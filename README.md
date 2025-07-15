@@ -46,6 +46,17 @@
 #### Challenge Details Page and Submissions
 ![Challenge Details Page and Submissions Wireframe](docs/images/wireframes/challenge-page-and-submissions-wireframes.jpg)
 
+### Colour Palette
+![Colour Palette](docs/images/design/main-colour-palette.png)
+
+#### Palette Brightness Variations
+![Palette Brightness Variations](docs/images/design/brightness-shades-colour-palette.jpg)
+
+### Accessibility
+
+#### Contrast 
+
+### Typography
 
 ### Site Map
 ![Site Map](docs/images/diagrams/site-map-1.jpg)
