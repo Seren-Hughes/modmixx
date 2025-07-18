@@ -20,16 +20,18 @@
 
 The music industry is evolving rapidly, presenting both challenges and opportunities for independent artists. With declining revenue from streaming platforms and the rise of AI-generated content, original, human-made music risks being undervalued. Despite these shifts, the demand for creativity, connection, and community in music remains as strong as ever.
 
+In parallel, the tools for music creation have become more accessible than ever. The market for both professional and hobbyist hardware, from analogue synthesizers to MIDI controllers, is thriving. Furthermore, the availability of powerful free software—including Digital Audio Workstations (DAWs), VST plugins, and sample packs—has lowered the barrier to entry, empowering a new generation of creators. This democratization of tools has expanded the community of music makers, creating a greater need for a platform that supports their journey.
+
 **modmixx** is a platform designed to fill a critical gap in the market: a space where music creators of all skill levels can share, experiment, and grow without the pressure of perfection or competition. Unlike traditional platforms that prioritize polished content and algorithmic visibility, modmixx fosters sincerity, collaboration, and experimentation.
 
-This project was developed as part of a full-stack web development diploma assessment to showcase technical proficiency while addressing a real-world need. With its inclusive design and focus on community, modmixx has the potential to grow into a thriving, user-driven platform that empowers creators and redefines how music is shared and appreciated.
+This project was developed as part of a full-stack web development diploma assessment to showcase technical proficiency while addressing a real-world need. With its inclusive design and focus on community, modmixx has the potential to grow into a thriving, user-driven platform that empowers creators and offers a supportive alternative for sharing and creating music.
 
 ---
 
 ## Concept Goals
 
 - **Creative Playground**: A space for users to upload musical ideas, sketches, and tracks without fear of judgment.
-- **Inclusive by Design**: Actively supports women, trans, and non-binary creators while welcoming allies who share collaborative values.
+- **A Safe & Inclusive Space**: Prioritizes a safe and welcoming environment for all creators, with a focus on amplifying voices often underrepresented in the music industry.
 - **Learning Through Sharing**: Encourages users to share their creative processes (e.g., DAW, techniques, effects) to inspire and educate others.
 - **Community & Feedback**: Promotes thoughtful, collaborative feedback rather than criticism.
 - **Challenges**: Monthly creative prompts to inspire participation and experimentation.
@@ -54,16 +56,20 @@ This project was developed as part of a full-stack web development diploma asses
 
 ## Future Features
 
-- **Learning Content**: Tutorials, masterclasses, mentorship, and 1-to-1 lessons.
+- **Learning Content**: Tutorials, masterclasses, and mentorship opportunities featuring a diverse range of artists and producers to ensure representation and broad perspectives.
 - **Social Features**: Follow/friend functionality with personalized feeds.
 - **Collaboration Tools**: Direct messaging and shared project spaces.
 - **Forum**: A dedicated space for sharing free resources and discussions.
 - **Blog Section**: Updates and insights from the community.
 - **Engagement Tools**: Like button (with hidden counts) and a report button for moderation.
+- **Video Integration**: Support for short performance video uploads and sharing.
+- **Listening Parties**: Real-time collaborative listening sessions. Recreating the feel of in-person jam sessions and open mic nights.
 
 
 
 ## Planning
+
+[Miro modmixx Planning Board](https://miro.com/app/board/uXjVIjLi6S0=/?share_link_id=959911845180)
 
 ### Wireframes
 
