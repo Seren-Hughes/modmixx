@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',  # Custom app for user accounts
     'core', # Core app for generic views like home page, etc.
+    'crispy_forms',  # For crispy forms
+    'crispy_bootstrap5',  # For Bootstrap 5 styling with crispy forms
 ]
 
 MIDDLEWARE = [
@@ -72,6 +74,9 @@ TEMPLATES = [
         },
     },
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 WSGI_APPLICATION = 'modmixx.wsgi.application'
 
