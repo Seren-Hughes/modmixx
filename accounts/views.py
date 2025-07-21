@@ -1,20 +1,18 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
+from .forms import CustomUserCreationForm, ProfileForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from .models import Profile
-from .forms import ProfileForm
 
 # Create your views here.
 def signup(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             Profile.objects.create(user=user)  # Create a profile for the new user
-            return redirect('login')
+            return redirect('profile_setup')  # Redirect to a profile setup page or login
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, 'accounts/signup.html', {'form': form})
 
 
