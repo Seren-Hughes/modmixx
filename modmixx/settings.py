@@ -116,6 +116,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
+LOGIN_REDIRECT_URL = '/profile/'  # Redirect to profile after login
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
