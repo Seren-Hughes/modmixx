@@ -360,6 +360,7 @@ The project was organized into themes, epics, and user stories to ensure a user-
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
 | **2.1.1**    | *As a user, I want to upload a music track with a title, DAW used, description, and image, so that others can understand my creative process.* | 8          |
 | **2.1.2**    | *As a user, I want to tag my upload with 'feedback wanted' so that others know I am looking for constructive feedback.*                        | 5           |
+| **2.1.3**    | *As a user, I want to edit or delete my uploaded track post, so that I can update or remove content if needed.*                                   | 5           |
 
 ### **Epic 2.2: Track Feed**
 
