@@ -15,6 +15,17 @@ def signup(request):
         form = CustomUserCreationForm()
     return render(request, 'accounts/signup.html', {'form': form})
 
+@login_required
+def profile_setup(request):
+    # You can reuse your ProfileForm here
+    if request.method == "POST":
+        form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile_detail')
+    else:
+        form = ProfileForm(instance=request.user.profile)
+    return render(request, 'accounts/profile_setup.html', {'form': form})
 
 @login_required
 def profile_detail(request):
