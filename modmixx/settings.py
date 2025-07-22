@@ -42,6 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',  # Required for django-allauth
+    'allauth',  # Django Allauth for authentication
+    'allauth.account',  # Django Allauth for account management
+    'allauth.socialaccount',  # Django Allauth for social accounts
+    'allauth.socialaccount.providers.google',  # Google provider for Allauth
     'accounts',  # Custom app for user accounts
     'core', # Core app for generic views like home page, etc.
     'crispy_forms',  # For crispy forms
@@ -54,6 +59,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -139,3 +145,15 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Allauth settings
+SITE_ID = 1
+
+# New Allauth 65+ settings
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+LOGIN_REDIRECT_URL = '/profile_setup/'
+LOGOUT_REDIRECT_URL = '/'
