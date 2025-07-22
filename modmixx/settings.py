@@ -122,8 +122,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-LOGIN_REDIRECT_URL = '/profile/'  # Redirect to profile after login
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
@@ -154,6 +152,14 @@ SITE_ID = 1
 ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_ALLOW_REGISTRATION = True
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_QUERY_EMAIL = True
 
-LOGIN_REDIRECT_URL = '/profile_setup/'
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None # Use email as the unique identifier
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
+
+LOGIN_REDIRECT_URL = '/login-redirect/'
 LOGOUT_REDIRECT_URL = '/'
