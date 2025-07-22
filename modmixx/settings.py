@@ -161,7 +161,6 @@ SOCIALACCOUNT_QUERY_EMAIL = True
 
 # Custom user model compatibility
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None # Use email as the unique identifier
-ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
 
 # Redirect configuration for sheltered community
