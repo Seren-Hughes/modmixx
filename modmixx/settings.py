@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',  # Google provider for Allauth
     'accounts',  # Custom app for user accounts
     'core', # Core app for generic views like home page, etc.
+    'tracks',  # App for managing tracks
     'crispy_forms',  # For crispy forms
     'crispy_bootstrap5',  # For Bootstrap 5 styling with crispy forms
 ]
@@ -145,21 +146,24 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# Allauth settings
+# Django Allauth Configuration
+# Implements email-based authentication with Google OAuth integration
+# Configured for sheltered community approach (members-only content)
 SITE_ID = 1
 
-# New Allauth 65+ settings
+# Current Allauth 65+ settings format
 ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'none' # Disabled for development
 ACCOUNT_ALLOW_REGISTRATION = True
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_QUERY_EMAIL = True
 
+# Custom user model compatibility
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None # Use email as the unique identifier
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
 
-LOGIN_REDIRECT_URL = '/login-redirect/'
-LOGOUT_REDIRECT_URL = '/'
+# Redirect configuration for sheltered community
+LOGIN_REDIRECT_URL = '/' # Authenticated users see track feed
+LOGOUT_REDIRECT_URL = '/' # Logged out users see landing page
