@@ -8,9 +8,11 @@ https://docs.djangoproject.com/en/5.2/howto/deployment/wsgi/
 """
 
 import os
-import env
 
 from django.core.wsgi import get_wsgi_application
+# Only import env.py if it exists (local development)
+if os.path.exists('env.py'):
+    import env
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'modmixx.settings')
 
