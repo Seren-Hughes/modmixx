@@ -27,7 +27,7 @@ def profile_setup(request):
         form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if form.is_valid():
             form.save()
-            return redirect('profile_detail')
+            return redirect('public_profile', username=request.user.profile.username)
     else:
         form = ProfileForm(instance=request.user.profile)
     return render(request, 'accounts/profile_setup.html', {'form': form})
@@ -43,7 +43,7 @@ def profile_edit(request):
         form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if form.is_valid():
             form.save()
-            return redirect('profile_detail')
+            return redirect('public_profile', username=request.user.profile.username)
     else:
         form = ProfileForm(instance=request.user.profile)
     return render(request, 'accounts/profile_edit.html', {'form': form})
@@ -62,7 +62,10 @@ def login_redirect(request):
         Profile.objects.create(user=user)
         return redirect('profile_setup')
     
-    return redirect('profile_detail')
+    if not user.profile.username:
+        return redirect('profile_setup')
+    
+    return redirect('public_profile', username=user.profile.username)
 
 @login_required
 def public_profile(request, username):
