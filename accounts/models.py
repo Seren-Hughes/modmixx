@@ -64,8 +64,15 @@ class Profile(models.Model):
         profile_picture: Optional profile image.
     """
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
-    username = models.CharField(max_length=30, unique=True, blank=True, null=True)
-    display_name = models.CharField(max_length=150, blank=True, null=True)
+    username = models.SlugField(
+        max_length=30, 
+        unique=True, 
+        help_text="Your unique profile URL (no spaces, letters/numbers only)"
+    )
+    display_name = models.CharField(
+        max_length=50, 
+        help_text="Your name as shown to others (can have spaces)"
+    )
     bio = models.TextField(blank=True, null=True)
     PRONOUN_CHOICES = [
         ('he/him', 'He/Him'),

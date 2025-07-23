@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>{{ profile.username }}'s Profile</h2>
+  <h2>{{ profile.display_name }}'s Profile</h2>
+  <p><strong>Username:</strong> {{ profile.username }}</p>
   <p><strong>Pronouns:</strong> {{ profile.pronouns }}</p>
   <p><strong>Bio:</strong> {{ profile.bio }}</p>
   {% if profile.profile_image %}
