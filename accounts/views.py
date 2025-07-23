@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CustomUserCreationForm, ProfileForm
 from django.contrib.auth.decorators import login_required
 from .models import Profile
@@ -63,3 +63,23 @@ def login_redirect(request):
         return redirect('profile_setup')
     
     return redirect('profile_detail')
+
+@login_required
+def public_profile(request, username):
+    """
+    Display profile view for any user by username.
+    Shows edit options if viewing your own profile.
+    """
+    profile = get_object_or_404(Profile, username=username)
+    
+    context = {
+        'profile': profile,
+        'is_owner': request.user == profile.user,
+    }
+    
+    # If the user is viewing their own profile, they can edit it
+    if request.user == profile.user:
+        
+        pass # handle edit logic here if needed 
+    
+    return render(request, 'accounts/public_profile.html', context)
