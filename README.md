@@ -427,54 +427,48 @@ The project was organized into themes, epics, and user stories to ensure a user-
 | **4.2.2**    | *As a user, I want to receive a confirmation message when I submit the form, so I know it went through.*           | 2           |
 
 ## User Stories for Future Features
-### Follow/Friend Users
+### Learning & Mentorship
 
 | User Story                                                                                                              |
 | ----------------------------------------------------------------------------------------------------------------------- |
-| *As a user, I want to view other users' profile pages, so that I can view their info and listen to their other tracks.* |
-| *As a user, I want to follow other users, so that I can easily find people whose work inspires me.*                     |
-| *As a user, I want a feed of my followed users, so that I can keep up with their uploads.*                              |
+| *As a beginner/intermediate user, I want access to tutorials, mentorship, and learning content, so that I can improve my skills in a supportive environment.* |
+| *As an experienced producer, I want to offer lessons or feedback to others, so that I can give back to the community and share my expertise.* |
 
-### Messaging & Collaboration
+### Social & Collaborative Features
 
 | User Story                                                                                                   |
 | ------------------------------------------------------------------------------------------------------------ |
-| *As a user, I want to send messages or collaborate with others, so that I can build creative relationships.* |
-| *As a user, I want to organize projects with collaborators, so that we can stay on track.*                   |
+| *As a user, I want to follow or friend other users, so that I can stay connected with artists whose work I admire.* |
+| *As a user, I want a personalised feed of uploads from users I follow, so that I can easily discover new tracks from my creative circle.*                   |
+| *As a user, I want to message or collaborate directly with others, so that we can create music together and stay on track with shared projects.* |
 
 
-### Tiered Learning Content
-
-| User Story                                                                                        |
-| ------------------------------------------------------------------------------------------------- |
-| *As a beginner, I want access to tutorials or 1-to-1 tutorship, so that I can improve my skills.* |
-| *As a pro, I want to offer lessons or feedback, so that I can help others and give back.*         |
-
-
-### Forum & Resources
+### Community & Forums
 
 | User Story                                                                                                     |
 | -------------------------------------------------------------------------------------------------------------- |
-| *As a user, I want to browse and share production resources, so that I can learn and contribute.*              |
-| *As a user, I want a forum space to discuss specific production topics, so that I can find community support.* |
+| *As a user, I want a forum or discussion area to ask questions and share production tips, so that I can learn and connect with others.*              |
+| *As a user, I want to browse and contribute free production resources, so that I can both benefit from and support the community.* |
 
 
-## Like Button (Hidden Count)
-
-| User Story                                                                                           |
-| ---------------------------------------------------------------------------------------------------- |
-| *As a user, I want to report inappropriate content, so that the community stays safe and welcoming.* |
-
-
-### Report Button
+## Engagement Tools
 
 | User Story                                                                                           |
 | ---------------------------------------------------------------------------------------------------- |
+| *As a user, I want to like tracks privately (with no visible counts), so that I can show appreciation without promoting competition.* |
 | *As a user, I want to report inappropriate content, so that the community stays safe and welcoming.* |
+
+
+### Media & Events
+
+| User Story                                                                                           |
+| ---------------------------------------------------------------------------------------------------- |
+| *As a user, I want to upload and share short performance videos, so that I can showcase my creative process and style.* |
+| *As a user, I want to participate in real-time listening parties, so that I can experience the joy of sharing music live with others.* |
 
 
 #### Fibonacci Sequence for Estimation
 The Fibonacci sequence was used for estimating the complexity of tasks, helping to prioritize features and manage workload effectively. 
 
 #### Fibonacci Effort vs Risk Matrix
-![Fibonacci Effort vs Risk Matrix](docs/images/diagrams/effort-risk-matrix.jpg)
+![Fibonacci Effort vs Risk Matrix](docs/images/diagrams/effort-risk-matrix-fibonacci.jpg)
