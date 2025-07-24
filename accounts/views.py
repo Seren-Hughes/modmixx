@@ -27,14 +27,10 @@ def profile_setup(request):
         form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if form.is_valid():
             form.save()
-            return redirect('public_profile', username=request.user.profile.username)
+            return redirect('profile', username=request.user.profile.username)
     else:
         form = ProfileForm(instance=request.user.profile)
     return render(request, 'accounts/profile_setup.html', {'form': form})
-
-@login_required
-def profile_detail(request):
-    return render(request, 'accounts/profile_detail.html', {'profile': request.user.profile})
 
 
 @login_required
@@ -43,7 +39,7 @@ def profile_edit(request):
         form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if form.is_valid():
             form.save()
-            return redirect('public_profile', username=request.user.profile.username)
+            return redirect('profile', username=request.user.profile.username)
     else:
         form = ProfileForm(instance=request.user.profile)
     return render(request, 'accounts/profile_edit.html', {'form': form})
@@ -65,10 +61,10 @@ def login_redirect(request):
     if not user.profile.username:
         return redirect('profile_setup')
     
-    return redirect('public_profile', username=user.profile.username)
+    return redirect('profile', username=user.profile.username)
 
 @login_required
-def public_profile(request, username):
+def profile(request, username):
     """
     Display profile view for any user by username.
     Shows edit options if viewing your own profile.
@@ -85,4 +81,4 @@ def public_profile(request, username):
         
         pass # handle edit logic here if needed 
     
-    return render(request, 'accounts/public_profile.html', context)
+    return render(request, 'accounts/profile.html', context)

@@ -13,7 +13,9 @@
                 {% if user.is_authenticated %}
                     <a class="nav-link" href="/">Discover</a>
                     <a class="nav-link" href="/tracks/upload/">Share Track</a>
-                    <a class="nav-link" href="/profile/">Profile</a>
+                    {% if user.is_authenticated and user.profile.username %}
+    <a class="nav-link" href="{% url 'profile' user.profile.username %}">Profile</a>
+{% endif %}
                     <form method="post" action="{% url 'account_logout' %}" class="d-inline">
                         {% csrf_token %}
                         <button type="submit" class="nav-link btn p-2 border-0 bg-transparent text-decoration-none" style="line-height: inherit;">
