@@ -5,4 +5,6 @@ from . import views
 # Currently implements basic feed structure for Iteration 2 development
 urlpatterns = [
     path('', views.track_feed, name='track_feed'), # Main track feed
+    path('upload/', views.track_upload, name='track_upload'),
+    path('<slug:slug>/', views.track_detail, name='track_detail'),
 ]

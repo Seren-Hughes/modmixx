@@ -70,7 +70,9 @@ class Profile(models.Model):
         help_text="Your unique profile URL (no spaces, letters/numbers only)"
     )
     display_name = models.CharField(
-        max_length=50, 
+        max_length=50,
+        blank=True,
+        null=True, 
         help_text="Your name as shown to others (can have spaces)"
     )
     bio = models.TextField(blank=True, null=True)
