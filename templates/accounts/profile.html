@@ -1,34 +1,192 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<div class="row">
-    <div class="col-md-4">
-        {% if profile.profile_picture %}
-            <img src="{{ profile.profile_picture.url }}" class="img-fluid rounded-circle mb-3" alt="Profile Picture" style="max-width: 200px;">
-        {% else %}
-            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 200px; height: 200px;">
-                <span class="text-muted fs-1">{{ profile.display_name|first|upper|default:profile.username|first|upper }}</span>
+    <div class="row">
+        <div class="col-md-4">
+            {% if profile.profile_picture %}
+                <img src="{{ profile.profile_picture.url }}"
+                     class="img-fluid rounded-circle mb-3"
+                     alt="Profile Picture"
+                     style="max-width: 200px">
+            {% else %}
+                <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mb-3"
+                     style="width: 200px;
+                            height: 200px">
+                    <span class="text-muted fs-1">{{ profile.display_name|first|upper|default:profile.username|first|upper }}</span>
+                </div>
+            {% endif %}
+            <h2>{{ profile.display_name|default:profile.username }}</h2>
+            <p class="text-muted">@{{ profile.username }}</p>
+            {% if profile.pronouns %}
+                <p>
+                    <small class="text-muted">{{ profile.pronouns }}</small>
+                </p>
+            {% endif %}
+            {% if is_owner %}
+                <a href="{% url 'profile_edit' %}"
+                   class="btn btn-outline-primary btn-sm">Edit Profile</a>
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            {% if profile.bio %}
+                <h5>About</h5>
+                <p>{{ profile.bio|linebreaks }}</p>
+            {% endif %}
+            <!-- User's Tracks Section -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5>Tracks ({{ user_tracks.count }})</h5>
+                {% if is_owner %}
+                    <a href="{% url 'track_upload' %}" class="btn btn-primary btn-sm">
+                        <i class="fa fa-plus me-1"></i> Share Track
+                    </a>
+                {% endif %}
             </div>
-        {% endif %}
-        
-        <h2>{{ profile.display_name|default:profile.username }}</h2>
-        <p class="text-muted">@{{ profile.username }}</p>
-        
-        {% if profile.pronouns %}
-            <p><small class="text-muted">{{ profile.pronouns }}</small></p>
-        {% endif %}
-        
-        {% if is_owner %}
-            <a href="{% url 'profile_edit' %}" class="btn btn-outline-primary btn-sm">Edit Profile</a>
-        {% endif %}
+            {% if user_tracks %}
+                {% for track in user_tracks %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- Track Artwork -->
+                                <div class="col-md-3">
+                                    {% if track.track_image %}
+                                        <img src="{{ track.track_image.url }}"
+                                             class="img-fluid rounded"
+                                             alt="{{ track.title }}"
+                                             style="aspect-ratio: 1;
+                                                    object-fit: cover">
+                                    {% else %}
+                                        <div class="bg-light rounded d-flex align-items-center justify-content-center"
+                                             style="aspect-ratio: 1">
+                                            <i class="fa fa-music text-muted fa-2x"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <!-- Track Info -->
+                                <div class="col-md-6">
+                                    <h6 class="card-title">
+                                        <a href="{% url 'track_detail' track.slug %}"
+                                           class="text-decoration-none">{{ track.title }}</a>
+                                    </h6>
+                                    <p class="text-muted small mb-2">{{ track.created_at|timesince }} ago</p>
+                                    {% if track.description %}<p class="card-text small">{{ track.description|truncatewords:15 }}</p>{% endif %}
+                                    {% if track.tags %}
+                                        <div class="mt-2">
+                                            <span class="badge bg-secondary">{{ track.tags }}</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <!-- Action Buttons (Only for Owner) -->
+                                <div class="col-md-3 text-end">
+                                    {% if is_owner %}
+                                        <div class="btn-group-vertical btn-group-sm">
+                                            <a href="{% url 'track_edit' track.slug %}"
+                                               class="btn btn-outline-primary btn-sm">
+                                                <i class="fa fa-edit me-1"></i> Edit
+                                            </a>
+                                            <button type="button"
+                                                    class="btn btn-outline-danger btn-sm"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal{{ track.id }}">
+                                                <i class="fa fa-trash me-1"></i> Delete
+                                            </button>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <!-- Audio Player -->
+                            <div class="mt-3">
+                                <audio controls class="w-100" style="height: 40px;">
+                                    <source src="{{ track.audio_file.url }}" type="audio/mpeg">
+                                    <source src="{{ track.audio_file.url }}" type="audio/wav">
+                                    <source src="{{ track.audio_file.url }}" type="audio/ogg">
+                                    Your browser does not support the audio element.
+                                </audio>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Delete Modal for Each Track -->
+                    {% if is_owner %}
+                        <div class="modal fade"
+                             id="deleteModal{{ track.id }}"
+                             tabindex="-1"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-danger text-white">
+                                        <h5 class="modal-title">
+                                            <i class="fa fa-exclamation-triangle me-2"></i>
+                                            Delete Track
+                                        </h5>
+                                        <button type="button"
+                                                class="btn-close btn-close-white"
+                                                data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="alert alert-warning">
+                                            <strong>Warning:</strong> This action cannot be undone!
+                                        </div>
+                                        <p>
+                                            Are you sure you want to delete <strong>"{{ track.title }}"</strong>?
+                                        </p>
+                                        <!-- Track Preview -->
+                                        <div class="border rounded p-3 bg-light">
+                                            <div class="d-flex align-items-center">
+                                                {% if track.track_image %}
+                                                    <img src="{{ track.track_image.url }}"
+                                                         class="rounded me-3"
+                                                         style="width: 50px;
+                                                                height: 50px;
+                                                                object-fit: cover"
+                                                         alt="Track artwork">
+                                                {% else %}
+                                                    <div class="bg-secondary rounded d-flex align-items-center justify-content-center me-3"
+                                                         style="width: 50px;
+                                                                height: 50px">
+                                                        <i class="fa fa-music text-white"></i>
+                                                    </div>
+                                                {% endif %}
+                                                <div>
+                                                    <h6 class="mb-1">{{ track.title }}</h6>
+                                                    <small class="text-muted">{{ track.get_audio_filename }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            <i class="fa fa-times me-1"></i> Cancel
+                                        </button>
+                                        <!-- Delete form -->
+                                        <form method="post"
+                                              action="{% url 'track_delete' track.slug %}"
+                                              class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger">
+                                                <i class="fa fa-trash me-1"></i> Delete Track
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fa fa-music fa-3x text-muted mb-3"></i>
+                    <h6 class="text-muted">
+                        {% if is_owner %}
+                            You haven't shared any tracks yet
+                        {% else %}
+                            {{ profile.display_name|default:profile.username }} hasn't shared any tracks yet
+                        {% endif %}
+                    </h6>
+                    {% if is_owner %}
+                        <a href="{% url 'track_upload' %}" class="btn btn-primary mt-2">
+                            <i class="fa fa-plus me-1"></i> Share Your First Track
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
     </div>
-    
-    <div class="col-md-8">
-        {% if profile.bio %}
-            <h5>About</h5>
-            <p>{{ profile.bio|linebreaks }}</p>
-        {% endif %}
-        
-    </div>
-</div>
 {% endblock %}

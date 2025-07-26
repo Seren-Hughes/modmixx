@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CustomUserCreationForm, ProfileForm
 from django.contrib.auth.decorators import login_required
 from .models import Profile
+from tracks.models import Track
 from django.contrib.auth import login
 
 # Create your views here.
@@ -68,12 +69,17 @@ def profile(request, username):
     """
     Display profile view for any user by username.
     Shows edit options if viewing your own profile.
+    Display user profile track uploads.
     """
     profile = get_object_or_404(Profile, username=username)
+
+    # Get user's tracks ordered by newest first
+    user_tracks = Track.objects.filter(user=profile.user).order_by('-created_at')
     
     context = {
         'profile': profile,
         'is_owner': request.user == profile.user,
+        'user_tracks': user_tracks,
     }
     
     # If the user is viewing their own profile, they can edit it
