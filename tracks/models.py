@@ -51,6 +51,7 @@ class Track(models.Model):
             base_slug = slugify(self.title)
             slug = base_slug
             counter = 1
+            # Ensure slug is unique by adding counter if needed
             while Track.objects.filter(slug=slug).exists():
                 slug = f"{base_slug}-{counter}"
                 counter += 1
