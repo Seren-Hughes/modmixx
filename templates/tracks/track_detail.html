@@ -39,11 +39,89 @@
     </div>
     <!-- Edit button -->
     {% if user == track.user %}
-        <div class="row mt-3">
-            <div class="col-12">
-                <a href="{% url 'track_edit' track.slug %}" class="btn btn-primary">Edit</a>
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'track_edit' track.slug %}" class="btn btn-primary">
+                            <i class="fa fa-edit me-1"></i> Edit
+                        </a>
+                        <!-- Delete button triggers modal -->
+                        <button type="button"
+                                class="btn btn-outline-danger"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteModal">
+                            <i class="fa fa-trash me-1"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Delete Confirmation Modal -->
+        <div class="modal fade"
+             id="deleteModal"
+             tabindex="-1"
+             aria-labelledby="deleteModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="deleteModalLabel">
+                            <i class="fa fa-exclamation-triangle me-2"></i>
+                            Delete Track
+                        </h5>
+                        <button type="button"
+                                class="btn-close btn-close-white"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-warning">
+                            <strong>Warning:</strong> This action cannot be undone!
+                        </div>
+                        <p>
+                            Are you sure you want to delete <strong>"{{ track.title }}"</strong>?
+                        </p>
+                        <!-- Track Preview -->
+                        <div class="border rounded p-3 bg-light">
+                            <div class="d-flex align-items-center">
+                                {% if track.track_image %}
+                                    <img src="{{ track.track_image.url }}"
+                                         class="rounded me-3"
+                                         style="width: 50px;
+                                                height: 50px;
+                                                object-fit: cover"
+                                         alt="Track artwork">
+                                {% else %}
+                                    <div class="bg-secondary rounded d-flex align-items-center justify-content-center me-3"
+                                         style="width: 50px;
+                                                height: 50px">
+                                        <i class="fa fa-music text-white"></i>
+                                    </div>
+                                {% endif %}
+                                <div>
+                                    <h6 class="mb-1">{{ track.title }}</h6>
+                                    <small class="text-muted">{{ track.get_audio_filename }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fa fa-times me-1"></i> Cancel
+                        </button>
+                        <!-- Delete form -->
+                        <form method="post"
+                              action="{% url 'track_delete' track.slug %}"
+                              class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fa fa-trash me-1"></i> Delete Track
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     {% endif %}
-</div>
 {% endblock %}

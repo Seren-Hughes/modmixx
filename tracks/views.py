@@ -94,3 +94,29 @@ def track_edit(request, slug):
         'form': form,
         'track': track
     })
+
+
+
+@login_required
+def track_delete(request, slug):
+    """
+    Delete an existing track.
+    
+    Only accepts POST requests from the confirmation modal.
+    Redirects back to track feed after successful deletion.
+    """
+    track = get_object_or_404(Track, slug=slug)
+    
+    # Check if user owns this track
+    if track.user != request.user:
+        raise Http404("Track not found")
+    
+    # Only allow POST (from modal form)
+    if request.method == 'POST':
+        track_title = track.title
+        track.delete()
+        messages.success(request, f'Track "{track_title}" deleted successfully!')
+        return redirect('track_feed')
+    
+    # If not POST, redirect to track detail
+    return redirect('track_detail', slug=slug)
