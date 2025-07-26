@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.http import Http404
 from .models import Track
 from .forms import TrackUploadForm
 
@@ -59,3 +60,37 @@ def track_upload(request):
             messages.error(request, 'Title and audio file are required.')
     
     return redirect('track_feed')
+
+
+@login_required
+def track_edit(request, slug):
+    """Edit an existing track."""
+    track = get_object_or_404(Track, slug=slug)
+    
+    if track.user != request.user:
+        raise Http404("Track not found")
+    
+    if request.method == 'POST':
+        # Create form with instance but don't require files
+        form = TrackUploadForm(request.POST, request.FILES, instance=track)
+        
+        if form.is_valid():
+            updated_track = form.save(commit=False)
+            
+            # Keep existing files if no new ones uploaded
+            if 'audio_file' not in request.FILES:
+                updated_track.audio_file = track.audio_file
+            
+            if 'track_image' not in request.FILES:
+                updated_track.track_image = track.track_image
+                
+            updated_track.save()
+            messages.success(request, f'Track "{track.title}" updated successfully!')
+            return redirect('track_detail', slug=track.slug)
+    else:
+        form = TrackUploadForm(instance=track)
+    
+    return render(request, 'tracks/edit_track.html', {
+        'form': form,
+        'track': track
+    })

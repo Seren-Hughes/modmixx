@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
+import os
 
 # Create your models here.
 class Track(models.Model):
@@ -26,7 +27,7 @@ class Track(models.Model):
     description = models.TextField(max_length=1000, blank=True, null=True)
 
     # File and image fields
-    audio_file = models.FileField(upload_to='tracks/')
+    audio_file = models.FileField(upload_to='tracks/', blank=True)
     track_image = models.ImageField(upload_to='track_images/', blank=True, null=True)
 
     # User who uploaded the track
@@ -57,3 +58,16 @@ class Track(models.Model):
                 counter += 1
             self.slug = slug
         super().save(*args, **kwargs) 
+
+
+    def get_audio_filename(self):
+        """Return just the filename without path."""
+        if self.audio_file:
+            return os.path.basename(self.audio_file.name)
+        return "No file"
+    
+    def get_image_filename(self):
+        """Return just the image filename without path."""
+        if self.track_image:
+            return os.path.basename(self.track_image.name)
+        return "No image"

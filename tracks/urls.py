@@ -6,5 +6,6 @@ from . import views
 urlpatterns = [
     path('', views.track_feed, name='track_feed'), # Main track feed
     path('upload/', views.track_upload, name='track_upload'),
+    path('<slug:slug>/edit/', views.track_edit, name='track_edit'),
     path('<slug:slug>/', views.track_detail, name='track_detail'),
 ]

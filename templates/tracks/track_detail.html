@@ -1,44 +1,49 @@
 {% extends "base.html" %}
 {% block title %}{{ track.title }} - modmixx{% endblock %}
-
 {% block content %}
-<div class="row">
-    <div class="col-md-4">
-        {% if track.track_image %}
-            <img src="{{ track.track_image.url }}" class="img-fluid rounded" alt="{{ track.title }}">
-        {% else %}
-            <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 300px;">
-                <span class="text-muted fs-1">Track Image</span>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-4">
+                {% if track.track_image %}
+                    <img src="{{ track.track_image.url }}"
+                         class="img-fluid rounded"
+                         alt="{{ track.title }}">
+                {% else %}
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center"
+                         style="height: 300px">
+                        <span class="text-muted fs-1">Track Image</span>
+                    </div>
+                {% endif %}
             </div>
-        {% endif %}
-    </div>
-    
-    <div class="col-md-8">
-        <h1>{{ track.title }}</h1>
-        
-        <p class="text-muted">
-            by <a href="{% url 'profile' track.user.profile.username %}">
-                {{ track.user.profile.display_name|default:track.user.profile.username }}
-            </a>
-            • {{ track.created_at|timesince }} ago
-        </p>
-        
-        {% if track.description %}
-            <p>{{ track.description|linebreaks }}</p>
-        {% endif %}
-
-        <!-- Audio Player -->
-        <div class="mt-4">
-            <audio controls class="w-100">
-                <source src="{{ track.audio_file.url }}" type="audio/mpeg">
-                <source src="{{ track.audio_file.url }}" type="audio/wav">
-                <source src="{{ track.audio_file.url }}" type="audio/ogg">
-            </audio>
-        </div>
-        
-        <div class="mt-4">
-            <a href="{% url 'track_feed' %}" class="btn btn-secondary">← Back to Feed</a>
+            <div class="col-md-8">
+                <h1>{{ track.title }}</h1>
+                <p class="text-muted">
+                    by <a href="{% url 'profile' track.user.profile.username %}">
+                    {{ track.user.profile.display_name|default:track.user.profile.username }}
+                </a>
+                • {{ track.created_at|timesince }} ago
+            </p>
+            {% if track.description %}<p>{{ track.description|linebreaks }}</p>{% endif %}
+            <!-- Audio Player -->
+            <div class="mt-4">
+                <audio controls class="w-100">
+                    <source src="{{ track.audio_file.url }}" type="audio/mpeg">
+                    <source src="{{ track.audio_file.url }}" type="audio/wav">
+                    <source src="{{ track.audio_file.url }}" type="audio/ogg">
+                </audio>
+            </div>
+            <div class="mt-4">
+                <a href="{% url 'track_feed' %}" class="btn btn-secondary">← Back to Feed</a>
+            </div>
         </div>
     </div>
+    <!-- Edit button -->
+    {% if user == track.user %}
+        <div class="row mt-3">
+            <div class="col-12">
+                <a href="{% url 'track_edit' track.slug %}" class="btn btn-primary">Edit</a>
+            </div>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
