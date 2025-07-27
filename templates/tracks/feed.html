@@ -102,9 +102,12 @@
                         <label class="form-label">Audio File *</label>
                         
                         <!-- Upload Area (shown initially) -->
-                        <div id="audioUploadArea" class="border rounded p-3 text-center">
+                        <div id="audioUploadArea" class="border rounded p-3 text-center upload-drop-zone" 
+                             data-upload-type="audio">
                             <i class="fa fa-upload fa-2x text-muted mb-2"></i>
-                            <p class="text-muted mb-2">Choose audio file</p>
+                            <p class="text-muted mb-2">
+                                <strong>Choose audio file</strong> or drag and drop here
+                            </p>
                             <input type="file" class="form-control" name="audio_file" accept="audio/*" required id="audioFileInput">
                         </div>
                         
@@ -136,9 +139,12 @@
                         <label class="form-label">Track Artwork (Optional)</label>
                         
                         <!-- Upload Area (shown initially) -->
-                        <div id="imageUploadArea" class="border rounded p-3 text-center">
+                        <div id="imageUploadArea" class="border rounded p-3 text-center upload-drop-zone" 
+                             data-upload-type="image">
                             <i class="fa fa-image text-muted"></i>
-                            <span class="text-muted ms-2">Add artwork</span>
+                            <span class="text-muted ms-2">
+                                <strong>Add artwork</strong> or drag and drop here
+                            </span>
                             <input type="file" class="form-control mt-2" name="track_image" accept="image/*" id="imageFileInput">
                         </div>
                         
@@ -164,10 +170,6 @@
                         <textarea class="form-control" name="description" rows="3" placeholder="Which DAW or app did you use to create your track?"></textarea>
                     </div>
                     
-                    <!-- Tags -->
-                    <div class="mb-3">
-                        <input type="text" class="form-control" name="tags" placeholder="Tags (comma-separated)">
-                    </div>
                 </div>
                 
                 <div class="modal-footer">

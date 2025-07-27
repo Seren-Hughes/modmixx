@@ -64,3 +64,37 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Get all file drop zones
+const dropZones = document.querySelectorAll('.upload-drop-zone');
+
+dropZones.forEach(dropZone => {
+    const fileInput = dropZone.querySelector('input[type="file"]');
+    
+    // Prevent default drag behaviours - this is important for drag and drop to work
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        }, false);
+    });
+    
+    // Handle file drop
+    dropZone.addEventListener('drop', (e) => {
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            // Just assign the file directly
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(files[0]);
+            fileInput.files = dataTransfer.files;
+            
+            // Trigger existing change event
+            fileInput.dispatchEvent(new Event('change'));
+        }
+    });
+    
+    // Click to open file picker
+    dropZone.addEventListener('click', () => {
+        fileInput.click();
+    });
+});
