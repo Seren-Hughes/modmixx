@@ -32,9 +32,6 @@ class Track(models.Model):
 
     # User who uploaded the track
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='tracks')
-    
-    # Additional metadata
-    tags = models.CharField(max_length=200, blank=True)
 
      # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)

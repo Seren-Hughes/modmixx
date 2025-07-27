@@ -17,7 +17,7 @@ class TrackUploadForm(forms.ModelForm):
     """
     class Meta:
         model = Track
-        fields = ['title', 'description', 'audio_file', 'track_image', 'tags']
+        fields = ['title', 'description', 'audio_file', 'track_image']
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control', 
@@ -35,10 +35,6 @@ class TrackUploadForm(forms.ModelForm):
             'track_image': forms.FileInput(attrs={
                 'class': 'form-control',
                 'accept': 'image/*'
-            }),
-            'tags': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'electronic, trance, beats (comma-separated)'
             }),
         }
         

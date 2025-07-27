@@ -68,11 +68,6 @@
                                     </h6>
                                     <p class="text-muted small mb-2">{{ track.created_at|timesince }} ago</p>
                                     {% if track.description %}<p class="card-text small">{{ track.description|truncatewords:15 }}</p>{% endif %}
-                                    {% if track.tags %}
-                                        <div class="mt-2">
-                                            <span class="badge bg-secondary">{{ track.tags }}</span>
-                                        </div>
-                                    {% endif %}
                                 </div>
                                 <!-- Action Buttons (Only for Owner) -->
                                 <div class="col-md-3 text-end">

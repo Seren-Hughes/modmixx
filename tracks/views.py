@@ -41,7 +41,6 @@ def track_upload(request):
         # Extract form data
         title = request.POST.get('title')
         description = request.POST.get('description')
-        tags = request.POST.get('tags', '')
         audio_file = request.FILES.get('audio_file')
         track_image = request.FILES.get('track_image')
         
@@ -51,7 +50,6 @@ def track_upload(request):
                 user=request.user,
                 title=title,
                 description=description,
-                tags=tags,
                 audio_file=audio_file,
                 track_image=track_image
             )
