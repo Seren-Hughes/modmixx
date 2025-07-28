@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'tracks',  # App for managing tracks
     'crispy_forms',  # For crispy forms
     'crispy_bootstrap5',  # For Bootstrap 5 styling with crispy forms
+    'comments',  # App for managing comments
 ]
 
 MIDDLEWARE = [

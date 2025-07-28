@@ -124,4 +124,61 @@
             </div>
         </div>
     {% endif %}
+    <!-- Comments Section -->
+    <h3>Comments</h3>
+    <ul class="list-unstyled">
+        {% for comment in comments %}
+            <li class="mb-3 pb-3 border-bottom">
+                <div class="d-flex align-items-center mb-1">
+                    <!-- Clickable avatar with first letter fallback -->
+                    <a href="{% url 'profile' comment.user.profile.username %}"
+                       class="text-decoration-none d-flex align-items-center">
+                        {% if comment.user.profile.profile_picture %}
+                            <img src="{{ comment.user.profile.profile_picture.url }}"
+                                 class="rounded-circle me-2"
+                                 alt="{{ comment.user.profile.username|default:'modmixx member' }}"
+                                 style="width: 32px;
+                                        height: 32px;
+                                        object-fit: cover">
+                        {% else %}
+                            <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-2"
+                                 style="width: 32px;
+                                        height: 32px">
+                                <span class="text-white" style="font-size: 14px;">{{ comment.user.profile.username|first|upper|default:"M" }}</span>
+                            </div>
+                        {% endif %}
+                        <strong class="text-dark">{{ comment.user.profile.username|default:"modmixx member" }}</strong>
+                    </a>
+                    <span class="text-muted small ms-2">{{ comment.created_at|date:"SHORT_DATETIME_FORMAT" }}</span>
+                </div>
+                <div class="ms-5">{{ comment.content|linebreaksbr }}</div>
+            </li>
+        {% empty %}
+            <li>No comments yet.</li>
+        {% endfor %}
+    </ul>
+    <!-- Comment Form -->
+    <form method="post" class="mb-4">
+        {% csrf_token %}
+        <div class="d-flex align-items-start">
+            {% if user.profile.profile_picture %}
+                <img src="{{ user.profile.profile_picture.url }}"
+                     class="rounded-circle me-2"
+                     alt="{{ user.profile.username|default:'You' }}"
+                     style="width: 40px;
+                            height: 40px;
+                            object-fit: cover">
+            {% else %}
+                <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-2"
+                     style="width: 40px;
+                            height: 40px">
+                    <span class="text-white" style="font-size: 16px;">{{ user.profile.username|first|upper|default:"M" }}</span>
+                </div>
+            {% endif %}
+            <div class="flex-grow-1">{{ form.content }}</div>
+            <div class="ms-2">
+                <button type="submit" class="btn btn-primary">Comment</button>
+            </div>
+        </div>
+    </form>
 {% endblock %}

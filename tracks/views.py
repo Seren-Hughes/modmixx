@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.http import Http404
 from .models import Track
 from .forms import TrackUploadForm
+from comments.models import Comment
+from comments.forms import CommentForm
 
 # Create your views here.
 
@@ -29,10 +31,27 @@ def track_feed(request):
 @login_required
 def track_detail(request, slug):
     """
-    Display individual track page
+    Display individual track page with comments
     """
     track = get_object_or_404(Track, slug=slug)
-    return render(request, 'tracks/track_detail.html', {'track': track})
+    comments = track.comments.filter(is_approved=True).order_by('-created_at')
+    
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.track = track
+            comment.save()
+            return redirect('track_detail', slug=track.slug)
+    else:
+        form = CommentForm()
+    
+    return render(request, 'tracks/track_detail.html', {
+        'track': track,
+        'comments': comments,
+        'form': form,  
+    })
 
 @login_required
 def track_upload(request):
