@@ -171,3 +171,11 @@ ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
 # Redirect configuration for sheltered community
 LOGIN_REDIRECT_URL = '/' # Authenticated users see track feed
 LOGOUT_REDIRECT_URL = '/' # Logged out users see landing page
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

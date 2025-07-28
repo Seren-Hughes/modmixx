@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from .models import Profile
 from tracks.models import Track
 from django.contrib.auth import login
+from django.core.mail import send_mail
+import os
 
 # Create your views here.
 def signup(request):
@@ -13,6 +15,19 @@ def signup(request):
             user = form.save()
             Profile.objects.create(user=user)  # Create a profile for the new user
             login(request, user)  # Log the user in
+            # Send a welcome email
+            send_mail(
+                subject="Welcome to modmixx 🎉",
+                message=(
+                    "Thanks for signing up to modmixx!\n\n"
+                    "We're thrilled to have you in our collaborative music community. "
+                    "Dive in, explore, and start creating!"
+                ),
+                from_email="modmixx <modmixx.platform@gmail.com>",
+                recipient_list=[user.email],
+                fail_silently=False,
+            )
+
             return redirect('profile_setup')  # Redirect to a profile setup page or login
     else:
         form = CustomUserCreationForm()
