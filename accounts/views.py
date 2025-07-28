@@ -15,7 +15,8 @@ def signup(request):
             user = form.save()
             Profile.objects.create(user=user)  # Create a profile for the new user
             login(request, user)  # Log the user in
-            # Send a welcome email
+            # Send a welcome email. Do not include sensitive information or user input in headers!
+            #  - reference https://docs.djangoproject.com/en/5.2/topics/email/#send-mail
             send_mail(
                 subject="Welcome to modmixx 🎉",
                 message=(
