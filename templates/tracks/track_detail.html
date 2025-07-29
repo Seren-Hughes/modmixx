@@ -128,7 +128,7 @@
     <h3>Comments</h3>
     <ul class="list-unstyled">
         {% for comment in comments %}
-            <li class="mb-3 pb-3 border-bottom">
+            <li class="mb-3 pb-3 border-bottom" data-comment-id="{{ comment.id }}">
                 <div class="d-flex align-items-center mb-1">
                     <!-- Clickable avatar with first letter fallback -->
                     <a href="{% url 'profile' comment.user.profile.username %}"
@@ -150,8 +150,50 @@
                         <strong class="text-dark">{{ comment.user.profile.username|default:"modmixx member" }}</strong>
                     </a>
                     <span class="text-muted small ms-2">{{ comment.created_at|date:"SHORT_DATETIME_FORMAT" }}</span>
+                    {% if comment.updated_at != comment.created_at %}<span class="text-muted small ms-1">(edited)</span>{% endif %}
                 </div>
-                <div class="ms-5">{{ comment.content|linebreaksbr }}</div>
+                <!-- Comment content (toggles with edit form) -->
+                <div class="ms-5">
+                    <div class="comment-content">{{ comment.content|linebreaksbr }}</div>
+                    <!-- Edit form (hidden by default) -->
+                    <div class="comment-edit-form" style="display: none;">
+                        <textarea class="form-control mb-2"
+                                  rows="3"
+                                  name="content"
+                                  id="edit-content-{{ comment.id }}">{{ comment.content }}</textarea>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-primary save-comment">Save</button>
+                            <button class="btn btn-sm btn-secondary cancel-edit">Cancel</button>
+                        </div>
+                    </div>
+                    <!-- dropdown options for edit delete -->
+                    {% if user == comment.user %}
+                        <div class="comment-actions mt-2">
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                                        type="button"
+                                        id="commentOptions{{ comment.id }}"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false">⋯</button>
+                                <ul class="dropdown-menu dropdown-menu-end"
+                                    aria-labelledby="commentOptions{{ comment.id }}">
+                                    <li>
+                                        <button class="dropdown-item edit-comment" type="button">
+                                            <i class="fa fa-edit me-2"></i>Edit
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item text-danger delete-comment"
+                                                type="button"
+                                                data-comment-id="{{ comment.id }}">
+                                            <i class="fa fa-trash me-2"></i>Delete
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
             </li>
         {% empty %}
             <li>No comments yet.</li>
@@ -175,10 +217,22 @@
                     <span class="text-white" style="font-size: 16px;">{{ user.profile.username|first|upper|default:"M" }}</span>
                 </div>
             {% endif %}
-            <div class="flex-grow-1">{{ form.content }}</div>
+            <div class="flex-grow-1">
+                <textarea class="form-control"
+                          name="content"
+                          id="new-comment-content"
+                          rows="2"
+                          placeholder="Comment prompt…"
+                          style="resize:vertical"
+                          required></textarea>
+            </div>
             <div class="ms-2">
                 <button type="submit" class="btn btn-primary">Comment</button>
             </div>
         </div>
     </form>
+{% endblock %}
+{% block extra_js %}
+    {% load static %}
+    <script src="{% static 'js/comments.js' %}"></script>
 {% endblock %}

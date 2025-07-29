@@ -8,11 +8,12 @@ class Comment(models.Model):
     track = models.ForeignKey(Track, on_delete=models.CASCADE, related_name='comments')
     content = models.TextField(max_length=1000)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     is_approved = models.BooleanField(default=True)  # For moderation
     needs_review = models.BooleanField(default=False) # For flagged comments
 
     def __str__(self):
-        return f"{self.user} on {self.track}: {self.content[:30]}"
+        return f"{self.user} on {self.track}: {self.content[:30]}" # Truncate for readability
     
     class Meta:
         ordering = ['-created_at']
