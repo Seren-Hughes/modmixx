@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Save comment
+    // Save comment 
     document.querySelectorAll('.save-comment').forEach(button => {
         button.addEventListener('click', function() {
             const comment = this.closest('[data-comment-id]');
@@ -49,20 +49,42 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // temporary solution to show comment changes: reload the page
-                    window.location.reload();
+                    // Update content in place (no reload!)
+                    const content = comment.querySelector('.comment-content');
+                    const editForm = comment.querySelector('.comment-edit-form');
+                    
+                    // Update the displayed content
+                    content.innerHTML = data.content.replace(/\n/g, '<br>');
+                    content.style.display = 'block';
+                    editForm.style.display = 'none';
+                    
+                    // Add or update "edited" indicator
+                    let editedSpan = comment.querySelector('.edited-indicator');
+                    if (!editedSpan) {
+                        editedSpan = document.createElement('span');
+                        editedSpan.className = 'text-muted small ms-1 edited-indicator';
+                        editedSpan.textContent = '(edited)';
+                        comment.querySelector('.text-muted.small').insertAdjacentElement('afterend', editedSpan);
+                    }
                 } else {
                     alert('Error saving comment');
                 }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error saving comment');
             });
         });
     });
 
-    // Delete comment
+    // Delete comment 
     document.querySelectorAll('.delete-comment').forEach(button => {
         button.addEventListener('click', function() {
             if (confirm('Are you sure you want to delete this comment?')) {
                 const commentId = this.dataset.commentId;
+                
+                // comment container (li element) not the button!
+                const comment = document.querySelector(`li[data-comment-id="${commentId}"]`);
                 
                 fetch(`/comments/delete/${commentId}/`, {
                     method: 'POST',
@@ -71,15 +93,19 @@ document.addEventListener('DOMContentLoaded', function() {
                         'X-Requested-With': 'XMLHttpRequest',
                     }
                 })
-                .then(response => response.json())
+                .then(response => {
+                    return response.json();
+                })
                 .then(data => {
                     if (data.success) {
-                        // temporary solution to show comment deletion: reload the page
-                        window.location.reload();
-                    } else {
-                        alert('Error deleting comment');
+                        // Remove the comment element from the DOM
+                        if (comment) {
+                            comment.remove(); // Simple removal
+                        } else {
+                            alert('Error deleting comment: Comment element not found');
+                        }
                     }
-                });
+                })
             }
         });
     });
