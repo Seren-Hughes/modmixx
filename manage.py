@@ -2,7 +2,10 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-import env
+try:
+    import env
+except ModuleNotFoundError:
+    pass
 
 
 def main():
