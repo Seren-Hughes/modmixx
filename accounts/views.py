@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CustomUserCreationForm, ProfileForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import views as auth_views
 from .models import Profile
 from tracks.models import Track
 from django.contrib.auth import login
@@ -104,3 +105,8 @@ def profile(request, username):
         pass # handle edit logic here if needed 
     
     return render(request, 'accounts/profile.html', context)
+
+
+class CustomPasswordResetView(auth_views.PasswordResetView):
+    from_email = "modmixx <modmixx.platform@gmail.com>"
+    template_name = 'accounts/password_reset.html'
