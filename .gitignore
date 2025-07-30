@@ -17,6 +17,9 @@ venv/
 env.py
 db.sqlite3
 
+# Static files
+staticfiles/
+
 # OS
 .DS_Store
 Thumbs.db
