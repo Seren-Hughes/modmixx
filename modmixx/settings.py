@@ -91,6 +91,13 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 WSGI_APPLICATION = 'modmixx.wsgi.application'
 
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -156,11 +163,22 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'  # For production static files collection
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
 
 # Django Allauth Configuration
 # Implements email-based authentication with Google OAuth integration
 # Configured for sheltered community approach (members-only content)
-SITE_ID = 1
+SITE_ID = 2
 
 # Current Allauth 65+ settings format
 ACCOUNT_LOGIN_METHODS = {'email'}
@@ -171,7 +189,7 @@ SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_QUERY_EMAIL = True
 
 # allauth-specific logout settings:
-ACCOUNT_LOGOUT_REDIRECT_URL = '/logout/'  # For allauth logout
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'  # For allauth logout
 ACCOUNT_LOGOUT_ON_GET = True  # Allow GET logout from allauth pages
 ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = False  # Don't auto-logout on password change
 
@@ -180,10 +198,11 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None # Use email as the unique identifier
 ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
 
 # Redirect configuration for sheltered community
-LOGIN_REDIRECT_URL = '/' # Authenticated users see track feed
-LOGOUT_REDIRECT_URL = '/logout/' # Logged out users see success page
+LOGIN_REDIRECT_URL = '/login-redirect/' # Authenticated users see track feed
+LOGOUT_REDIRECT_URL = '/' 
+LOGIN_URL = '/login/' # Redirect to login page for unauthenticated users
 
-SOCIALACCOUNT_STORE_TOKENS = False # Don't store social tokens (helps with logout)
+SOCIALACCOUNT_STORE_TOKENS = False 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

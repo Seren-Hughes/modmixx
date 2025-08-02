@@ -4,9 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
 from .models import Profile
 from tracks.models import Track
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.core.mail import send_mail
-import os
 
 # Create your views here.
 def signup(request):
@@ -15,7 +14,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             Profile.objects.create(user=user)  # Create a profile for the new user
-            login(request, user)  # Log the user in
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             # Send a welcome email. Do not include sensitive information or user input in headers!
             #  - reference https://docs.djangoproject.com/en/5.2/topics/email/#send-mail
             send_mail(
@@ -37,7 +36,6 @@ def signup(request):
 
 @login_required
 def profile_setup(request):
-
     if not hasattr(request.user, 'profile'):
         Profile.objects.create(user=request.user)
 
@@ -50,7 +48,6 @@ def profile_setup(request):
         form = ProfileForm(instance=request.user.profile)
     return render(request, 'accounts/profile_setup.html', {'form': form})
 
-
 @login_required
 def profile_edit(request):
     if request.method == "POST":
@@ -62,7 +59,6 @@ def profile_edit(request):
         form = ProfileForm(instance=request.user.profile)
     return render(request, 'accounts/profile_edit.html', {'form': form})
 
-
 @login_required
 def login_redirect(request):
     """
@@ -72,25 +68,22 @@ def login_redirect(request):
     """
     user = request.user
 
+    # Create profile if it doesn't exist
     if not hasattr(user, 'profile'):
         Profile.objects.create(user=user)
         return redirect('profile_setup')
     
+    # Redirect to setup if username is missing
     if not user.profile.username:
         return redirect('profile_setup')
     
+    # Redirect to user's profile
     return redirect('profile', username=user.profile.username)
 
 @login_required
 def profile(request, username):
-    """
-    Display profile view for any user by username.
-    Shows edit options if viewing your own profile.
-    Display user profile track uploads.
-    """
+    """Display profile view for any user by username."""
     profile = get_object_or_404(Profile, username=username)
-
-    # Get user's tracks ordered by newest first
     user_tracks = Track.objects.filter(user=profile.user).order_by('-created_at')
     
     context = {
@@ -99,18 +92,11 @@ def profile(request, username):
         'user_tracks': user_tracks,
     }
     
-    # If the user is viewing their own profile, they can edit it
-    if request.user == profile.user:
-        
-        pass # handle edit logic here if needed 
-    
     return render(request, 'accounts/profile.html', context)
-
 
 class CustomPasswordResetView(auth_views.PasswordResetView):
     from_email = "modmixx <modmixx.platform@gmail.com>"
     template_name = 'accounts/password_reset.html'
-
 
 @login_required
 def account_delete(request):
@@ -119,3 +105,8 @@ def account_delete(request):
         user.delete()
         return redirect('home')
     return render(request, 'accounts/account_delete_confirm.html')
+
+def custom_logout(request):
+    """Custom logout that ensures complete logout"""
+    logout(request)
+    return redirect('home') 
