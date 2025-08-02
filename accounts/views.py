@@ -110,3 +110,12 @@ def profile(request, username):
 class CustomPasswordResetView(auth_views.PasswordResetView):
     from_email = "modmixx <modmixx.platform@gmail.com>"
     template_name = 'accounts/password_reset.html'
+
+
+@login_required
+def account_delete(request):
+    if request.method == 'POST':
+        user = request.user
+        user.delete()
+        return redirect('home')
+    return render(request, 'accounts/account_delete_confirm.html')

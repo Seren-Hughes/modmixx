@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="text-danger">Delete Account</h2>
+  <div class="alert alert-warning">
+    <strong>Warning:</strong> This action cannot be undone. All your data including:
+    <ul>
+      <li>Your profile</li>
+      <li>Uploaded tracks</li>
+      <li>Comments</li>
+    </ul>
+    will be permanently deleted.
+  </div>
+  
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Yes, Delete My Account</button>
+    <a href="{% url 'profile_edit' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}
