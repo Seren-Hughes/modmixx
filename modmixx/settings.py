@@ -170,13 +170,20 @@ ACCOUNT_ALLOW_REGISTRATION = True
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_QUERY_EMAIL = True
 
+# allauth-specific logout settings:
+ACCOUNT_LOGOUT_REDIRECT_URL = '/logout/'  # For allauth logout
+ACCOUNT_LOGOUT_ON_GET = True  # Allow GET logout from allauth pages
+ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = False  # Don't auto-logout on password change
+
 # Custom user model compatibility
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None # Use email as the unique identifier
 ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
 
 # Redirect configuration for sheltered community
 LOGIN_REDIRECT_URL = '/' # Authenticated users see track feed
-LOGOUT_REDIRECT_URL = '/' # Logged out users see landing page
+LOGOUT_REDIRECT_URL = '/logout/' # Logged out users see success page
+
+SOCIALACCOUNT_STORE_TOKENS = False # Don't store social tokens (helps with logout)
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
