@@ -178,13 +178,8 @@ SOCIALACCOUNT_PROVIDERS = {
 # Django Allauth Configuration
 # Implements email-based authentication with Google OAuth integration
 # Configured for sheltered community approach (members-only content)
-# Environment-specific SITE_ID
-if DEBUG:
-    # Local development
-    SITE_ID = 2  
-else:
-    # Production site ID for Heroku
-    SITE_ID = 1  
+
+SITE_ID = 2  
 
 # Current Allauth 65+ settings format
 ACCOUNT_LOGIN_METHODS = {'email'}
