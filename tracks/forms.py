@@ -135,3 +135,58 @@ class TrackUploadForm(forms.ModelForm):
         elif self.instance and self.instance.pk:
             return self.instance.audio_file
         return audio_file
+    
+
+
+
+def clean_track_image(self):
+    """    
+    Validate uploaded track images for security and format compliance.
+    
+    Implements security measures including:
+    - File size validation (max 10MB)
+    - Image format verification (JPG, PNG, WebP only)
+    - Dimension limits (prevents resource exhaustion)
+    - Filename sanitization (prevents path traversal attacks)
+    """
+    track_image = self.cleaned_data.get('track_image')
+    
+    # Only validate if a new image is uploaded
+    if track_image and hasattr(track_image, 'size'):
+        # Image size validation
+        if track_image.size > 10 * 1024 * 1024:  # 10MB limit
+            raise forms.ValidationError('Image too large (max 10MB)')
+        
+        # Content type validation
+        allowed_image_types = [
+            'image/jpeg', 'image/jpg', 'image/png', 'image/webp'
+        ]
+        if hasattr(track_image, 'content_type') and track_image.content_type:
+            if track_image.content_type not in allowed_image_types:
+                raise forms.ValidationError(
+                    'Invalid image type. Please upload JPG, PNG, or WebP files.'
+                )
+        
+        # Check image dimensions (prevent huge images)
+        if hasattr(track_image, 'width') and hasattr(track_image, 'height'):
+            if track_image.width > 2000 or track_image.height > 2000:
+                raise forms.ValidationError(
+                    'Image dimensions too large. Maximum 2000x2000 pixels.'
+                )
+            
+        # Remove characters that could enable path traversal or filesystem attacks
+        if hasattr(track_image, 'name') and track_image.name:
+            name, ext = os.path.splitext(track_image.name)
+            # Allow only alphanumeric and safe punctuation (OWASP recommendation)
+            safe_name = ''.join(c for c in name if c.isalnum() or c in ' -_()[]')
+            safe_name = safe_name.strip()[:50]  # Limit length to prevent buffer issues
+            if safe_name:  # Only change if it's a valid name
+                track_image.name = f"{safe_name}{ext}"    
+        
+        return track_image
+    
+    # If editing and no new image uploaded, keep existing
+    elif self.instance and self.instance.pk:
+        return self.instance.track_image
+    
+    return track_image
