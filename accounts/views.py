@@ -6,30 +6,41 @@ from .models import Profile
 from tracks.models import Track
 from django.contrib.auth import login, logout
 from django.core.mail import send_mail
+import os  # Import os to access environment variables
 
 # Create your views here.
 def signup(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            Profile.objects.create(user=user)  # Create a profile for the new user
-            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-            # Send a welcome email. Do not include sensitive information or user input in headers!
-            #  - reference https://docs.djangoproject.com/en/5.2/topics/email/#send-mail
-            send_mail(
-                subject="Welcome to modmixx 🎉",
-                message=(
-                    "Thanks for signing up to modmixx!\n\n"
-                    "We're thrilled to have you in our collaborative music community. "
-                    "Dive in, explore, and start creating!"
-                ),
-                from_email="modmixx <modmixx.platform@gmail.com>",
-                recipient_list=[user.email],
-                fail_silently=False,
-            )
-
-            return redirect('profile_setup')  # Redirect to a profile setup page or login
+            try:
+                user = form.save()
+                Profile.objects.create(user=user)
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+                
+                # Debug email sending
+                print(f"Attempting to send email to: {user.email}")
+                print(f"EMAIL_HOST_USER: {os.environ.get('EMAIL_HOST_USER')}")
+                print(f"EMAIL_HOST_PASSWORD set: {'Yes' if os.environ.get('EMAIL_HOST_PASSWORD') else 'No'}")
+                
+                send_mail(
+                    subject="Welcome to modmixx 🎉",
+                    message=(
+                        "Thanks for signing up to modmixx!\n\n"
+                        "We're thrilled to have you in our collaborative music community. "
+                        "Dive in, explore, and start creating!"
+                    ),
+                    from_email="modmixx <modmixx.platform@gmail.com>",
+                    recipient_list=[user.email],
+                    fail_silently=False,
+                )
+                print("Email sent successfully!")
+                
+            except Exception as e:
+                print(f"Signup/Email error: {e}")
+                # Still allow signup to complete
+                
+            return redirect('profile_setup')
     else:
         form = CustomUserCreationForm()
     return render(request, 'accounts/signup.html', {'form': form})
@@ -109,4 +120,4 @@ def account_delete(request):
 def custom_logout(request):
     """Custom logout that ensures complete logout"""
     logout(request)
-    return redirect('home') 
+    return redirect('home')
