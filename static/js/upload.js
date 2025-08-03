@@ -1,5 +1,132 @@
 document.addEventListener('DOMContentLoaded', function() {
     
+    // 1. Modal state management 
+    handleModalValidationErrors();
+    
+    // 2. Upload handlers
+    setupFileUploadHandlers();
+    setupModalEventHandlers();
+    
+    function handleModalValidationErrors() {
+        const uploadModal = document.getElementById('uploadModal');
+        if (uploadModal && uploadModal.dataset.showModal === 'true') {
+            const modal = new bootstrap.Modal(uploadModal);
+            modal.show();
+        }
+    }
+    
+    // Handle modal reopening for validation errors
+    const uploadModal = document.getElementById('uploadModal');
+    
+    if (uploadModal) {
+        const showModal = uploadModal.dataset.showModal === 'true';
+        
+        if (showModal) {
+            console.log('Reopening modal due to validation errors');
+            const modal = new bootstrap.Modal(uploadModal);
+            modal.show();
+        }
+        
+        // Fix cancel button
+        const cancelBtn = document.getElementById('cancelBtn');
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('🐛 DEBUG: Cancel button clicked');
+                
+                // Force close the modal
+                const modal = bootstrap.Modal.getInstance(uploadModal);
+                if (modal) {
+                    modal.hide();
+                } else {
+                    // If no instance exists, create one and hide it
+                    const newModal = new bootstrap.Modal(uploadModal);
+                    newModal.hide();
+                }
+                
+                // Reset form
+                const form = uploadModal.querySelector('form');
+                if (form) {
+                    form.reset();
+                }
+                
+                // Reset preview areas
+                resetPreviews();
+                
+                // Clear validation states
+                clearAllValidationStates();
+            });
+        }
+    }
+
+    // Function to reset preview areas
+    function resetPreviews() {
+        // Reset audio preview
+        const audioUploadArea = document.getElementById('audioUploadArea');
+        const audioPreview = document.getElementById('audioPreview');
+        if (audioUploadArea && audioPreview) {
+            audioUploadArea.style.display = 'block';
+            audioPreview.style.display = 'none';
+        }
+        
+        // Reset image preview
+        const imageUploadArea = document.getElementById('imageUploadArea');
+        const imagePreview = document.getElementById('imagePreview');
+        if (imageUploadArea && imagePreview) {
+            imageUploadArea.style.display = 'block';
+            imagePreview.style.display = 'none';
+        }
+    }
+
+    // Function to clear all validation states
+    function clearAllValidationStates() {
+        const uploadModal = document.getElementById('uploadModal');
+        if (uploadModal) {
+            // Remove all error classes
+            const invalidFields = uploadModal.querySelectorAll('.is-invalid');
+            invalidFields.forEach(field => field.classList.remove('is-invalid'));
+            
+            // Hide all error messages
+            const errorFeedbacks = uploadModal.querySelectorAll('.invalid-feedback');
+            errorFeedbacks.forEach(feedback => feedback.style.display = 'none');
+            
+            // Remove error alerts
+            const errorAlerts = uploadModal.querySelectorAll('.alert-danger');
+            errorAlerts.forEach(alert => alert.remove());
+        }
+    }
+
+    // Also handle the X (close) button
+    const closeBtn = uploadModal.querySelector('.btn-close');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            console.log('🐛 DEBUG: Close (X) button clicked');
+            resetPreviews();
+            clearAllValidationStates();
+        });
+    }
+
+    // Handle modal hidden event (when modal is fully closed)
+    if (uploadModal) {
+        uploadModal.addEventListener('hidden.bs.modal', function() {
+            console.log('🐛 DEBUG: Modal fully closed');
+            
+            // Reset everything when modal is completely hidden
+            const form = uploadModal.querySelector('form');
+            if (form) {
+                form.reset();
+            }
+            
+            resetPreviews();
+            clearAllValidationStates();
+            
+            // If we're on a page with validation errors, redirect to clean feed
+            if (uploadModal.dataset.showModal === 'true') {
+                console.log('🐛 DEBUG: Redirecting to clean feed');
+                window.location.href = '/';  // Redirect to clean feed
+            }
+        });
+    }
 
     // Functions to show previews with change/remove buttons
     function showAudioPreview(file) {
@@ -18,6 +145,18 @@ document.addEventListener('DOMContentLoaded', function() {
         reader.readAsDataURL(file);
     }
 
+    // Clear form errors when user starts making changes
+    function clearFieldErrors(fieldName) {
+        const field = document.querySelector(`[name="${fieldName}"]`);
+        if (field) {
+            field.classList.remove('is-invalid');
+            const feedback = field.parentNode.querySelector('.invalid-feedback');
+            if (feedback) {
+                feedback.style.display = 'none';
+            }
+        }
+    }
+
     // Change file buttons
     const changeAudioBtn = document.getElementById('changeAudioBtn');
     const changeImageBtn = document.getElementById('changeImageBtn');
@@ -32,6 +171,8 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('audioPreview').style.display = 'none';
             // Clear the file input
             document.getElementById('audioFileInput').value = '';
+            // Clear any validation errors
+            clearFieldErrors('audio_file');
         });
     }
     
@@ -45,6 +186,8 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('imagePreview').style.display = 'none';
             // Clear the file input
             document.getElementById('imageFileInput').value = '';
+            // Clear any validation errors
+            clearFieldErrors('track_image');
         });
     }
 
@@ -56,13 +199,16 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (!fileInput) return;
         
-        // single change event listener for each file input
+        // Single change event listener for each file input
         fileInput.addEventListener('change', function(e) {
             e.stopPropagation();
             
             const file = e.target.files[0];
             if (file) {
-                console.log('File selected:', file.name); // Debug
+                console.log('File selected:', file.name, 'Type:', file.type); // Enhanced debug
+                
+                // Clear any existing validation errors
+                clearFieldErrors(fileInput.name);
                 
                 // Determine if it's audio or image
                 if (fileInput.id === 'audioFileInput') {
@@ -73,7 +219,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Prevent default drag behaviours - this is important for drag and drop to work
+        // Prevent default drag behaviours
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             dropZone.addEventListener(eventName, (e) => {
                 e.preventDefault();
@@ -85,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
         dropZone.addEventListener('drop', (e) => {
             const files = e.dataTransfer.files;
             if (files.length > 0) {
-                console.log('File dropped:', files[0].name); // Debug
+                console.log('File dropped:', files[0].name, 'Type:', files[0].type); // Enhanced debug
                 
                 // Assign the file directly
                 const dataTransfer = new DataTransfer();
@@ -106,4 +252,44 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Clear validation errors when user types in text fields
+    const titleInput = document.querySelector('[name="title"]');
+    const descriptionInput = document.querySelector('[name="description"]');
+    
+    if (titleInput) {
+        titleInput.addEventListener('input', function() {
+            clearFieldErrors('title');
+        });
+    }
+    
+    if (descriptionInput) {
+        descriptionInput.addEventListener('input', function() {
+            clearFieldErrors('description');
+        });
+    }
+
+    // Reset modal state when it's closed
+    if (uploadModal) {
+        uploadModal.addEventListener('hidden.bs.modal', function() {
+            // Reset all form fields and previews
+            const form = uploadModal.querySelector('form');
+            if (form) {
+                form.reset();
+            }
+            
+            // Reset previews
+            document.getElementById('audioUploadArea').style.display = 'block';
+            document.getElementById('audioPreview').style.display = 'none';
+            document.getElementById('imageUploadArea').style.display = 'block';
+            document.getElementById('imagePreview').style.display = 'none';
+            
+            // Clear all validation states
+            const invalidFields = uploadModal.querySelectorAll('.is-invalid');
+            invalidFields.forEach(field => field.classList.remove('is-invalid'));
+            
+            const errorAlerts = uploadModal.querySelectorAll('.alert-danger');
+            errorAlerts.forEach(alert => alert.remove());
+        });
+    }
 });
