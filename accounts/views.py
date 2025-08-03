@@ -6,10 +6,10 @@ from .models import Profile
 from tracks.models import Track
 from django.contrib.auth import login, logout
 from django.core.mail import send_mail
-import os  # Import os to access environment variables
 
 # Create your views here.
 def signup(request):
+    """Handle user registration with email and password."""
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
@@ -18,11 +18,7 @@ def signup(request):
                 Profile.objects.create(user=user)
                 login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                 
-                # Debug email sending
-                print(f"Attempting to send email to: {user.email}")
-                print(f"EMAIL_HOST_USER: {os.environ.get('EMAIL_HOST_USER')}")
-                print(f"EMAIL_HOST_PASSWORD set: {'Yes' if os.environ.get('EMAIL_HOST_PASSWORD') else 'No'}")
-                
+                # Send welcome email
                 send_mail(
                     subject="Welcome to modmixx 🎉",
                     message=(
@@ -30,15 +26,14 @@ def signup(request):
                         "We're thrilled to have you in our collaborative music community. "
                         "Dive in, explore, and start creating!"
                     ),
-                    from_email="modmixx <modmixx.platform@gmail.com>",
+                    from_email="modmixx.platform@gmail.com",
                     recipient_list=[user.email],
-                    fail_silently=False,
+                    fail_silently=True,
                 )
-                print("Email sent successfully!")
                 
             except Exception as e:
-                print(f"Signup/Email error: {e}")
-                # Still allow signup to complete
+                # Log error but don't break signup process
+                print(f"Signup error: {e}")
                 
             return redirect('profile_setup')
     else:
@@ -47,6 +42,7 @@ def signup(request):
 
 @login_required
 def profile_setup(request):
+    """Handle initial profile setup for new users."""
     if not hasattr(request.user, 'profile'):
         Profile.objects.create(user=request.user)
 
@@ -61,6 +57,7 @@ def profile_setup(request):
 
 @login_required
 def profile_edit(request):
+    """Handle profile editing for existing users."""
     if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if form.is_valid():
@@ -73,9 +70,10 @@ def profile_edit(request):
 @login_required
 def login_redirect(request):
     """
-    Redirect users after login:
+    Redirect users after login based on profile completion status.
+    
     - New users (no profile or incomplete profile) -> profile setup
-    - Existing users with complete profiles -> profile page
+    - Existing users with complete profiles -> their profile page
     """
     user = request.user
 
@@ -93,7 +91,7 @@ def login_redirect(request):
 
 @login_required
 def profile(request, username):
-    """Display profile view for any user by username."""
+    """Display public profile view for any user."""
     profile = get_object_or_404(Profile, username=username)
     user_tracks = Track.objects.filter(user=profile.user).order_by('-created_at')
     
@@ -106,11 +104,13 @@ def profile(request, username):
     return render(request, 'accounts/profile.html', context)
 
 class CustomPasswordResetView(auth_views.PasswordResetView):
-    from_email = "modmixx <modmixx.platform@gmail.com>"
+    """Custom password reset view with branded from_email."""
+    from_email = "modmixx.platform@gmail.com"
     template_name = 'accounts/password_reset.html'
 
 @login_required
 def account_delete(request):
+    """Handle account deletion with confirmation."""
     if request.method == 'POST':
         user = request.user
         user.delete()
@@ -118,6 +118,6 @@ def account_delete(request):
     return render(request, 'accounts/account_delete_confirm.html')
 
 def custom_logout(request):
-    """Custom logout that ensures complete logout"""
+    """Handle user logout and redirect to home page."""
     logout(request)
-    return redirect('home')
+    return render(request, 'accounts/logout.html')
