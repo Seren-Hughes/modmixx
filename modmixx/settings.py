@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'crispy_forms',  # For crispy forms
     'crispy_bootstrap5',  # For Bootstrap 5 styling with crispy forms
     'comments',  # App for managing comments
+    'storages',  # For AWS S3 storage
 ]
 
 MIDDLEWARE = [
@@ -217,3 +218,31 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+# AWS S3 Storage
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = "modmixx-media"
+AWS_S3_REGION_NAME = "eu-west-2" 
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+
+# AWS S3 settings
+AWS_DEFAULT_ACL = ""
+AWS_QUERYSTRING_AUTH = False  # Clean public URLs
+
+# Use S3 for all media files
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+# URL for accessing media files
+MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
+
+# Django 5 storage config
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
