@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 import os
 
 # Create your models here.
@@ -68,3 +70,20 @@ class Track(models.Model):
         if self.track_image:
             return os.path.basename(self.track_image.name)
         return "No image"
+    
+    
+    
+# Signal handler to delete files from S3 when a Track is deleted    
+@receiver(post_delete, sender=Track)
+def delete_files_on_track_delete(sender, instance, **kwargs):
+    """Delete audio and image files from S3 when a Track instance is deleted.
+    Args:
+        sender (Model): The model class that sent the signal.
+        instance (Track): The instance of the Track being deleted.
+        **kwargs: Additional keyword arguments.
+    """
+    # Check if the instance has audio_file and track_image, then delete them
+    if instance.audio_file:
+        instance.audio_file.delete(save=False)
+    if instance.track_image:
+        instance.track_image.delete(save=False)
