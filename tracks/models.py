@@ -3,6 +3,7 @@ from django.conf import settings
 from django.utils.text import slugify
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from django.core.files.uploadedfile import UploadedFile
 import os
 
 # Create your models here.
@@ -51,7 +52,6 @@ class Track(models.Model):
             base_slug = slugify(self.title)
             slug = base_slug
             counter = 1
-            # Ensure slug is unique by adding counter if needed
             while Track.objects.filter(slug=slug).exists():
                 slug = f"{base_slug}-{counter}"
                 counter += 1

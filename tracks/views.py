@@ -215,20 +215,27 @@ def track_edit(request, slug):
         raise Http404("Track not found")
     
     if request.method == 'POST':
+        # Store references to old files before form processing
+        old_audio_file = track.audio_file if track.audio_file else None
+        old_image_file = track.track_image if track.track_image else None
+        
         # Process edit form with existing track instance
         form = TrackUploadForm(request.POST, request.FILES, instance=track)
         
         if form.is_valid():
-            updated_track = form.save(commit=False)
+            # Save the updated track
+            updated_track = form.save()
             
-            # Preserve existing files when not replaced
-            if 'audio_file' not in request.FILES:
-                updated_track.audio_file = track.audio_file
+            # Delete old audio file if a new one was uploaded
+            if 'audio_file' in form.changed_data and old_audio_file:
+                if old_audio_file != updated_track.audio_file:
+                    old_audio_file.delete(save=False)
             
-            if 'track_image' not in request.FILES:
-                updated_track.track_image = track.track_image
-                
-            updated_track.save()
+            # Delete old image file if a new one was uploaded
+            if 'track_image' in form.changed_data and old_image_file:
+                if old_image_file != updated_track.track_image:
+                    old_image_file.delete(save=False)
+            
             messages.success(request, f'Track "{track.title}" updated successfully!')
             return redirect('track_detail', slug=track.slug)
         else:

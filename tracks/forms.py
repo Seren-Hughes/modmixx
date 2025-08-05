@@ -89,6 +89,13 @@ class TrackUploadForm(forms.ModelForm):
             }),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # If this is an edit (instance exists), make file fields not required
+        if self.instance and self.instance.pk:
+            self.fields['audio_file'].required = False
+            self.fields['track_image'].required = False
+
     # https://stackoverflow.com/questions/51075396/python-django-does-not-overwrite-newly-uploaded-file-with-old-one
     # https://stackoverflow.com/questions/69448205/how-to-update-filefield-data-only-if-a-new-file-has-been-chosen-in-django-or-to
     # https://stackoverflow.com/questions/17774636/editing-a-django-model-with-a-filefield-without-re-uploading-the-file
@@ -119,9 +126,18 @@ class TrackUploadForm(forms.ModelForm):
         - https://cwe.mitre.org/data/definitions/22.html
         """
         audio_file = self.cleaned_data.get('audio_file')
+
+        # Check if this is an edit and the audio hasn't changed
+        if self.instance and self.instance.pk:
+            if not audio_file:
+                return self.instance.audio_file
+            elif hasattr(audio_file, 'name') and self.instance.audio_file:
+                # Check if it's the same file (same name = no new upload)
+                if audio_file.name == self.instance.audio_file.name:
+                    return self.instance.audio_file
         
-        # Only validate if a new file is uploaded
-        if audio_file and hasattr(audio_file, 'size'):
+        # Only validate if a new audio file was uploaded
+        if audio_file and hasattr(audio_file, 'file'):
             # File size validation - prevent resource exhaustion
             if audio_file.size > 100 * 1024 * 1024:
                 raise forms.ValidationError('File size exceeds 100MB limit.')
@@ -151,10 +167,6 @@ class TrackUploadForm(forms.ModelForm):
 
             return audio_file
         
-        # For edits without new file upload, preserve existing file
-        elif self.instance and self.instance.pk:
-            return self.instance.audio_file
-        
         return audio_file
 
     def clean_track_image(self):
@@ -178,8 +190,18 @@ class TrackUploadForm(forms.ModelForm):
         """
         track_image = self.cleaned_data.get('track_image')
         
-        # Only validate if a new image is uploaded
-        if track_image and hasattr(track_image, 'size'):
+        # Check if this is an edit and the image hasn't changed
+        if self.instance and self.instance.pk:
+            if not track_image:
+                # No image uploaded, return existing
+                return self.instance.track_image
+            elif hasattr(track_image, 'name') and self.instance.track_image:
+                # Check if it's the same file (same name = no new upload)
+                if track_image.name == self.instance.track_image.name:
+                    return self.instance.track_image
+        
+        # Only validate if a new image was uploaded
+        if track_image and hasattr(track_image, 'file'):
             # Image size validation - prevent resource exhaustion
             if track_image.size > 10 * 1024 * 1024:  # 10MB limit
                 raise forms.ValidationError('Image too large (max 10MB)')
@@ -209,13 +231,8 @@ class TrackUploadForm(forms.ModelForm):
                 safe_name = safe_name.strip()[:50]  # Limit length to prevent buffer issues
                 if safe_name:
                     track_image.name = f"{safe_name}{ext}"    
-            
-            return track_image
         
-        # For edits without new image upload, preserve existing image
-        elif self.instance and self.instance.pk:
-            return self.instance.track_image
-        
+        # return the image as-is
         return track_image
 
     def clean_title(self):
