@@ -47,9 +47,19 @@ def profile_setup(request):
         Profile.objects.create(user=request.user)
 
     if request.method == "POST":
+        # Store reference to old profile image before form processing
+        old_profile_image = request.user.profile.profile_picture if request.user.profile.profile_picture else None
+        
         form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if form.is_valid():
-            form.save()
+            # Save the updated profile
+            updated_profile = form.save()
+            
+            # Delete old profile image if a new one was uploaded
+            if 'profile_picture' in form.changed_data and old_profile_image:
+                if old_profile_image != updated_profile.profile_picture:
+                    old_profile_image.delete(save=False)
+            
             return redirect('profile', username=request.user.profile.username)
     else:
         form = ProfileForm(instance=request.user.profile)
@@ -59,9 +69,19 @@ def profile_setup(request):
 def profile_edit(request):
     """Handle profile editing for existing users."""
     if request.method == "POST":
+        # Store reference to old profile image before form processing
+        old_profile_image = request.user.profile.profile_picture if request.user.profile.profile_picture else None
+        
         form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if form.is_valid():
-            form.save()
+            # Save the updated profile
+            updated_profile = form.save()
+            
+            # Delete old profile image if a new one was uploaded
+            if 'profile_picture' in form.changed_data and old_profile_image:
+                if old_profile_image != updated_profile.profile_picture:
+                    old_profile_image.delete(save=False)
+            
             return redirect('profile', username=request.user.profile.username)
     else:
         form = ProfileForm(instance=request.user.profile)
