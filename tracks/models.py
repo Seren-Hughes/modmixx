@@ -47,15 +47,32 @@ class Track(models.Model):
         return f"{self.title} by {self.user.profile.display_name or self.user.profile.username}"
     
     def save(self, *args, **kwargs):
-        # Auto-generate slug from title if not provided
-        if not self.slug:
-            base_slug = slugify(self.title)
-            slug = base_slug
-            counter = 1
-            while Track.objects.filter(slug=slug).exists():
-                slug = f"{base_slug}-{counter}"
-                counter += 1
-            self.slug = slug
+        # Generate slug from title if not provided OR if title has changed
+        if not self.slug or (self.pk and self.title):
+            # For existing tracks, check if title changed
+            if self.pk:
+                try:
+                    old_track = Track.objects.get(pk=self.pk)
+                    if old_track.title != self.title:
+                        # Title changed, regenerate slug
+                        base_slug = slugify(self.title)
+                        slug = base_slug
+                        counter = 1
+                        while Track.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                            slug = f"{base_slug}-{counter}"
+                            counter += 1
+                        self.slug = slug
+                except Track.DoesNotExist:
+                    pass
+            else:
+                # New track, generate slug
+                base_slug = slugify(self.title)
+                slug = base_slug
+                counter = 1
+                while Track.objects.filter(slug=slug).exists():
+                    slug = f"{base_slug}-{counter}"
+                    counter += 1
+                self.slug = slug
         super().save(*args, **kwargs) 
 
 
