@@ -1,6 +1,5 @@
 from django import forms
 from .models import Profile
-
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
 import re
@@ -11,9 +10,9 @@ class CustomUserCreationForm(UserCreationForm):
         model = CustomUser
         fields = ("email",)
 
-
 class ProfileForm(forms.ModelForm):
     """Form for creating and editing user profiles.
+       Applies XSS/HTML injection protection and file upload security.
     Fields:
         username: Unique username for the profile.
         display_name: Name displayed to others.
@@ -39,38 +38,120 @@ class ProfileForm(forms.ModelForm):
             'invalid': 'Username can only contain letters, numbers, hyphens, and underscores'
         }
 
+    def clean_display_name(self):
+        display_name = self.cleaned_data.get('display_name')
+        if display_name:
+            display_name = display_name.strip()
+            # Remove HTML tags
+            if re.search(r'<[^>]*>', display_name):
+                raise ValidationError("HTML tags are not allowed in display name.")
+            # Check for dangerous patterns
+            dangerous_patterns = [
+                'javascript:', 'vbscript:', 'onclick=', 'onerror=', 'onload=',
+                'onmouseover=', 'onfocus=', 'data:', 'script'
+            ]
+            display_name_lower = display_name.lower()
+            for pattern in dangerous_patterns:
+                if pattern in display_name_lower:
+                    raise ValidationError(
+                        f"Display name contains potentially harmful content: '{pattern}'."
+                    )
+            if len(display_name) > 100:
+                raise ValidationError("Display name too long. Maximum 100 characters.")
+        return display_name
+
+    def clean_bio(self):
+        bio = self.cleaned_data.get('bio')
+        if bio:
+            bio = bio.strip()
+            # Remove HTML tags
+            if re.search(r'<[^>]*>', bio):
+                raise ValidationError("HTML tags are not allowed in bio.")
+            # Check for dangerous patterns
+            dangerous_patterns = [
+                'javascript:', 'vbscript:', 'onclick=', 'onerror=', 'onload=',
+                'onmouseover=', 'onfocus=', 'data:', 'script'
+            ]
+            bio_lower = bio.lower()
+            for pattern in dangerous_patterns:
+                if pattern in bio_lower:
+                    raise ValidationError(
+                        f"Bio contains potentially harmful content: '{pattern}'."
+                    )
+            if len(bio) > 500:
+                raise ValidationError("Bio too long. Maximum 500 characters.")
+        return bio
+
+    def clean_pronouns(self):
+        pronouns = self.cleaned_data.get('pronouns')
+        if pronouns:
+            pronouns = pronouns.strip()
+            # Remove HTML tags
+            if re.search(r'<[^>]*>', pronouns):
+                raise ValidationError("HTML tags are not allowed in pronouns.")
+            # Check for dangerous patterns
+            dangerous_patterns = [
+                'javascript:', 'vbscript:', 'onclick=', 'onerror=', 'onload=',
+                'onmouseover=', 'onfocus=', 'data:', 'script'
+            ]
+            pronouns_lower = pronouns.lower()
+            for pattern in dangerous_patterns:
+                if pattern in pronouns_lower:
+                    raise ValidationError(
+                        f"Pronouns contain potentially harmful content: '{pattern}'."
+                    )
+            if len(pronouns) > 50:
+                raise ValidationError("Pronouns too long. Maximum 50 characters.")
+        return pronouns
+
     def clean_username(self):
         username = self.cleaned_data['username']
         if ' ' in username:
-            raise forms.ValidationError("Username cannot contain spaces")
-        return username.lower()  # Ensure lowercase
+            raise ValidationError("Username cannot contain spaces")
+        # Remove HTML tags
+        if re.search(r'<[^>]*>', username):
+            raise ValidationError("HTML tags are not allowed in username.")
+        # Check for dangerous patterns
+        dangerous_patterns = [
+            'javascript:', 'vbscript:', 'onclick=', 'onerror=', 'onload=',
+            'onmouseover:', 'onfocus=', 'data:', 'script'
+        ]
+        username_lower = username.lower()
+        for pattern in dangerous_patterns:
+            if pattern in username_lower:
+                raise ValidationError(
+                    f"Username contains potentially harmful content: '{pattern}'."
+                )
+        return username.lower()
 
     def clean_profile_picture(self):
+        """
+        Security validation for newly uploaded profile pictures only.
+        - File size: 20MB max
+        - Extension: jpg, jpeg, png, webp
+        - MIME type: image/jpeg, image/png, image/webp
+        - Filename sanitization
+        """
         image = self.cleaned_data.get('profile_picture')
-
-        # Only validate if a new file is uploaded 
+        # Only validate if a new file is uploaded
         if image and hasattr(image, 'file'):
             # File size validation (20MB limit)
             if image.size > 20 * 1024 * 1024:
                 raise ValidationError("Image file too large. Maximum size is 20MB.")
-
             # File extension validation (case-insensitive)
             allowed_extensions = ['jpg', 'jpeg', 'png', 'webp']
             filename = image.name.split('/')[-1].split('\\')[-1]
             ext = filename.split('.')[-1].lower() if '.' in filename else ''
             if ext not in allowed_extensions:
                 raise ValidationError("Invalid file type. Only JPG, PNG, and WebP files are allowed.")
-
             # MIME type validation
             allowed_types = ['image/jpeg', 'image/png', 'image/webp']
             if hasattr(image, 'content_type') and image.content_type not in allowed_types:
                 raise ValidationError("Invalid image format. Only JPG, PNG, and WebP are allowed.")
-
             # Basic filename sanitization
             if '..' in filename or '/' in filename or '\\' in filename:
                 raise ValidationError("Invalid filename.")
             safe_name = re.sub(r'[^\w\-_\.]', '', filename)
             if safe_name != filename:
                 image.name = safe_name
-
         return image
