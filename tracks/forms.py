@@ -1,6 +1,7 @@
 from django import forms
 from django.core.validators import FileExtensionValidator
 from django.core.exceptions import ValidationError
+from core.utils import get_toxicity_score
 from .models import Track
 import os
 import re # Regular expressions module for filename sanitization
@@ -237,10 +238,11 @@ class TrackUploadForm(forms.ModelForm):
 
     def clean_title(self):
         """
-        Validate track title for security and format compliance.
-        
+        Validate track title for security, format compliance and content moderation using Perspective API.
+
         Implements comprehensive input validation following OWASP guidelines
         to prevent Cross-Site Scripting (XSS) and injection attacks.
+        Blocks titles with toxicity score above 0.7 threshold.
         
         Security measures:
             - HTML tag detection and rejection
@@ -263,6 +265,19 @@ class TrackUploadForm(forms.ModelForm):
         
         if title:
             title = title.strip()
+
+            
+            # Perspective API moderation
+            try:
+                toxicity = get_toxicity_score(title)
+                if toxicity > 0.7:
+                    raise ValidationError("Your track title may contain inappropriate language. Please revise.")
+            except ValidationError:
+                raise  # Re-raise validation errors
+            except Exception as e:
+                # Log API errors but allow track if moderation service fails
+                print(f"Perspective API error for title: {e}")
+                pass
             
             # Length validation
             if len(title) < 2:
@@ -292,10 +307,11 @@ class TrackUploadForm(forms.ModelForm):
 
     def clean_description(self):
         """
-        Validate track description for security and content compliance.
-        
+        Validate track description for security, content compliance and moderation using Perspective API.
+
         Implements comprehensive content filtering to prevent Cross-Site Scripting (XSS)
         and other injection attacks while maintaining usability for legitimate content.
+        Blocks descriptions with toxicity score above 0.7 threshold.
         
         Security measures:
             - HTML tag detection and rejection
@@ -319,6 +335,18 @@ class TrackUploadForm(forms.ModelForm):
         
         if description:
             description = description.strip()
+
+            # Perspective API moderation
+            try:
+                toxicity = get_toxicity_score(description)
+                if toxicity > 0.7:
+                    raise ValidationError("Your track description may contain inappropriate language. Please revise.")
+            except ValidationError:
+                raise  # Re-raise validation errors
+            except Exception as e:
+                # Log API errors but allow track if moderation service fails
+                print(f"Perspective API error for description: {e}")
+                pass
             
             # HTML tag detection - prevents XSS through markup injection
             if re.search(r'<[^>]*>', description):
