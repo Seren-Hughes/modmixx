@@ -57,3 +57,15 @@ def comment_delete(request, comment_id):
         return JsonResponse({'success': True})
     
     return redirect('track_detail', slug=track_slug)
+
+def post_comment(request):
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('somewhere')
+        # If not valid, fall through to re-render the form with errors
+        return render(request, 'comments/comment_form.html', {'form': form})
+    else:
+        form = CommentForm()
+    return render(request, 'comments/comment_form.html', {'form': form})

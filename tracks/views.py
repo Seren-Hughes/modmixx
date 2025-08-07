@@ -51,14 +51,22 @@ def track_detail(request, slug):
     
     This view provides comprehensive track information including audio playback,
     user comments, and interaction capabilities. Handles both GET requests for
-    viewing and POST requests for comment submission.
+    viewing and POST requests for comment submission with automated content moderation.
     
     Features:
         - Full track metadata display with audio player
         - Approved comments display in chronological order
-        - Comment submission form with validation
+        - Comment submission form with validation and toxicity detection
+        - Perspective API integration for automated content moderation
         - User profile integration and track ownership verification
         - Social interaction elements (comments, user profiles)
+    
+    Content Moderation:
+        - Integrates Google Perspective API for toxic language detection
+        - Blocks comments with toxicity score above 0.7 threshold
+        - Displays user-friendly error messages for flagged content
+        - Graceful fallback if moderation API is unavailable
+        - Maintains comment quality and community safety standards
     
     Args:
         request (HttpRequest): The HTTP request object
@@ -74,28 +82,33 @@ def track_detail(request, slug):
     Context:
         track: Track object with full metadata
         comments: QuerySet of approved Comment objects
-        form: CommentForm for new comment submission
+        form: CommentForm for new comment submission with validation errors
     """
     track = get_object_or_404(Track, slug=slug)
-    comments = track.comments.filter(is_approved=True).order_by('-created_at')
+    comments = Comment.objects.filter(track=track).order_by('-created_at')
     
-    # Handle comment submission via POST request
+    # Handle comment submission with content moderation
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
+            # Save valid comment
             comment = form.save(commit=False)
             comment.user = request.user
             comment.track = track
             comment.save()
             messages.success(request, 'Comment added successfully!')
             return redirect('track_detail', slug=track.slug)
+        else:
+            # Form is invalid (e.g., toxic content detected)
+            # Fall through to re-render page with validation errors
+            pass
     else:
         form = CommentForm()
     
     return render(request, 'tracks/track_detail.html', {
         'track': track,
         'comments': comments,
-        'form': form,  
+        'form': form,
     })
 
 

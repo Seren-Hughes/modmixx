@@ -115,13 +115,24 @@
                                 
                                 <!-- Comment input area -->
                                 <div class="flex-grow-1">
-                                    <textarea class="form-control"
+                                    <!-- Updated textarea with error display -->
+                                    <textarea class="form-control {% if form.content.errors %}is-invalid{% endif %}"
                                               name="content"
                                               id="new-comment-content"
                                               rows="3"
                                               placeholder="Share your thoughts about this track..."
                                               style="resize: vertical;"
-                                              required></textarea>
+                                              required>{% if form.content.value %}{{ form.content.value }}{% endif %}</textarea>
+
+                                    <!-- Display validation errors for toxic content -->
+                                    {% if form.content.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in form.content.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+
                                     <div class="mt-2 d-flex justify-content-between align-items-center">
                                         <small class="text-muted">
                                             <i class="fa fa-info-circle me-1"></i>

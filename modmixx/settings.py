@@ -246,3 +246,6 @@ STORAGES = {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
+
+# Perspective API 
+PERSPECTIVE_API_KEY = os.environ.get("PERSPECTIVE_API_KEY")
