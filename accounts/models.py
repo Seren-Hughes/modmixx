@@ -76,14 +76,11 @@ class Profile(models.Model):
         help_text="Your name as shown to others (can have spaces)"
     )
     bio = models.TextField(blank=True, null=True)
-    PRONOUN_CHOICES = [
-        ('he/him', 'He/Him'),
-        ('she/her', 'She/Her'),
-        ('they/them', 'They/Them'),
-        ('don\'t specify', 'Don\'t Specify'),
-        ('other', 'Other'),  
-    ]
-    pronouns = models.CharField(max_length=50, choices=PRONOUN_CHOICES, blank=True, null=True)
+    pronouns = models.CharField(
+        max_length=50, 
+        blank=True, 
+        help_text="e.g., she/her, they/them, he/they, xe/xir"
+    )
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
 
     def __str__(self):

@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
 import re
 from django.core.exceptions import ValidationError
+from core.utils import get_toxicity_score 
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
@@ -56,6 +57,15 @@ class ProfileForm(forms.ModelForm):
                     raise ValidationError(
                         f"Display name contains potentially harmful content: '{pattern}'."
                     )
+            # Perspective API moderation
+            try:
+                toxicity = get_toxicity_score(display_name)
+                if toxicity > 0.7:
+                    raise ValidationError("Your display name may contain inappropriate language. Please revise.")
+            except ValidationError:
+                raise
+            except Exception:
+                pass  # Allow if API fails
             if len(display_name) > 100:
                 raise ValidationError("Display name too long. Maximum 100 characters.")
         return display_name
@@ -78,6 +88,15 @@ class ProfileForm(forms.ModelForm):
                     raise ValidationError(
                         f"Bio contains potentially harmful content: '{pattern}'."
                     )
+            # Perspective API moderation
+            try:
+                toxicity = get_toxicity_score(bio)
+                if toxicity > 0.7:
+                    raise ValidationError("Your bio may contain inappropriate language. Please revise.")
+            except ValidationError:
+                raise
+            except Exception:
+                pass  # Allow if API fails
             if len(bio) > 500:
                 raise ValidationError("Bio too long. Maximum 500 characters.")
         return bio
@@ -100,6 +119,15 @@ class ProfileForm(forms.ModelForm):
                     raise ValidationError(
                         f"Pronouns contain potentially harmful content: '{pattern}'."
                     )
+            # Perspective API moderation
+            try:
+                toxicity = get_toxicity_score(pronouns)
+                if toxicity > 0.7:
+                    raise ValidationError("Your pronouns may contain inappropriate language. Please revise.")
+            except ValidationError:
+                raise
+            except Exception:
+                pass  # Allow if API fails
             if len(pronouns) > 50:
                 raise ValidationError("Pronouns too long. Maximum 50 characters.")
         return pronouns

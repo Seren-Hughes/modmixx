@@ -1,11 +1,7 @@
 from django import forms
 from .models import Comment
-from .utils import get_toxicity_score
+from core.utils import get_toxicity_score
 from django.core.exceptions import ValidationError
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
 
 class CommentForm(forms.ModelForm):
     """
@@ -44,37 +40,3 @@ class CommentForm(forms.ModelForm):
                 print(f"Perspective API error: {e}")
                 pass
         return content
-
-def post_comment(request):
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('somewhere')
-        # If not valid, fall through to re-render the form with errors
-    else:
-        form = CommentForm()
-    return render(request, 'comments/comment_form.html', {'form': form})
-
-@login_required
-@require_POST
-def comment_edit(request, comment_id):
-    comment = get_object_or_404(Comment, id=comment_id, user=request.user)
-    form = CommentForm(request.POST, instance=comment)
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        if form.is_valid():
-            form.save()
-            return JsonResponse({
-                'success': True,
-                'content': comment.content,
-                'updated_at': comment.updated_at.strftime('%b %d, %Y %I:%M %p')
-            })
-        else:
-            return JsonResponse({'success': False, 'errors': form.errors})
-    else:
-        if form.is_valid():
-            form.save()
-            return redirect('track_detail', slug=comment.track.slug)
-        else:
-            # Re-render the form with errors
-            return render(request, 'comments/comment_form.html', {'form': form, 'comment': comment})
