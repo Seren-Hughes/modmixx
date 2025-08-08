@@ -3,8 +3,10 @@ from .models import Profile
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
 import re
+import os
 from django.core.exceptions import ValidationError
 from core.utils import get_toxicity_score 
+from ulid import ULID  
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
@@ -158,7 +160,7 @@ class ProfileForm(forms.ModelForm):
         - File size: 20MB max
         - Extension: jpg, jpeg, png, webp
         - MIME type: image/jpeg, image/png, image/webp
-        - Filename sanitization
+        - Filename sanitization with ULID for uniqueness
         """
         image = self.cleaned_data.get('profile_picture')
         # Only validate if a new file is uploaded
@@ -166,20 +168,33 @@ class ProfileForm(forms.ModelForm):
             # File size validation (20MB limit)
             if image.size > 20 * 1024 * 1024:
                 raise ValidationError("Image file too large. Maximum size is 20MB.")
+            
             # File extension validation (case-insensitive)
             allowed_extensions = ['jpg', 'jpeg', 'png', 'webp']
             filename = image.name.split('/')[-1].split('\\')[-1]
             ext = filename.split('.')[-1].lower() if '.' in filename else ''
             if ext not in allowed_extensions:
                 raise ValidationError("Invalid file type. Only JPG, PNG, and WebP files are allowed.")
+            
             # MIME type validation
             allowed_types = ['image/jpeg', 'image/png', 'image/webp']
             if hasattr(image, 'content_type') and image.content_type not in allowed_types:
                 raise ValidationError("Invalid image format. Only JPG, PNG, and WebP are allowed.")
+            
             # Basic filename sanitization
             if '..' in filename or '/' in filename or '\\' in filename:
                 raise ValidationError("Invalid filename.")
-            safe_name = re.sub(r'[^\w\-_\.]', '', filename)
-            if safe_name != filename:
-                image.name = safe_name
+            
+            # Generate unique filename with ULID
+            name, ext = os.path.splitext(filename)
+            safe_name = ''.join(c for c in name if c.isalnum() or c in ' -_()[]')
+            safe_name = safe_name.strip()[:30]
+            
+            if safe_name:
+                ulid = str(ULID())
+                image.name = f"{safe_name}_{ulid}{ext}"
+            else:
+                ulid = str(ULID())
+                image.name = f"profile_{ulid}{ext}"
+            
         return image

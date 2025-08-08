@@ -4,7 +4,8 @@ from django.core.exceptions import ValidationError
 from core.utils import get_toxicity_score
 from .models import Track
 import os
-import re # Regular expressions module for filename sanitization
+import re
+from ulid import ULID
 
 class TrackUploadForm(forms.ModelForm):
     """
@@ -162,9 +163,14 @@ class TrackUploadForm(forms.ModelForm):
                 name, ext = os.path.splitext(audio_file.name)
                 # Allow only alphanumeric characters and safe punctuation
                 safe_name = ''.join(c for c in name if c.isalnum() or c in ' -_()[]')
-                safe_name = safe_name.strip()[:50]  # Limit length to prevent buffer issues
+                safe_name = safe_name.strip()[:30] 
                 if safe_name:
-                    audio_file.name = f"{safe_name}{ext}"
+                    ulid = str(ULID())
+                    audio_file.name = f"{safe_name}_{ulid}{ext}"
+                else:
+                    ulid = str(ULID())
+                    audio_file.name = f"track_{ulid}{ext}"
+                    
 
             return audio_file
         
@@ -229,10 +235,14 @@ class TrackUploadForm(forms.ModelForm):
                 name, ext = os.path.splitext(track_image.name)
                 # Allow only alphanumeric characters and safe punctuation
                 safe_name = ''.join(c for c in name if c.isalnum() or c in ' -_()[]')
-                safe_name = safe_name.strip()[:50]  # Limit length to prevent buffer issues
+                safe_name = safe_name.strip()[:30]
                 if safe_name:
-                    track_image.name = f"{safe_name}{ext}"    
-        
+                    ulid = str(ULID())
+                    track_image.name = f"{safe_name}_{ulid}{ext}"
+                else:
+                    ulid = str(ULID())
+                    track_image.name = f"image_{ulid}{ext}"
+                
         # return the image as-is
         return track_image
 
