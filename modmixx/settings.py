@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'crispy_forms',  # For crispy forms
     'crispy_bootstrap5',  # For Bootstrap 5 styling with crispy forms
     'comments',  # App for managing comments
+    'contact',  # App for managing contact forms
     'storages',  # For AWS S3 storage
 ]
 
