@@ -6,6 +6,7 @@ from .models import Profile
 from tracks.models import Track
 from django.contrib.auth import login, logout
 from django.core.mail import send_mail
+from django.contrib import messages
 
 # Create your views here.
 def signup(request):
@@ -60,6 +61,7 @@ def profile_setup(request):
                 if old_profile_image != updated_profile.profile_picture:
                     old_profile_image.delete(save=False)
             
+            messages.success(request, "Profile setup complete! 🎉")
             return redirect('profile', username=request.user.profile.username)
     else:
         form = ProfileForm(instance=request.user.profile)
@@ -82,6 +84,7 @@ def profile_edit(request):
                 if old_profile_image != updated_profile.profile_picture:
                     old_profile_image.delete(save=False)
             
+            messages.success(request, "Profile updated successfully!")
             return redirect('profile', username=request.user.profile.username)
     else:
         form = ProfileForm(instance=request.user.profile)

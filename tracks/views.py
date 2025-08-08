@@ -317,3 +317,7 @@ def track_delete(request, slug):
     
     # Redirect invalid requests back to track detail
     return redirect('track_detail', slug=slug)
+
+def upload_track(request):
+    messages.success(request, "Track uploaded successfully!")
+    return redirect('feed')
