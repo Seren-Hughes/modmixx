@@ -5,6 +5,7 @@ from .models import CustomUser
 import re
 import os
 from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import InMemoryUploadedFile, TemporaryUploadedFile
 from core.utils import get_toxicity_score 
 from ulid import ULID  
 
@@ -164,7 +165,7 @@ class ProfileForm(forms.ModelForm):
         """
         image = self.cleaned_data.get('profile_picture')
         # Only validate if a new file is uploaded
-        if image and hasattr(image, 'file'):
+        if isinstance(image, (InMemoryUploadedFile, TemporaryUploadedFile)):
             # File size validation (20MB limit)
             if image.size > 20 * 1024 * 1024:
                 raise ValidationError("Image file too large. Maximum size is 20MB.")

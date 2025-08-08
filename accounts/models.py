@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.core.files.uploadedfile import InMemoryUploadedFile, TemporaryUploadedFile
 from django.db import models
 from django.conf import settings
 
@@ -82,6 +83,31 @@ class Profile(models.Model):
         help_text="e.g., she/her, they/them, he/they, xe/xir"
     )
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        """
+        Custom save method to handle profile picture cleanup.
+
+        - If the profile picture is replaced or cleared, delete the old file from storage (S3).
+        - Only deletes the old file if:
+            * The clear checkbox was checked (profile_picture is now None)
+            * A new file was uploaded (profile_picture is a new InMemoryUploadedFile or TemporaryUploadedFile)
+        """
+        try:
+            old = Profile.objects.get(pk=self.pk)
+        except Profile.DoesNotExist:
+            old = None
+
+        super().save(*args, **kwargs)
+
+        # Delete the old profile picture if it was replaced or cleared
+        if old and old.profile_picture and old.profile_picture != self.profile_picture:
+            if not self.profile_picture:
+                # User cleared the image via the clear checkbox
+                old.profile_picture.delete(save=False)
+            elif isinstance(self.profile_picture.file, (InMemoryUploadedFile, TemporaryUploadedFile)):
+                # User uploaded a new image, so remove the old file
+                old.profile_picture.delete(save=False)
 
     def __str__(self):
         return f"{self.username or self.user.email}'s Profile"
