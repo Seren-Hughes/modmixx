@@ -1,7 +1,9 @@
 from django import forms
 from django.core.validators import FileExtensionValidator
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 from core.utils import get_toxicity_score
+from .services.moderation import scan_image_bytes
 from .models import Track
 import os
 import re
@@ -181,13 +183,15 @@ class TrackUploadForm(forms.ModelForm):
         Validate uploaded track images for security and format compliance.
         
         Implements comprehensive image validation to prevent malicious uploads
-        and ensure proper resource management.
+        and ensure proper resource management. Now includes AWS Rekognition
+        content moderation.
     
         Security measures:
             - File size validation (10MB limit)
             - Image format verification (JPG, PNG, WebP only)
             - Dimension limits (prevents resource exhaustion)
             - Filename sanitization (prevents path traversal attacks)
+            - AWS Rekognition content moderation (fail-open)
             
         Returns:
             ImageFile: Validated and sanitized image file, or existing file for edits
@@ -196,6 +200,11 @@ class TrackUploadForm(forms.ModelForm):
             ValidationError: If image fails security or format validation
         """
         track_image = self.cleaned_data.get('track_image')
+        
+        # Initialize moderation flags for save() method
+        self._moderation_failed = False
+        self._moderation_allowed = True
+        self._moderation_labels = []
         
         # Check if this is an edit and the image hasn't changed
         if self.instance and self.instance.pk:
@@ -229,6 +238,24 @@ class TrackUploadForm(forms.ModelForm):
                     raise forms.ValidationError(
                         'Image dimensions too large. Maximum 2000x2000 pixels.'
                     )
+            
+            # AWS Rekognition content moderation
+            try:
+                data = track_image.read()
+                track_image.seek(0)
+                allowed, labels, failed = scan_image_bytes(data)  # receives 3 values
+                
+                self._moderation_allowed = allowed
+                self._moderation_labels = labels
+                self._moderation_failed = failed  # Set based on the failure flag
+                
+                if not allowed:
+                    raise forms.ValidationError("This image violates our community guidelines.")
+            except forms.ValidationError:
+                raise
+            except Exception as e:
+                # This shouldn't happen but keep as backup *
+                self._moderation_failed = True
                 
             # Filename sanitization following OWASP recommendations
             if hasattr(track_image, 'name') and track_image.name:
@@ -383,5 +410,24 @@ class TrackUploadForm(forms.ModelForm):
             description = re.sub(r'\n\s*\n\s*\n', '\n\n', description)  # Max double newlines
         
         return description
+
+    def save(self, commit=True):
+        """
+        Save the track with moderation status based on image scan results.
+        """
+        inst = super().save(commit=False)
+        
+        # Set moderation status based on image scan (if image was uploaded)
+        if getattr(self, "_moderation_failed", False):
+            inst.moderation_status = "PENDING"
+            inst.moderation_labels = None
+        else:
+            inst.moderation_status = "APPROVED" if getattr(self, "_moderation_allowed", True) else "REJECTED"
+            inst.moderation_labels = getattr(self, "_moderation_labels", [])
+        
+        inst.moderated_at = timezone.now()
+        if commit:
+            inst.save()
+        return inst
 
 # End of TrackUploadForm class

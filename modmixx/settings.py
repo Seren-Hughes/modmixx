@@ -250,3 +250,12 @@ STORAGES = {
 
 # Perspective API 
 PERSPECTIVE_API_KEY = os.environ.get("PERSPECTIVE_API_KEY")
+
+# Rekognition config
+AWS_REGION = os.environ.get("AWS_REGION", "eu-west-1")
+IMAGE_MODERATION_ENABLED = os.environ.get("IMAGE_MODERATION_ENABLED", "true").lower() == "true"
+REKOG_MIN_CONFIDENCE = int(os.environ.get("REKOG_MIN_CONFIDENCE", "80"))
+
+# Rekognition credentials
+REKOGNITION_ACCESS_KEY = os.environ.get("REKOGNITION_ACCESS_KEY")
+REKOGNITION_SECRET = os.environ.get("REKOGNITION_SECRET")

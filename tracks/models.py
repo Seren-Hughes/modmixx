@@ -40,6 +40,12 @@ class Track(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # Moderation fields
+    MOD_STATUS = (("PENDING","Pending"), ("APPROVED","Approved"), ("REJECTED","Rejected"))
+    moderation_status = models.CharField(max_length=9, choices=MOD_STATUS, default="PENDING")
+    moderation_labels = models.JSONField(blank=True, null=True)
+    moderated_at = models.DateTimeField(blank=True, null=True)
+
     class Meta:
         ordering = ['-created_at'] # Newest tracks first
 

@@ -6,31 +6,25 @@ from django.urls import reverse
 from django.utils.timesince import timesince
 from django.contrib import messages
 from django.http import Http404
-from django.db.models import Count
+from django.db.models import Count, Q
 from .models import Track
 from .forms import TrackUploadForm
 from comments.models import Comment
 from comments.forms import CommentForm
 
 # Create your views here.
-
 @login_required
 def track_feed(request):
     """
     Server-render (SSR) the first page (5 newest tracks).
-    Benefits:
-      - Fast first paint (HTML already rendered)
-      - Works without JS (progressive enhancement)
-      - JS infinite scroll starts at page=2
-    N+1 avoidance:
-      - select_related('user','user__profile'): prevents 1 extra query per track when accessing user/profile
-      - annotate(comment_count=Count('comments')): avoids per-track COUNT() queries in template
+    Only show APPROVED tracks to maintain community standards.
     """
     tracks = (
         Track.objects
-        .select_related('user', 'user__profile') # Avoid N+1 (1 main query vs 1 + N)
-        .annotate(comment_count=Count('comments')) # Aggregate once; no per-item COUNT
-        .order_by('-created_at')[:5] # First 5 only; rest loaded via API
+        .filter(moderation_status="APPROVED")  # Only approved tracks
+        .select_related('user', 'user__profile')
+        .annotate(comment_count=Count('comments'))
+        .order_by('-created_at')[:5]
     )
     upload_form = TrackUploadForm()
     return render(request, 'tracks/feed.html', {
@@ -55,6 +49,7 @@ def track_detail(request, slug):
         - Perspective API integration for automated content moderation
         - User profile integration and track ownership verification
         - Social interaction elements (comments, user profiles)
+        - Moderation-aware access (users can see own pending tracks)
     
     Content Moderation:
         - Integrates Google Perspective API for toxic language detection
@@ -62,6 +57,7 @@ def track_detail(request, slug):
         - Displays user-friendly error messages for flagged content
         - Graceful fallback if moderation API is unavailable
         - Maintains comment quality and community safety standards
+        - AWS Rekognition image moderation status display
     
     Args:
         request (HttpRequest): The HTTP request object
@@ -71,7 +67,7 @@ def track_detail(request, slug):
         HttpResponse: Rendered track detail template with track data and comments
         
     Raises:
-        Http404: If track with specified slug does not exist
+        Http404: If track with specified slug does not exist or user lacks access
         
     Template: tracks/track_detail.html
     Context:
@@ -79,7 +75,13 @@ def track_detail(request, slug):
         comments: QuerySet of approved Comment objects
         form: CommentForm for new comment submission with validation errors
     """
-    track = get_object_or_404(Track, slug=slug)
+    # for now users can see their own tracks regardless of moderation status * clumsy needs to be fixed
+    # All other users only see approved tracks
+    track = get_object_or_404(
+        Track.objects.select_related('user', 'user__profile'),
+        Q(slug=slug) & (Q(moderation_status="APPROVED") | Q(user=request.user))
+    )
+    
     comments = Comment.objects.filter(track=track).order_by('-created_at')
     
     # Handle comment submission with content moderation
@@ -122,12 +124,14 @@ def track_upload(request):
         - MIME type verification
         - Filename sanitization
         - User authentication verification
+        - AWS Rekognition image moderation with fail-open policy
     
     User Experience:
         - Modal state preservation on validation errors
         - Detailed error messaging for field-specific issues
         - Seamless integration with track feed interface
         - Automatic redirect to track detail on success
+        - User notification for pending moderation status
     
     Args:
         request (HttpRequest): The HTTP request object with form data and files
@@ -150,7 +154,20 @@ def track_upload(request):
             track.user = request.user
             track.save()
             
-            messages.success(request, f'Track "{track.title}" uploaded successfully!')
+            # Check moderation status and provide appropriate feedback
+            if track.moderation_status == "PENDING":
+                messages.warning(
+                    request,
+                    f'Track "{track.title}" uploaded successfully! Your artwork is pending moderation and will be reviewed shortly.'
+                )
+            elif track.moderation_status == "REJECTED":
+                messages.error(
+                    request,
+                    f'Track "{track.title}" was uploaded but the artwork was flagged during moderation.'
+                )
+            else:
+                messages.success(request, f'Track "{track.title}" uploaded successfully!')
+            
             return redirect('track_detail', slug=track.slug)
         else:
             # Handle validation errors with user-friendly messaging
@@ -321,30 +338,13 @@ def upload_track(request):
 
 def track_feed_api(request):
     """
-    JSON endpoint for infinite scroll (page size = 5).
-
-    Query parameter:
-      page (int, default=1) - 1-based page number.
-
-    Performance / N+1:
-      N+1 = 1 query for list + N queries for related objects (refs:
-        Django docs: https://docs.djangoproject.com/en/stable/topics/db/optimization/#use-select-related-and-prefetch-related
-        Medium explainer: https://medium.com/databases-in-simple-words/the-n-1-database-query-problem-a-simple-explanation-and-solutions-ef11751aef8a
-      Mitigations here:
-        - select_related joins user + profile in main query
-        - annotate(comment_count=Count('comments')) gets counts in same query
-
-    Returns:
-      {
-        "tracks": [ { id, title, slug, detail_url, description, created_ago,
-                      audio_url, image_url, comment_count,
-                      profile: { username, display_name, url, avatar } } ],
-        "has_next": bool
-      }
+    JSON endpoint for infinite scroll.
+    Only return APPROVED tracks.
     """
     page = int(request.GET.get('page', 1))
     tracks_qs = (
         Track.objects
+        .filter(moderation_status="APPROVED")  # Only approved tracks
         .select_related('user', 'user__profile')
         .annotate(comment_count=Count('comments'))
         .order_by('-created_at')
