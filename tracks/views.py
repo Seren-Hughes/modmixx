@@ -1,7 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.http import JsonResponse
+from django.urls import reverse
+from django.utils.timesince import timesince
 from django.contrib import messages
 from django.http import Http404
+from django.db.models import Count
 from .models import Track
 from .forms import TrackUploadForm
 from comments.models import Comment
@@ -12,32 +17,22 @@ from comments.forms import CommentForm
 @login_required
 def track_feed(request):
     """
-    Display the main track feed for authenticated users.
-    
-    This view serves as the community homepage, showing all uploaded tracks
-    in reverse chronological order with an integrated upload modal. Only 
-    authenticated users can access this view to maintain platform privacy.
-    
-    Features:
-        - Displays latest 5 tracks with metadata and audio players
-        - Provides upload form integration via modal
-        - Shows track artwork, user profiles, and comment counts
-        - Responsive design optimized for community interaction
-    
-    Args:
-        request (HttpRequest): The HTTP request object containing user session
-        
-    Returns:
-        HttpResponse: Rendered track feed template with tracks and upload form
-        
-    Template: tracks/feed.html
-    Context:
-        tracks: QuerySet of latest Track objects
-        upload_form: Empty TrackUploadForm for modal integration
+    Server-render (SSR) the first page (5 newest tracks).
+    Benefits:
+      - Fast first paint (HTML already rendered)
+      - Works without JS (progressive enhancement)
+      - JS infinite scroll starts at page=2
+    N+1 avoidance:
+      - select_related('user','user__profile'): prevents 1 extra query per track when accessing user/profile
+      - annotate(comment_count=Count('comments')): avoids per-track COUNT() queries in template
     """
-    tracks = Track.objects.all()[:5]  # Get latest 5 tracks for feed display
-    upload_form = TrackUploadForm()   # Provide clean form for upload modal
-    
+    tracks = (
+        Track.objects
+        .select_related('user', 'user__profile') # Avoid N+1 (1 main query vs 1 + N)
+        .annotate(comment_count=Count('comments')) # Aggregate once; no per-item COUNT
+        .order_by('-created_at')[:5] # First 5 only; rest loaded via API
+    )
+    upload_form = TrackUploadForm()
     return render(request, 'tracks/feed.html', {
         'tracks': tracks,
         'upload_form': upload_form,
@@ -321,3 +316,64 @@ def track_delete(request, slug):
 def upload_track(request):
     messages.success(request, "Track uploaded successfully!")
     return redirect('feed')
+
+
+
+def track_feed_api(request):
+    """
+    JSON endpoint for infinite scroll (page size = 5).
+
+    Query parameter:
+      page (int, default=1) - 1-based page number.
+
+    Performance / N+1:
+      N+1 = 1 query for list + N queries for related objects (refs:
+        Django docs: https://docs.djangoproject.com/en/stable/topics/db/optimization/#use-select-related-and-prefetch-related
+        Medium explainer: https://medium.com/databases-in-simple-words/the-n-1-database-query-problem-a-simple-explanation-and-solutions-ef11751aef8a
+      Mitigations here:
+        - select_related joins user + profile in main query
+        - annotate(comment_count=Count('comments')) gets counts in same query
+
+    Returns:
+      {
+        "tracks": [ { id, title, slug, detail_url, description, created_ago,
+                      audio_url, image_url, comment_count,
+                      profile: { username, display_name, url, avatar } } ],
+        "has_next": bool
+      }
+    """
+    page = int(request.GET.get('page', 1))
+    tracks_qs = (
+        Track.objects
+        .select_related('user', 'user__profile')
+        .annotate(comment_count=Count('comments'))
+        .order_by('-created_at')
+    )
+    paginator = Paginator(tracks_qs, 5)
+    page_obj = paginator.get_page(page)
+
+    items = []
+    for t in page_obj:
+        items.append({
+            "id": t.id,
+            "title": t.title,
+            "slug": t.slug,
+            "detail_url": reverse('track_detail', args=[t.slug]),
+            "description": t.description or "",
+            "created_ago": f"{timesince(t.created_at)} ago",
+            "audio_url": t.audio_file.url,
+            "image_url": t.track_image.url if t.track_image else None,
+            "comment_count": t.comment_count,  # Annotated (no extra query)
+            "profile": {
+                "username": t.user.profile.username,
+                # Fallback: use username if no display_name set
+                "display_name": t.user.profile.display_name or t.user.profile.username,
+                "url": reverse('profile', args=[t.user.profile.username]),
+                "avatar": t.user.profile.profile_picture.url if t.user.profile.profile_picture else None,
+            },
+        })
+
+    return JsonResponse({
+        "tracks": items,
+        "has_next": page_obj.has_next(),
+    })
