@@ -1,344 +1,344 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block title %}{{ track.title|escape }} - modmixx{% endblock %}
-
 {% block content %}
     <!-- Pending Moderation Alert -->
     {% if track.moderation_status == "PENDING" and track.user == user %}
         <div class="container mt-4">
             <div class="alert alert-warning" role="alert">
-                <i class="fas fa-clock"></i> This track is pending moderation and only visible to you.
+                <i class="fas fa-clock"></i> Your track artwork is pending moderation. Others see a placeholder image until approved.
             </div>
         </div>
     {% endif %}
-
     <!-- Track Information Section -->
     <div class="container mt-4">
         <div class="row">
             <!-- Track Artwork Column -->
             <div class="col-md-4">
-                {% if track.track_image %}
+                {% if track.track_image and track.moderation_status == "APPROVED" %}
                     <img src="{{ track.track_image.url }}"
                          class="img-fluid rounded"
                          alt="Track artwork for {{ track.title|escape }}"
-                         style="max-height: 400px; width: 100%; object-fit: cover;">
+                         style="max-height: 400px;
+                                width: 100%;
+                                object-fit: cover">
+                {% elif track.moderation_status == "PENDING" and track.user == user %}
+                    <!-- Show pending artwork to track owner -->
+                    <div class="position-relative">
+                        <img src="{{ track.track_image.url }}"
+                             class="img-fluid rounded"
+                             alt="Track artwork for {{ track.title|escape }}"
+                             style="max-height: 400px;
+                                    width: 100%;
+                                    object-fit: cover;
+                                    opacity: 0.7">
+                        <div class="position-absolute top-50 start-50 translate-middle bg-warning text-dark px-3 py-2 rounded">
+                            <i class="fas fa-clock"></i> Pending Approval
+                        </div>
+                    </div>
                 {% else %}
-                    <!-- Default placeholder for tracks without artwork -->
+                    <!-- Default placeholder for no artwork or rejected/pending for others -->
+                    <!-- update to use a static branded image later -->
                     <div class="bg-light rounded d-flex align-items-center justify-content-center"
-                         style="height: 300px;">
+                         style="height: 300px">
                         <div class="text-center text-muted">
                             <i class="fa fa-music fa-3x mb-3"></i>
-                            <p class="mb-0">No artwork uploaded</p>
+                            <p class="mb-0">No artwork available</p>
                         </div>
                     </div>
                 {% endif %}
             </div>
-            
             <!-- Track Details Column -->
             <div class="col-md-8">
                 <!-- Track title and artist information -->
                 <h1 class="mb-3">{{ track.title|escape }}</h1>
                 <p class="text-muted mb-3">
                     by <a href="{% url 'profile' track.user.profile.username %}"
-                          class="text-decoration-none">
-                        {{ track.user.profile.display_name|default:track.user.profile.username|escape }}
-                    </a>
-                    • {{ track.created_at|timesince }} ago
-                </p>
-                
-                <!-- Track description -->
-                {% if track.description %}
-                    <div class="mb-4">
-                        <h5>About this track</h5>
-                        <p class="text-muted">{{ track.description|linebreaksbr|escape }}</p>
-                    </div>
-                {% endif %}
-                
-                <!-- Audio Player -->
+    class="text-decoration-none">{{ track.user.profile.display_name|default:track.user.profile.username|escape }}</a>
+                • {{ track.created_at|timesince }} ago
+            </p>
+            <!-- Track description -->
+            {% if track.description %}
                 <div class="mb-4">
-                    <h5>Listen</h5>
-                    <audio controls class="w-100" style="max-width: 500px;">
-                        <source src="{{ track.audio_file.url }}" type="audio/mpeg">
-                        <source src="{{ track.audio_file.url }}" type="audio/wav">
-                        <source src="{{ track.audio_file.url }}" type="audio/ogg">
-                        <source src="{{ track.audio_file.url }}" type="audio/flac">
-                        <source src="{{ track.audio_file.url }}" type="audio/aac">
-                        Your browser does not support the audio element.
-                    </audio>
+                    <h5>About this track</h5>
+                    <p class="text-muted">{{ track.description|linebreaksbr|escape }}</p>
                 </div>
-                
-                <!-- Navigation and actions -->
-                <div class="d-flex gap-2 flex-wrap">
-                    <a href="{% url 'track_feed' %}" class="btn btn-secondary">
-                        <i class="fa fa-arrow-left me-1"></i> Back to Feed
+            {% endif %}
+            <!-- Audio Player -->
+            <div class="mb-4">
+                <h5>Listen</h5>
+                <audio controls class="w-100" style="max-width: 500px;">
+                    <source src="{{ track.audio_file.url }}" type="audio/mpeg">
+                    <source src="{{ track.audio_file.url }}" type="audio/wav">
+                    <source src="{{ track.audio_file.url }}" type="audio/ogg">
+                    <source src="{{ track.audio_file.url }}" type="audio/flac">
+                    <source src="{{ track.audio_file.url }}" type="audio/aac">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+            <!-- Navigation and actions -->
+            <div class="d-flex gap-2 flex-wrap">
+                <a href="{% url 'track_feed' %}" class="btn btn-secondary">
+                    <i class="fa fa-arrow-left me-1"></i> Back to Feed
+                </a>
+                <!-- Track owner actions -->
+                {% if user == track.user %}
+                    <a href="{% url 'track_edit' track.slug %}" class="btn btn-primary">
+                        <i class="fa fa-edit me-1"></i> Edit Track
                     </a>
-                    
-                    <!-- Track owner actions -->
-                    {% if user == track.user %}
-                        <a href="{% url 'track_edit' track.slug %}" class="btn btn-primary">
-                            <i class="fa fa-edit me-1"></i> Edit Track
-                        </a>
-                        <button type="button"
-                                class="btn btn-outline-danger"
-                                data-bs-toggle="modal"
-                                data-bs-target="#deleteModal">
-                            <i class="fa fa-trash me-1"></i> Delete Track
-                        </button>
-                    {% endif %}
-                </div>
+                    <button type="button"
+                            class="btn btn-outline-danger"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteModal">
+                        <i class="fa fa-trash me-1"></i> Delete Track
+                    </button>
+                {% endif %}
             </div>
         </div>
     </div>
-
-    <!-- Comments Section -->
-    <div class="container mt-5" id="comments">
-        <div class="row">
-            <div class="col-12">
-                <h3 class="mb-4">
-                    <i class="fa fa-comments me-2"></i>
-                    Comments
-                    <span class="badge bg-secondary ms-2">{{ comments.count }}</span>
-                </h3>
-                
-                <!-- Comment Submission Form -->
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <form method="post" class="comment-form">
-                            {% csrf_token %}
-                            <div class="d-flex align-items-start">
-                                <!-- User avatar -->
-                                {% if user.profile.profile_picture %}
-                                    <img src="{{ user.profile.profile_picture.url }}"
-                                         class="rounded-circle me-3"
-                                         alt="{{ user.profile.display_name|default:user.profile.username|escape }}"
-                                         style="width: 45px; height: 45px; object-fit: cover;">
-                                {% else %}
-                                    <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-3"
-                                         style="width: 45px; height: 45px;">
-                                        <span class="text-white fw-bold">
-                                            {{ user.profile.display_name|first|upper|default:user.profile.username|first|upper|escape }}
-                                        </span>
+</div>
+<!-- Comments Section -->
+<div class="container mt-5" id="comments">
+    <div class="row">
+        <div class="col-12">
+            <h3 class="mb-4">
+                <i class="fa fa-comments me-2"></i>
+                Comments
+                <span class="badge bg-secondary ms-2">{{ comments.count }}</span>
+            </h3>
+            <!-- Comment Submission Form -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form method="post" class="comment-form">
+                        {% csrf_token %}
+                        <div class="d-flex align-items-start">
+                            <!-- User avatar -->
+                            {% if user.profile.profile_picture %}
+                                <img src="{{ user.profile.profile_picture.url }}"
+                                     class="rounded-circle me-3"
+                                     alt="{{ user.profile.display_name|default:user.profile.username|escape }}"
+                                     style="width: 45px;
+                                            height: 45px;
+                                            object-fit: cover">
+                            {% else %}
+                                <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-3"
+                                     style="width: 45px;
+                                            height: 45px">
+                                    <span class="text-white fw-bold">
+                                        {{ user.profile.display_name|first|upper|default:user.profile.username|first|upper|escape }}
+                                    </span>
+                                </div>
+                            {% endif %}
+                            <!-- Comment input area -->
+                            <div class="flex-grow-1">
+                                <!-- Updated textarea with error display -->
+                                <textarea class="form-control {% if form.content.errors %}is-invalid{% endif %}"
+                                          name="content"
+                                          id="new-comment-content"
+                                          rows="3"
+                                          placeholder="Share your thoughts about this track..."
+                                          style="resize: vertical"
+                                          required>{% if form.content.value %}{{ form.content.value }}{% endif %}</textarea>
+                                <!-- Display validation errors for toxic content -->
+                                {% if form.content.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.content.errors %}{{ error }}{% endfor %}
                                     </div>
                                 {% endif %}
-                                
-                                <!-- Comment input area -->
-                                <div class="flex-grow-1">
-                                    <!-- Updated textarea with error display -->
-                                    <textarea class="form-control {% if form.content.errors %}is-invalid{% endif %}"
-                                              name="content"
-                                              id="new-comment-content"
-                                              rows="3"
-                                              placeholder="Share your thoughts about this track..."
-                                              style="resize: vertical;"
-                                              required>{% if form.content.value %}{{ form.content.value }}{% endif %}</textarea>
-
-                                    <!-- Display validation errors for toxic content -->
-                                    {% if form.content.errors %}
-                                        <div class="invalid-feedback d-block">
-                                            {% for error in form.content.errors %}
-                                                {{ error }}
-                                            {% endfor %}
+                                <div class="mt-2 d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">
+                                        <i class="fa fa-info-circle me-1"></i>
+                                        Be respectful and constructive in your feedback
+                                    </small>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-paper-plane me-1"></i> Post Comment
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- Comments Display -->
+            <div class="comments-list">
+                {% for comment in comments %}
+                    <div class="card mb-3" data-comment-id="{{ comment.id }}">
+                        <div class="card-body">
+                            <!-- Comment header with user info -->
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div class="d-flex align-items-center">
+                                    <!-- User avatar and profile link -->
+                                    <a href="{% url 'profile' comment.user.profile.username %}"
+                                       class="text-decoration-none d-flex align-items-center">
+                                        {% if comment.user.profile.profile_picture %}
+                                            <img src="{{ comment.user.profile.profile_picture.url }}"
+                                                 class="rounded-circle me-3"
+                                                 alt="{{ comment.user.profile.display_name|default:comment.user.profile.username|escape }}"
+                                                 style="width: 40px;
+                                                        height: 40px;
+                                                        object-fit: cover">
+                                        {% else %}
+                                            <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-3"
+                                                 style="width: 40px;
+                                                        height: 40px">
+                                                <span class="text-white fw-bold" style="font-size: 14px;">
+                                                    {{ comment.user.profile.display_name|first|upper|default:comment.user.profile.username|first|upper|escape }}
+                                                </span>
+                                            </div>
+                                        {% endif %}
+                                        <div>
+                                            <strong class="text-dark">{{ comment.user.profile.display_name|default:comment.user.profile.username|escape }}</strong>
+                                            <div class="text-muted small">
+                                                {{ comment.created_at|timesince }} ago
+                                                {% if comment.updated_at != comment.created_at %}<span class="text-muted">(edited)</span>{% endif %}
+                                            </div>
                                         </div>
-                                    {% endif %}
-
-                                    <div class="mt-2 d-flex justify-content-between align-items-center">
-                                        <small class="text-muted">
-                                            <i class="fa fa-info-circle me-1"></i>
-                                            Be respectful and constructive in your feedback
-                                        </small>
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="fa fa-paper-plane me-1"></i> Post Comment
+                                    </a>
+                                </div>
+                                <!-- Comment actions dropdown (for comment owner) -->
+                                {% if user == comment.user %}
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                                                type="button"
+                                                id="commentOptions{{ comment.id }}"
+                                                data-bs-toggle="dropdown"
+                                                aria-expanded="false">
+                                            <i class="fa fa-ellipsis-h"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end"
+                                            aria-labelledby="commentOptions{{ comment.id }}">
+                                            <li>
+                                                <button class="dropdown-item edit-comment" type="button">
+                                                    <i class="fa fa-edit me-2"></i>Edit Comment
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <hr class="dropdown-divider">
+                                            </li>
+                                            <li>
+                                                <button class="dropdown-item text-danger delete-comment"
+                                                        type="button"
+                                                        data-comment-id="{{ comment.id }}">
+                                                    <i class="fa fa-trash me-2"></i>Delete Comment
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <!-- Comment content (toggles with edit form) -->
+                            <div class="comment-content">
+                                <p class="mb-0">{{ comment.content|linebreaksbr|escape }}</p>
+                            </div>
+                            <!-- Edit form (hidden by default) -->
+                            <div class="comment-edit-form" style="display: none;">
+                                <div class="mt-3">
+                                    <textarea class="form-control mb-3"
+                                              rows="3"
+                                              name="content"
+                                              id="edit-content-{{ comment.id }}"
+                                              style="resize: vertical">{{ comment.content|escape }}</textarea>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-primary save-comment">
+                                            <i class="fa fa-check me-1"></i> Save Changes
+                                        </button>
+                                        <button class="btn btn-sm btn-secondary cancel-edit">
+                                            <i class="fa fa-times me-1"></i> Cancel
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
+                {% empty %}
+                    <div class="text-center py-5">
+                        <i class="fa fa-comments fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No comments yet</h5>
+                        <p class="text-muted">Be the first to share your thoughts about this track!</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Track Deletion Confirmation Modal -->
+{% if user == track.user %}
+    <div class="modal fade"
+         id="deleteModal"
+         tabindex="-1"
+         aria-labelledby="deleteModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="deleteModalLabel">
+                        <i class="fa fa-exclamation-triangle me-2"></i>
+                        Delete Track
+                    </h5>
+                    <button type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                 </div>
-                
-                <!-- Comments Display -->
-                <div class="comments-list">
-                    {% for comment in comments %}
-                        <div class="card mb-3" data-comment-id="{{ comment.id }}">
-                            <div class="card-body">
-                                <!-- Comment header with user info -->
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <!-- User avatar and profile link -->
-                                        <a href="{% url 'profile' comment.user.profile.username %}"
-                                           class="text-decoration-none d-flex align-items-center">
-                                            {% if comment.user.profile.profile_picture %}
-                                                <img src="{{ comment.user.profile.profile_picture.url }}"
-                                                     class="rounded-circle me-3"
-                                                     alt="{{ comment.user.profile.display_name|default:comment.user.profile.username|escape }}"
-                                                     style="width: 40px; height: 40px; object-fit: cover;">
-                                            {% else %}
-                                                <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-3"
-                                                     style="width: 40px; height: 40px;">
-                                                    <span class="text-white fw-bold" style="font-size: 14px;">
-                                                        {{ comment.user.profile.display_name|first|upper|default:comment.user.profile.username|first|upper|escape }}
-                                                    </span>
-                                                </div>
-                                            {% endif %}
-                                            <div>
-                                                <strong class="text-dark">
-                                                    {{ comment.user.profile.display_name|default:comment.user.profile.username|escape }}
-                                                </strong>
-                                                <div class="text-muted small">
-                                                    {{ comment.created_at|timesince }} ago
-                                                    {% if comment.updated_at != comment.created_at %}
-                                                        <span class="text-muted">(edited)</span>
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    
-                                    <!-- Comment actions dropdown (for comment owner) -->
-                                    {% if user == comment.user %}
-                                        <div class="dropdown">
-                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
-                                                    type="button"
-                                                    id="commentOptions{{ comment.id }}"
-                                                    data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
-                                                <i class="fa fa-ellipsis-h"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end"
-                                                aria-labelledby="commentOptions{{ comment.id }}">
-                                                <li>
-                                                    <button class="dropdown-item edit-comment" type="button">
-                                                        <i class="fa fa-edit me-2"></i>Edit Comment
-                                                    </button>
-                                                </li>
-                                                <li><hr class="dropdown-divider"></li>
-                                                <li>
-                                                    <button class="dropdown-item text-danger delete-comment"
-                                                            type="button"
-                                                            data-comment-id="{{ comment.id }}">
-                                                        <i class="fa fa-trash me-2"></i>Delete Comment
-                                                    </button>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    {% endif %}
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <strong><i class="fa fa-warning me-2"></i>Warning:</strong>
+                        This action cannot be undone! Your track and all associated comments will be permanently deleted.
+                    </div>
+                    <p class="mb-3">
+                        Are you sure you want to delete <strong>"{{ track.title|escape }}"</strong>?
+                    </p>
+                    <!-- Track preview in deletion modal -->
+                    <div class="border rounded p-3 bg-light">
+                        <div class="d-flex align-items-center">
+                            {% if track.track_image %}
+                                <img src="{{ track.track_image.url }}"
+                                     class="rounded me-3"
+                                     style="width: 60px;
+                                            height: 60px;
+                                            object-fit: cover"
+                                     alt="Track artwork">
+                            {% else %}
+                                <div class="bg-secondary rounded d-flex align-items-center justify-content-center me-3"
+                                     style="width: 60px;
+                                            height: 60px">
+                                    <i class="fa fa-music text-white"></i>
                                 </div>
-                                
-                                <!-- Comment content (toggles with edit form) -->
-                                <div class="comment-content">
-                                    <p class="mb-0">{{ comment.content|linebreaksbr|escape }}</p>
-                                </div>
-                                
-                                <!-- Edit form (hidden by default) -->
-                                <div class="comment-edit-form" style="display: none;">
-                                    <div class="mt-3">
-                                        <textarea class="form-control mb-3"
-                                                  rows="3"
-                                                  name="content"
-                                                  id="edit-content-{{ comment.id }}"
-                                                  style="resize: vertical;">{{ comment.content|escape }}</textarea>
-                                        <div class="d-flex gap-2">
-                                            <button class="btn btn-sm btn-primary save-comment">
-                                                <i class="fa fa-check me-1"></i> Save Changes
-                                            </button>
-                                            <button class="btn btn-sm btn-secondary cancel-edit">
-                                                <i class="fa fa-times me-1"></i> Cancel
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                            {% endif %}
+                            <div>
+                                <h6 class="mb-1">{{ track.title|escape }}</h6>
+                                <small class="text-muted">
+                                    <i class="fa fa-file-audio me-1"></i>
+                                    Audio file: {{ track.get_audio_filename|default:"track audio"|escape }}
+                                </small>
+                                <br>
+                                <small class="text-muted">
+                                    <i class="fa fa-comments me-1"></i>
+                                    {{ comments.count }} comment{{ comments.count|pluralize }}
+                                </small>
                             </div>
                         </div>
-                    {% empty %}
-                        <div class="text-center py-5">
-                            <i class="fa fa-comments fa-3x text-muted mb-3"></i>
-                            <h5 class="text-muted">No comments yet</h5>
-                            <p class="text-muted">Be the first to share your thoughts about this track!</p>
-                        </div>
-                    {% endfor %}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fa fa-times me-1"></i> Cancel
+                    </button>
+                    <!-- Actual deletion form -->
+                    <form method="post"
+                          action="{% url 'track_delete' track.slug %}"
+                          class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fa fa-trash me-1"></i> Delete Track Permanently
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Track Deletion Confirmation Modal -->
-    {% if user == track.user %}
-        <div class="modal fade"
-             id="deleteModal"
-             tabindex="-1"
-             aria-labelledby="deleteModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header bg-danger text-white">
-                        <h5 class="modal-title" id="deleteModalLabel">
-                            <i class="fa fa-exclamation-triangle me-2"></i>
-                            Delete Track
-                        </h5>
-                        <button type="button"
-                                class="btn-close btn-close-white"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="alert alert-warning">
-                            <strong><i class="fa fa-warning me-2"></i>Warning:</strong> 
-                            This action cannot be undone! Your track and all associated comments will be permanently deleted.
-                        </div>
-                        <p class="mb-3">
-                            Are you sure you want to delete <strong>"{{ track.title|escape }}"</strong>?
-                        </p>
-                        
-                        <!-- Track preview in deletion modal -->
-                        <div class="border rounded p-3 bg-light">
-                            <div class="d-flex align-items-center">
-                                {% if track.track_image %}
-                                    <img src="{{ track.track_image.url }}"
-                                         class="rounded me-3"
-                                         style="width: 60px; height: 60px; object-fit: cover;"
-                                         alt="Track artwork">
-                                {% else %}
-                                    <div class="bg-secondary rounded d-flex align-items-center justify-content-center me-3"
-                                         style="width: 60px; height: 60px;">
-                                        <i class="fa fa-music text-white"></i>
-                                    </div>
-                                {% endif %}
-                                <div>
-                                    <h6 class="mb-1">{{ track.title|escape }}</h6>
-                                    <small class="text-muted">
-                                        <i class="fa fa-file-audio me-1"></i>
-                                        Audio file: {{ track.get_audio_filename|default:"track audio"|escape }}
-                                    </small>
-                                    <br>
-                                    <small class="text-muted">
-                                        <i class="fa fa-comments me-1"></i>
-                                        {{ comments.count }} comment{{ comments.count|pluralize }}
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            <i class="fa fa-times me-1"></i> Cancel
-                        </button>
-                        <!-- Actual deletion form -->
-                        <form method="post"
-                              action="{% url 'track_delete' track.slug %}"
-                              class="d-inline">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger">
-                                <i class="fa fa-trash me-1"></i> Delete Track Permanently
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endif %}
+{% endif %}
 {% endblock %}
-
 {% block extra_js %}
     <script src="{% static 'js/comments.js' %}"></script>
 {% endblock %}

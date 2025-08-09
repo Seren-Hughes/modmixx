@@ -21,7 +21,6 @@ def track_feed(request):
     """
     tracks = (
         Track.objects
-        .filter(moderation_status="APPROVED")  # Only approved tracks
         .select_related('user', 'user__profile')
         .annotate(comment_count=Count('comments'))
         .order_by('-created_at')[:5]
@@ -75,11 +74,10 @@ def track_detail(request, slug):
         comments: QuerySet of approved Comment objects
         form: CommentForm for new comment submission with validation errors
     """
-    # for now users can see their own tracks regardless of moderation status * clumsy needs to be fixed
-    # All other users only see approved tracks
+    # All users can see all tracks - moderation only affects image display
     track = get_object_or_404(
         Track.objects.select_related('user', 'user__profile'),
-        Q(slug=slug) & (Q(moderation_status="APPROVED") | Q(user=request.user))
+        slug=slug
     )
     
     comments = Comment.objects.filter(track=track).order_by('-created_at')
@@ -362,8 +360,9 @@ def track_feed_api(request):
             "description": t.description or "",
             "created_ago": f"{timesince(t.created_at)} ago",
             "audio_url": t.audio_file.url,
-            "image_url": t.track_image.url if t.track_image else None,
+            "image_url": t.track_image.url if (t.track_image and t.moderation_status == "APPROVED") else None,
             "comment_count": t.comment_count,  # Annotated (no extra query)
+            "moderation_status": t.moderation_status,
             "profile": {
                 "username": t.user.profile.username,
                 # Fallback: use username if no display_name set

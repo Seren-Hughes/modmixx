@@ -25,6 +25,26 @@
                 <a href="{% url 'profile_edit' %}"
                    class="btn btn-outline-primary btn-sm">Edit Profile</a>
             {% endif %}
+            <!-- Profile Picture Moderation Status Messages -->
+            {% if user.profile.moderation_status == "PENDING" %}
+                <div class="alert alert-info d-flex align-items-center mb-3">
+                    <i class="fas fa-clock me-2"></i>
+                    <div>
+                        <strong>Profile Picture Pending</strong>
+                        <br>
+                        <small>Your profile picture is being reviewed. Others see a default avatar until approved.</small>
+                    </div>
+                </div>
+            {% elif user.profile.moderation_status == "REJECTED" %}
+                <div class="alert alert-warning d-flex align-items-center mb-3">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <div>
+                        <strong>Profile Picture Rejected</strong>
+                        <br>
+                        <small>Please upload a different image that meets our community guidelines.</small>
+                    </div>
+                </div>
+            {% endif %}
         </div>
         <div class="col-md-8">
             {% if profile.bio %}

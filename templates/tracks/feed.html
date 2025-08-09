@@ -4,13 +4,17 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Community Feed</h1>
         <!--modal upload button-->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">Share Your Track</button>
+        <button type="button"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#uploadModal">Share Your Track</button>
     </div>
     <div class="text-center">
         <p>Welcome to the modmixx community!</p>
-        <p><em>This is your private track feed - only community members can see this.</em></p>
+        <p>
+            <em>This is your private track feed - only community members can see this.</em>
+        </p>
     </div>
-
     <div id="track-feed">
         {% for track in tracks %}
             <!--first page renders server-side -->
@@ -20,7 +24,7 @@
                     <div class="d-flex align-items-center mb-3">
                         <a href="{% url 'profile' track.user.profile.username %}"
                            class="text-decoration-none">
-                            {% if track.user.profile.profile_picture %}
+                            {% if track.user.profile.profile_picture and track.user.profile.moderation_status == "APPROVED" %}
                                 <img src="{{ track.user.profile.profile_picture.url }}"
                                      class="rounded-circle me-2"
                                      alt="{{ track.user.profile.display_name|default:track.user.profile.username|escape }}"
@@ -31,7 +35,9 @@
                                 <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-2"
                                      style="width: 32px;
                                             height: 32px">
-                                    <span class="text-white" style="font-size: 14px;">{{ track.user.profile.display_name|first|upper|default:track.user.profile.username|first|upper|escape }}</span>
+                                    <span class="text-white" style="font-size: 14px;">
+                                        {{ track.user.profile.display_name|first|upper|default:track.user.profile.username|first|upper|escape }}
+                                    </span>
                                 </div>
                             {% endif %}
                         </a>
@@ -49,18 +55,37 @@
                     <!-- Track Content -->
                     <div class="row">
                         <div class="col-md-3">
-                            {% if track.track_image %}
-                                <img src="{{ track.track_image.url }}" class="img-fluid rounded"
+                            {% if track.track_image and track.moderation_status == "APPROVED" %}
+                                <img src="{{ track.track_image.url }}"
+                                     class="img-fluid rounded"
                                      alt="Uploaded track art work for {{ track.title|escape }}"
                                      style="max-height: 150px;
                                             object-fit: cover">
+                            {% elif track.moderation_status == "PENDING" and track.user == user %}
+                                <!-- Show placeholder with pending message for track owner -->
+                                <div class="card-img-top bg-light d-flex align-items-center justify-content-center"
+                                     style="height: 150px">
+                                    <div class="text-center text-muted">
+                                        <i class="fas fa-clock fa-2x mb-2"></i>
+                                        <p>Image pending moderation</p>
+                                    </div>
+                                </div>
                             {% else %}
-                                <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 150px"></div>
+                                <!-- Default placeholder for everyone else -->
+                                <!-- update to use a static branded image later -->
+                                <div class="card-img-top bg-light d-flex align-items-center justify-content-center"
+                                     style="height: 150px">
+                                    <div class="text-center text-muted">
+                                        <i class="fas fa-music fa-2x mb-2"></i>
+                                        <p>No image</p>
+                                    </div>
+                                </div>
                             {% endif %}
                         </div>
                         <div class="col-md-9">
                             <h5 class="card-title">
-                                <a href="{% url 'track_detail' track.slug %}" class="text-decoration-none">{{ track.title|escape }}</a>
+                                <a href="{% url 'track_detail' track.slug %}"
+                                   class="text-decoration-none">{{ track.title|escape }}</a>
                             </h5>
                             {% if track.description %}<p class="card-text">{{ track.description|escape|truncatewords:10 }}</p>{% endif %}
                             <div class="mb-2">
@@ -69,12 +94,17 @@
                                 </audio>
                             </div>
                             <div class="mt-2">
-                                <a href="{% url 'track_detail' track.slug %}#comments" class="text-decoration-none text-muted">
+                                <a href="{% url 'track_detail' track.slug %}#comments"
+                                   class="text-decoration-none text-muted">
                                     <i class="fa fa-comment me-1"></i>
                                     {% with comment_count=track.comments.count %}
-                                        {% if comment_count == 0 %}No comments yet
-                                        {% elif comment_count == 1 %}1 comment
-                                        {% else %}{{ comment_count }} comments{% endif %}
+                                        {% if comment_count == 0 %}
+                                            No comments yet
+                                        {% elif comment_count == 1 %}
+                                            1 comment
+                                        {% else %}
+                                            {{ comment_count }} comments
+                                        {% endif %}
                                     {% endwith %}
                                 </a>
                             </div>
@@ -84,22 +114,23 @@
             </div>
         {% endfor %}
     </div>
-
     <div id="loading" class="text-center py-3" style="display:none;">Loading…</div>
     <div id="feed-sentinel" class="py-2"></div>
-
     <!-- Screen-reader live region -->
-    <div id="sr-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
-
+    <div id="sr-announcer"
+         class="visually-hidden"
+         aria-live="polite"
+         aria-atomic="true"></div>
     <!-- Back to top button -->
     <button id="backToTop"
             class="btn btn-secondary"
             type="button"
             aria-label="Back to top"
-            style="position:fixed; right:1rem; bottom:1rem; display:none; z-index:1060;">
-      ↑ Top
-    </button>
-
+            style="position:fixed;
+                   right:1rem;
+                   bottom:1rem;
+                   display:none;
+                   z-index:1060">↑ Top</button>
     <!-- Modal for Uploading Tracks -->
     <div class="modal fade"
          id="uploadModal"
@@ -111,39 +142,48 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="uploadModalLabel">Create post</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                 </div>
-                <form method="post" action="{% url 'track_upload' %}" enctype="multipart/form-data" id="uploadForm">
+                <form method="post"
+                      action="{% url 'track_upload' %}"
+                      enctype="multipart/form-data"
+                      id="uploadForm">
                     <div class="modal-body">
                         {% csrf_token %}
-                        
                         <!-- Display form errors at the top of modal -->
                         {% if upload_form.errors %}
-                        <div class="alert alert-danger">
-                            <strong>Please fix the following errors:</strong>
-                            <ul class="mb-0 mt-2">
-                                {% for field, errors in upload_form.errors.items %}
-                                    {% for error in errors %}
-                                    <li><strong>{{ field|capfirst }}:</strong> {{ error|escape }}</li>
+                            <div class="alert alert-danger">
+                                <strong>Please fix the following errors:</strong>
+                                <ul class="mb-0 mt-2">
+                                    {% for field, errors in upload_form.errors.items %}
+                                        {% for error in errors %}
+                                            <li>
+                                                <strong>{{ field|capfirst }}:</strong> {{ error|escape }}
+                                            </li>
+                                        {% endfor %}
                                     {% endfor %}
-                                {% endfor %}
-                            </ul>
-                        </div>
+                                </ul>
+                            </div>
                         {% endif %}
-                        
                         <!-- Audio File Upload Section -->
                         <div class="mb-3">
                             <label class="form-label">Audio File *</label>
                             {% if upload_form.audio_file.errors %}
-                            <div class="text-danger small mb-2">
-                                {% for error in upload_form.audio_file.errors %}
-                                    <div><i class="fa fa-exclamation-triangle"></i> {{ error|escape }}</div>
-                                {% endfor %}
-                            </div>
+                                <div class="text-danger small mb-2">
+                                    {% for error in upload_form.audio_file.errors %}
+                                        <div>
+                                            <i class="fa fa-exclamation-triangle"></i> {{ error|escape }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
                             {% endif %}
-                            
                             <!-- Upload Area -->
-                            <div id="audioUploadArea" class="border rounded p-3 text-center upload-drop-zone" data-upload-type="audio">
+                            <div id="audioUploadArea"
+                                 class="border rounded p-3 text-center upload-drop-zone"
+                                 data-upload-type="audio">
                                 <i class="fa fa-upload fa-2x text-muted mb-2"></i>
                                 <p class="text-muted mb-2">
                                     <strong>Choose audio file</strong> or drag and drop here
@@ -154,13 +194,12 @@
                                        accept="audio/*"
                                        required
                                        id="audioFileInput">
-                            {% if upload_form.audio_file.errors %}
-                            <div class="invalid-feedback d-block">
-                                {% for error in upload_form.audio_file.errors %}{{ error }}{% endfor %}
+                                {% if upload_form.audio_file.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in upload_form.audio_file.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
                             </div>
-                            {% endif %}
-                            </div>
-                            
                             <!-- Preview Area (hidden by default) -->
                             <div id="audioPreview" class="border rounded p-3" style="display: none;">
                                 <div class="d-flex align-items-center justify-content-between">
@@ -171,11 +210,12 @@
                                             <small class="text-muted">Audio file selected</small>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-outline-secondary btn-sm" id="changeAudioBtn">Remove</button>
+                                    <button type="button"
+                                            class="btn btn-outline-secondary btn-sm"
+                                            id="changeAudioBtn">Remove</button>
                                 </div>
                             </div>
                         </div>
-                        
                         <!-- Track Title -->
                         <div class="mb-3">
                             <input type="text"
@@ -185,25 +225,27 @@
                                    value="{{ upload_form.title.value|default:''|escape }}"
                                    required>
                             {% if upload_form.title.errors %}
-                            <div class="invalid-feedback">
-                                {% for error in upload_form.title.errors %}{{ error }}{% endfor %}
-                            </div>
+                                <div class="invalid-feedback">
+                                    {% for error in upload_form.title.errors %}{{ error }}{% endfor %}
+                                </div>
                             {% endif %}
                         </div>
-                        
                         <!-- Track Image Upload Section -->
                         <div class="mb-3">
                             <label class="form-label">Track Artwork (Optional)</label>
                             {% if upload_form.track_image.errors %}
-                            <div class="text-danger small mb-2">
-                                {% for error in upload_form.track_image.errors %}
-                                    <div><i class="fa fa-exclamation-triangle"></i> {{ error }}</div>
-                                {% endfor %}
-                            </div>
+                                <div class="text-danger small mb-2">
+                                    {% for error in upload_form.track_image.errors %}
+                                        <div>
+                                            <i class="fa fa-exclamation-triangle"></i> {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
                             {% endif %}
-                            
                             <!-- Upload Area -->
-                            <div id="imageUploadArea" class="border rounded p-3 text-center upload-drop-zone" data-upload-type="image">
+                            <div id="imageUploadArea"
+                                 class="border rounded p-3 text-center upload-drop-zone"
+                                 data-upload-type="image">
                                 <i class="fa fa-image text-muted"></i>
                                 <span class="text-muted ms-2">
                                     <strong>Add artwork</strong> or drag and drop here
@@ -213,28 +255,32 @@
                                        name="track_image"
                                        accept="image/*"
                                        id="imageFileInput">
-                            {% if upload_form.track_image.errors %}
-                            <div class="invalid-feedback d-block">
-                                {% for error in upload_form.track_image.errors %}{{ error }}{% endfor %}
+                                {% if upload_form.track_image.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in upload_form.track_image.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
                             </div>
-                            {% endif %}
-                            </div>
-                            
                             <!-- Preview Area (hidden by default) -->
                             <div id="imagePreview" class="border rounded p-3" style="display: none;">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center">
-                                        <img id="previewImg" class="rounded me-3" style="width: 60px; height: 60px; object-fit: cover">
+                                        <img id="previewImg"
+                                             class="rounded me-3"
+                                             style="width: 60px;
+                                                    height: 60px;
+                                                    object-fit: cover">
                                         <div>
                                             <p class="mb-0 fw-semibold">Artwork selected</p>
                                             <small class="text-muted">Image preview</small>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-outline-secondary btn-sm" id="changeImageBtn">Remove</button>
+                                    <button type="button"
+                                            class="btn btn-outline-secondary btn-sm"
+                                            id="changeImageBtn">Remove</button>
                                 </div>
                             </div>
                         </div>
-                        
                         <!-- Description -->
                         <div class="mb-3">
                             <textarea class="form-control {% if upload_form.description.errors %}is-invalid{% endif %}"
@@ -242,15 +288,15 @@
                                       rows="3"
                                       placeholder="Which DAW or app did you use to create your track?">{{ upload_form.description.value|default:''|escape }}</textarea>
                             {% if upload_form.description.errors %}
-                            <div class="invalid-feedback">
-                                {% for error in upload_form.description.errors %}{{ error }}{% endfor %}
-                            </div>
+                                <div class="invalid-feedback">
+                                    {% for error in upload_form.description.errors %}{{ error }}{% endfor %}
+                                </div>
                             {% endif %}
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" 
-                                class="btn btn-secondary" 
+                        <button type="button"
+                                class="btn btn-secondary"
                                 data-bs-dismiss="modal"
                                 id="cancelBtn">Cancel</button>
                         <button type="submit" class="btn btn-primary">Upload</button>
