@@ -312,21 +312,24 @@ def track_delete(request, slug):
         - Verifies user ownership before allowing deletion
         - Prevents unauthorized access through proper error handling
     """
-    track = get_object_or_404(Track, slug=slug)
+    track = get_object_or_404(Track, slug=slug, user=request.user)
     
-    # Verify track ownership for security
-    if track.user != request.user:
-        raise Http404("Track not found")
-    
-    # Only allow POST requests from confirmation modal
     if request.method == 'POST':
-        track_title = track.title  # Store title before deletion for messaging
+        username = track.user.profile.username
+        track_title = track.title
         track.delete()
-        messages.success(request, f'Track "{track_title}" deleted successfully!')
-        return redirect('track_feed')
+        
+        messages.success(request, f'Track "{track_title}" has been deleted successfully.')
+        
+        # Check redirect preference from hidden input
+        redirect_to = request.POST.get('redirect_to', 'feed')
+        if redirect_to == 'profile':
+            return redirect('profile', username=username)
+        else:
+            return redirect('track_feed')
     
-    # Redirect invalid requests back to track detail
-    return redirect('track_detail', slug=slug)
+    # For GET requests, show confirmation page
+    return render(request, 'tracks/track_delete_confirm.html', {'track': track})
 
 def upload_track(request):
     messages.success(request, "Track uploaded successfully!")
