@@ -295,11 +295,12 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button"
-                                class="btn btn-secondary"
-                                data-bs-dismiss="modal"
-                                id="cancelBtn">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Upload</button>
+                        <a href="{% url 'track_feed' %}" class="btn btn-secondary">
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            Upload Track
+                        </button>
                     </div>
                 </form>
             </div>
