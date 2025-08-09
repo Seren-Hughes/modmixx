@@ -1,4 +1,5 @@
 from django import forms
+from django.utils import timezone
 from .models import Profile
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
@@ -7,7 +8,8 @@ import os
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import InMemoryUploadedFile, TemporaryUploadedFile
 from core.utils import get_toxicity_score 
-from ulid import ULID  
+from ulid import ULID
+from tracks.services.moderation import scan_image_bytes 
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
@@ -162,8 +164,15 @@ class ProfileForm(forms.ModelForm):
         - Extension: jpg, jpeg, png, webp
         - MIME type: image/jpeg, image/png, image/webp
         - Filename sanitization with ULID for uniqueness
+        - AWS Rekognition content moderation
         """
         image = self.cleaned_data.get('profile_picture')
+        
+        # Initialize moderation flags
+        self._moderation_failed = False
+        self._moderation_allowed = True
+        self._moderation_labels = []
+        
         # Only validate if a new file is uploaded
         if isinstance(image, (InMemoryUploadedFile, TemporaryUploadedFile)):
             # File size validation (20MB limit)
@@ -186,7 +195,26 @@ class ProfileForm(forms.ModelForm):
             if '..' in filename or '/' in filename or '\\' in filename:
                 raise ValidationError("Invalid filename.")
             
-            # Generate unique filename with ULID
+            # AWS Rekognition content moderation
+            try:
+                data = image.read()
+                image.seek(0)  # Reset file pointer for storage
+                
+                allowed, labels, failed = scan_image_bytes(data)
+                self._moderation_allowed = allowed
+                self._moderation_labels = labels
+                self._moderation_failed = failed
+                
+                if not allowed:
+                    raise ValidationError("This image violates our community guidelines.")
+                    
+            except ValidationError:
+                raise  # Re-raise validation errors
+            except Exception:
+                # Fail-open: allow upload but mark as pending
+                self._moderation_failed = True
+            
+            # Generate unique filename with ULID 
             name, ext = os.path.splitext(filename)
             safe_name = ''.join(c for c in name if c.isalnum() or c in ' -_()[]')
             safe_name = safe_name.strip()[:30]
@@ -199,3 +227,23 @@ class ProfileForm(forms.ModelForm):
                 image.name = f"profile_{ulid}{ext}"
             
         return image
+
+    def save(self, commit=True):
+        """
+        Save profile with moderation status based on image scan results.
+        """
+        profile = super().save(commit=False)
+        
+        # Set moderation status if image was processed
+        if hasattr(self, '_moderation_failed') or hasattr(self, '_moderation_allowed'):
+            if getattr(self, '_moderation_failed', False):
+                profile.moderation_status = "PENDING"
+                profile.moderation_labels = None
+            else:
+                profile.moderation_status = "APPROVED" if getattr(self, '_moderation_allowed', True) else "REJECTED"
+                profile.moderation_labels = getattr(self, '_moderation_labels', [])
+            profile.moderated_at = timezone.now()
+        
+        if commit:
+            profile.save()
+        return profile

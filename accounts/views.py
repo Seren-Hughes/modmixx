@@ -76,16 +76,23 @@ def profile_edit(request):
         
         form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if form.is_valid():
-            # Save the updated profile
-            updated_profile = form.save()
+            profile = form.save()
             
-            # Delete old profile image if a new one was uploaded
-            if 'profile_picture' in form.changed_data and old_profile_image:
-                if old_profile_image != updated_profile.profile_picture:
-                    old_profile_image.delete(save=False)
+            # Check moderation status and provide feedback
+            if profile.moderation_status == "PENDING":
+                messages.warning(
+                    request,
+                    "Profile updated! Your profile picture is pending moderation and will be reviewed shortly."
+                )
+            elif profile.moderation_status == "REJECTED":
+                messages.error(
+                    request,
+                    "Profile updated but your profile picture was flagged during moderation."
+                )
+            else:
+                messages.success(request, "Profile updated successfully!")
             
-            messages.success(request, "Profile updated successfully!")
-            return redirect('profile', username=request.user.profile.username)
+            return redirect('profile', username=profile.username)
     else:
         form = ProfileForm(instance=request.user.profile)
     return render(request, 'accounts/profile_edit.html', {'form': form})

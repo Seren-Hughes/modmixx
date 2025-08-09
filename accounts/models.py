@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 from django.core.files.uploadedfile import InMemoryUploadedFile, TemporaryUploadedFile
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 
 # Create your models here.
 
@@ -83,6 +84,15 @@ class Profile(models.Model):
         help_text="e.g., she/her, they/them, he/they, xe/xir"
     )
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
+
+    MOD_STATUS = (
+        ("PENDING", "Pending"),
+        ("APPROVED", "Approved"),
+        ("REJECTED", "Rejected"),
+    )
+    moderation_status = models.CharField(max_length=9, choices=MOD_STATUS, default="PENDING")
+    moderation_labels = models.JSONField(blank=True, null=True)
+    moderated_at = models.DateTimeField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
         """
