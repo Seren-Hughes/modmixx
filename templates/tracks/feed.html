@@ -9,115 +9,92 @@
                 data-bs-toggle="modal"
                 data-bs-target="#uploadModal">Share Your Track</button>
     </div>
-    
     <div class="text-center">
         <p>Welcome to the modmixx community!</p>
-        <p><em>This is your private track feed - only community members can see this.</em></p>
+        <p>
+            <em>This is your private track feed - only community members can see this.</em>
+        </p>
     </div>
-    
     <!-- Track feed container for server-rendered and dynamic content -->
     <div id="track-feed">
         {% for track in tracks %}
             <!-- Server-rendered track cards (first page) -->
             <div class="card mb-3" data-track-slug="{{ track.slug }}">
                 <div class="card-body">
-                    <!-- User Info at Top -->
+                    <!-- User info header -->
                     <div class="d-flex align-items-center mb-3">
                         <a href="{% url 'profile' track.user.profile.username %}"
                            class="text-decoration-none">
                             {% if track.user.profile.profile_picture and track.user.profile.moderation_status == "APPROVED" %}
                                 <img src="{{ track.user.profile.profile_picture.url }}"
                                      class="rounded-circle me-2"
-                                     alt="{{ track.user.profile.display_name|default:track.user.profile.username|escape }}"
-                                     style="width: 32px;
-                                            height: 32px;
-                                            object-fit: cover">
+                                     alt="{{ track.user.profile.display_name }}"
+                                     style="width:32px;
+                                            height:32px;
+                                            object-fit:cover">
                             {% else %}
                                 <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-2"
-                                     style="width: 32px;
-                                            height: 32px">
-                                    <span class="text-white" style="font-size: 14px;">
-                                        {{ track.user.profile.display_name|first|upper|default:track.user.profile.username|first|upper|escape }}
-                                    </span>
+                                     style="width:32px;
+                                            height:32px">
+                                    <span class="text-white" style="font-size:14px;">{{ track.user.profile.display_name|first|upper }}</span>
                                 </div>
                             {% endif %}
                         </a>
                         <div>
                             <div>
                                 <a href="{% url 'profile' track.user.profile.username %}"
-                                   class="text-decoration-none fw-semibold">
-                                    {{ track.user.profile.display_name|default:track.user.profile.username|escape }}
-                                </a>
+                                   class="text-decoration-none fw-semibold">{{ track.user.profile.display_name }}</a>
                             </div>
-                            <!-- time since django built in time stamp -->
                             <small class="text-muted">{{ track.created_at|timesince }} ago</small>
                         </div>
                     </div>
-                    <!-- Track Content -->
-                    <div class="row">
-                        <div class="col-md-3">
-                            {% if track.track_image and track.moderation_status == "APPROVED" %}
-                                <img src="{{ track.track_image.url }}"
-                                     class="img-fluid rounded"
-                                     alt="Uploaded track art work for {{ track.title|escape }}"
-                                     style="max-height: 150px;
-                                            object-fit: cover">
-                            {% elif track.moderation_status == "PENDING" and track.user == user %}
-                                <!-- Show placeholder with pending message for track owner -->
-                                <div class="card-img-top bg-light d-flex align-items-center justify-content-center"
-                                     style="height: 150px">
-                                    <div class="text-center text-muted">
-                                        <i class="fas fa-clock fa-2x mb-2"></i>
-                                        <p>Image pending moderation</p>
-                                    </div>
-                                </div>
-                            {% else %}
-                                <!-- Default placeholder for everyone else -->
-                                <!-- update to use a static branded image later -->
-                                <div class="card-img-top bg-light d-flex align-items-center justify-content-center"
-                                     style="height: 150px">
-                                    <div class="text-center text-muted">
-                                        <i class="fas fa-music fa-2x mb-2"></i>
-                                        <p>No image</p>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        </div>
-                        <div class="col-md-9">
-                            <div class="track-info">
-                                <h5 class="card-title">
-                                    <a href="{% url 'track_detail' track.slug %}"
-                                       class="text-decoration-none">{{ track.title|escape }}</a>
-                                </h5>
-                                {% if track.duration %}
-                                    <small class="text-muted">Duration: {{ track.get_duration_display }}</small>
-                                {% endif %}
+                    <!-- Track artwork and content -->
+                    <div class="track-card-body">
+                        <!-- Square artwork -->
+                        {% if track.track_image and track.moderation_status == "APPROVED" %}
+                            <img src="{{ track.track_image.url }}"
+                                 class="track-artwork"
+                                 alt="Cover art for {{ track.title }}">
+                        {% else %}
+                            <div class="track-artwork-placeholder">
+                                <i class="fas fa-music"></i>
                             </div>
-                            {% if track.description %}<p class="card-text">{{ track.description|escape|truncatewords:10 }}</p>{% endif %}
-                            <div class="mb-2">
-                                <!-- Audio player with single-track playback management -->
-                                <audio controls 
-                                       controlsList="nodownload" 
-                                       class="w-100" 
-                                       style="max-width:400px;"
+                        {% endif %}
+                        <!-- Track content -->
+                        <div class="track-content">
+                            <h5 class="card-title mb-2">
+                                <a href="{% url 'track_detail' track.slug %}"
+                                   class="text-decoration-none">
+                                    {{ track.title }}
+                                    {% if track.duration %}• {{ track.get_duration_display }}{% endif %}
+                                </a>
+                            </h5>
+                            {% if track.description %}
+                                <p class="card-text text-muted mb-3" style="font-size: 0.9em;">{{ track.description }}</p>
+                            {% endif %}
+                            <!-- Audio player -->
+                            <div class="mb-3">
+                                <audio controls
+                                       controlsList="nodownload noplaybackrate"
+                                       class="w-100"
+                                       style="max-width:400px"
                                        onplay="AudioManager.handlePlay('{{ track.slug }}', this)"
                                        onpause="AudioManager.handlePause('{{ track.slug }}', this)">
                                     <source src="{{ track.audio_file.url }}" type="audio/mpeg">
                                 </audio>
                             </div>
-                            <div class="mt-2">
+                            <!-- Comments link -->
+                            <div>
                                 <a href="{% url 'track_detail' track.slug %}#comments"
                                    class="text-decoration-none text-muted">
                                     <i class="fa fa-comment me-1"></i>
-                                    {% with comment_count=track.comments.count %}
-                                        {% if comment_count == 0 %}
-                                            No comments yet
-                                        {% elif comment_count == 1 %}
-                                            1 comment
-                                        {% else %}
-                                            {{ comment_count }} comments
-                                        {% endif %}
-                                    {% endwith %}
+                                    {% if track.comments.count == 0 %}
+                                        No comments yet
+                                    {% elif track.comments.count == 1 %}
+                                        1 comment
+                                    {% else %}
+                                        {{ track.comments.count }} comments
+                                    {% endif %}
                                 </a>
                             </div>
                         </div>
@@ -126,22 +103,31 @@
             </div>
         {% endfor %}
     </div>
-    
     <!-- Infinite scroll loading indicator -->
     <div id="loading" class="text-center py-3" style="display:none;">Loading…</div>
-    
     <!-- Intersection observer sentinel for infinite scroll -->
     <div id="feed-sentinel" class="py-2"></div>
-    
     <!-- Accessibility: Screen-reader announcements -->
-    <div id="sr-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
-    
+    <div id="sr-announcer"
+         class="visually-hidden"
+         aria-live="polite"
+         aria-atomic="true"></div>
     <!-- Accessibility: Back to top button -->
-    <button id="backToTop" class="btn btn-secondary" type="button" aria-label="Back to top"
-            style="position:fixed; right:1rem; bottom:1rem; display:none; z-index:1060">↑ Top</button>
-    
+    <button id="backToTop"
+            class="btn btn-secondary"
+            type="button"
+            aria-label="Back to top"
+            style="position:fixed;
+                   right:1rem;
+                   bottom:1rem;
+                   display:none;
+                   z-index:1060">↑ Top</button>
     <!-- Track upload modal -->
-    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true"
+    <div class="modal fade"
+         id="uploadModal"
+         tabindex="-1"
+         aria-labelledby="uploadModalLabel"
+         aria-hidden="true"
          data-show-modal="{% if show_upload_modal or upload_form.errors %}true{% else %}false{% endif %}">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -300,12 +286,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <a href="{% url 'track_feed' %}" class="btn btn-secondary">
-                            Cancel
-                        </a>
-                        <button type="submit" class="btn btn-primary">
-                            Upload Track
-                        </button>
+                        <a href="{% url 'track_feed' %}" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Upload Track</button>
                     </div>
                 </form>
             </div>
