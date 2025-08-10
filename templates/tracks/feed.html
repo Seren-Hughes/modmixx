@@ -3,22 +3,23 @@
 {% block content %}
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Community Feed</h1>
-        <!--modal upload button-->
+        <!-- Upload modal trigger button -->
         <button type="button"
                 class="btn btn-primary"
                 data-bs-toggle="modal"
                 data-bs-target="#uploadModal">Share Your Track</button>
     </div>
+    
     <div class="text-center">
         <p>Welcome to the modmixx community!</p>
-        <p>
-            <em>This is your private track feed - only community members can see this.</em>
-        </p>
+        <p><em>This is your private track feed - only community members can see this.</em></p>
     </div>
+    
+    <!-- Track feed container for server-rendered and dynamic content -->
     <div id="track-feed">
         {% for track in tracks %}
-            <!--first page renders server-side -->
-            <div class="card mb-3">
+            <!-- Server-rendered track cards (first page) -->
+            <div class="card mb-3" data-track-slug="{{ track.slug }}">
                 <div class="card-body">
                     <!-- User Info at Top -->
                     <div class="d-flex align-items-center mb-3">
@@ -83,13 +84,24 @@
                             {% endif %}
                         </div>
                         <div class="col-md-9">
-                            <h5 class="card-title">
-                                <a href="{% url 'track_detail' track.slug %}"
-                                   class="text-decoration-none">{{ track.title|escape }}</a>
-                            </h5>
+                            <div class="track-info">
+                                <h5 class="card-title">
+                                    <a href="{% url 'track_detail' track.slug %}"
+                                       class="text-decoration-none">{{ track.title|escape }}</a>
+                                </h5>
+                                {% if track.duration %}
+                                    <small class="text-muted">Duration: {{ track.get_duration_display }}</small>
+                                {% endif %}
+                            </div>
                             {% if track.description %}<p class="card-text">{{ track.description|escape|truncatewords:10 }}</p>{% endif %}
                             <div class="mb-2">
-                                <audio controls class="w-100" style="max-width: 400px;">
+                                <!-- Audio player with single-track playback management -->
+                                <audio controls 
+                                       controlsList="nodownload" 
+                                       class="w-100" 
+                                       style="max-width:400px;"
+                                       onplay="AudioManager.handlePlay('{{ track.slug }}', this)"
+                                       onpause="AudioManager.handlePause('{{ track.slug }}', this)">
                                     <source src="{{ track.audio_file.url }}" type="audio/mpeg">
                                 </audio>
                             </div>
@@ -114,29 +126,22 @@
             </div>
         {% endfor %}
     </div>
+    
+    <!-- Infinite scroll loading indicator -->
     <div id="loading" class="text-center py-3" style="display:none;">Loading…</div>
+    
+    <!-- Intersection observer sentinel for infinite scroll -->
     <div id="feed-sentinel" class="py-2"></div>
-    <!-- Screen-reader live region -->
-    <div id="sr-announcer"
-         class="visually-hidden"
-         aria-live="polite"
-         aria-atomic="true"></div>
-    <!-- Back to top button -->
-    <button id="backToTop"
-            class="btn btn-secondary"
-            type="button"
-            aria-label="Back to top"
-            style="position:fixed;
-                   right:1rem;
-                   bottom:1rem;
-                   display:none;
-                   z-index:1060">↑ Top</button>
-    <!-- Modal for Uploading Tracks -->
-    <div class="modal fade"
-         id="uploadModal"
-         tabindex="-1"
-         aria-labelledby="uploadModalLabel"
-         aria-hidden="true"
+    
+    <!-- Accessibility: Screen-reader announcements -->
+    <div id="sr-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+    
+    <!-- Accessibility: Back to top button -->
+    <button id="backToTop" class="btn btn-secondary" type="button" aria-label="Back to top"
+            style="position:fixed; right:1rem; bottom:1rem; display:none; z-index:1060">↑ Top</button>
+    
+    <!-- Track upload modal -->
+    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true"
          data-show-modal="{% if show_upload_modal or upload_form.errors %}true{% else %}false{% endif %}">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">

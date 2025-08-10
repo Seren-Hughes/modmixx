@@ -67,7 +67,9 @@
             <!-- Audio Player -->
             <div class="mb-4">
                 <h5>Listen</h5>
-                <audio controls class="w-100" style="max-width: 500px;">
+                <audio controls 
+                       controlsList="nodownload noremoteplayback"
+                       data-duration="{{ track.duration|default:0 }}">
                     <source src="{{ track.audio_file.url }}" type="audio/mpeg">
                     <source src="{{ track.audio_file.url }}" type="audio/wav">
                     <source src="{{ track.audio_file.url }}" type="audio/ogg">
