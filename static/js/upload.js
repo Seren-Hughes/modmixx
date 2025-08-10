@@ -1,11 +1,17 @@
+/**
+ * Track Upload Modal Management
+ * 
+ * Features:
+ * - Drag & drop file upload with previews
+ * - Form validation and error handling
+ * - Modal state preservation on validation errors
+ * - File type validation and preview generation
+ */
+
 document.addEventListener('DOMContentLoaded', function() {
-    
-    // 1. Modal state management 
+    // Modal state management for validation errors
     handleModalValidationErrors();
     
-    // 2. Upload handlers
-    setupFileUploadHandlers();
-    setupModalEventHandlers();
     
     function handleModalValidationErrors() {
         const uploadModal = document.getElementById('uploadModal');
