@@ -71,18 +71,21 @@ function buildAvatarHTML(profile) {
  * Build a Bootstrap card for a track.
  */
 function buildCard(t) {
-    const avatar = buildAvatarHTML(t.profile);
-    const image = t.image_url
-        ? `<img src="${t.image_url}" class="img-fluid rounded" alt="Uploaded track art work for ${escapeHtml(t.title)}" style="max-height:150px;object-fit:cover">`
-        : `<div class="bg-light rounded d-flex align-items-center justify-content-center" style="height:150px"></div>`;
-    const commentsText = t.comment_count === 0 ? 'No comments yet'
-                        : t.comment_count === 1 ? '1 comment'
-                        : `${t.comment_count} comments`;
-    const durationText = t.duration ? ` • ${t.duration_display}` : '';
+  const avatar = buildAvatarHTML(t.profile);
+  const image = t.image_url
+    ? `<img src="${t.image_url}" class="track-artwork" alt="Cover art for ${escapeHtml(t.title)}">`
+    : `<div class="track-artwork-placeholder">
+             <i class="fas fa-music"></i>
+           </div>`;
+  const commentsText = t.comment_count === 0 ? 'No comments yet'
+    : t.comment_count === 1 ? '1 comment'
+      : `${t.comment_count} comments`;
+  const durationText = t.duration ? ` • ${t.duration_display}` : '';
 
-    return `
+  return `
         <div class="card mb-3" data-track-slug="${t.slug}">
             <div class="card-body">
+                <!-- User info header -->
                 <div class="d-flex align-items-center mb-3">
                     <a href="${t.profile.url}" class="text-decoration-none">
                         ${avatar}
@@ -96,18 +99,24 @@ function buildCard(t) {
                         <small class="text-muted">${escapeHtml(t.created_ago)}</small>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-3">
-                        ${image}
-                    </div>
-                    <div class="col-md-9">
-                        <h5 class="card-title">
+                
+                <!-- SoundCloud-style track layout -->
+                <div class="track-card-body">
+                    <!-- Square artwork -->
+                    ${image}
+                    
+                    <!-- Track content -->
+                    <div class="track-content">
+                        <h5 class="card-title mb-2">
                             <a href="${t.detail_url}" class="text-decoration-none">
                                 ${escapeHtml(t.title)}${durationText}
                             </a>
                         </h5>
-                        ${t.description ? `<p class="card-text">${escapeHtml(t.description)}</p>` : ''}
-                        <div class="mb-2">
+                        
+                        ${t.description ? `<p class="card-text text-muted mb-3" style="font-size: 0.9em;">${escapeHtml(t.description)}</p>` : ''}
+                        
+                        <!-- Audio player -->
+                        <div class="mb-3">
                             <audio controls 
                                    controlsList="nodownload" 
                                    class="w-100" 
@@ -117,7 +126,9 @@ function buildCard(t) {
                                 <source src="${t.audio_url}" type="audio/mpeg">
                             </audio>
                         </div>
-                        <div class="mt-2">
+                        
+                        <!-- Comments link -->
+                        <div>
                             <a href="${t.detail_url}#comments" class="text-decoration-none text-muted">
                                 <i class="fa fa-comment me-1"></i>${commentsText}
                             </a>
@@ -132,7 +143,7 @@ function buildCard(t) {
  * Escape HTML to prevent XSS when rendering user-generated content.
  */
 function escapeHtml(s) {
-  return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
 /**
@@ -187,7 +198,7 @@ async function loadMore() {
  * Falls back gracefully if IntersectionObserver is unavailable.
  */
 document.addEventListener('DOMContentLoaded', () => {
-  
+
   const sentinel = document.getElementById('feed-sentinel');
 
   if ('IntersectionObserver' in window && sentinel) {
@@ -217,43 +228,43 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 class AudioManager {
-    static handlePlay(trackSlug, audioElement) {
-        // Stop current track if playing a different one
-        if (currentAudio && currentAudio !== audioElement) {
-            currentAudio.pause();
-            currentAudio.currentTime = 0;
-            this.updatePlayButtonState(currentTrackSlug, 'stopped');
-        }
-        
-        // Update current references
-        currentAudio = audioElement;
-        currentTrackSlug = trackSlug;
-        
-        // Update UI state
-        this.updatePlayButtonState(trackSlug, 'playing');
-        
-        // Show sticky player = ***** To Do!***** 
-        this.showStickyPlayer(trackSlug, audioElement);
+  static handlePlay(trackSlug, audioElement) {
+    // Stop current track if playing a different one
+    if (currentAudio && currentAudio !== audioElement) {
+      currentAudio.pause();
+      currentAudio.currentTime = 0;
+      this.updatePlayButtonState(currentTrackSlug, 'stopped');
     }
-    
-    static handlePause(trackSlug, audioElement) {
-        // Only update state if this is the currently playing track
-        if (currentAudio === audioElement) {
-            this.updatePlayButtonState(trackSlug, 'paused');
-        }
+
+    // Update current references
+    currentAudio = audioElement;
+    currentTrackSlug = trackSlug;
+
+    // Update UI state
+    this.updatePlayButtonState(trackSlug, 'playing');
+
+    // Show sticky player = ***** To Do!***** 
+    this.showStickyPlayer(trackSlug, audioElement);
+  }
+
+  static handlePause(trackSlug, audioElement) {
+    // Only update state if this is the currently playing track
+    if (currentAudio === audioElement) {
+      this.updatePlayButtonState(trackSlug, 'paused');
     }
-    
-    static updatePlayButtonState(trackSlug, state) {
-        const trackElement = document.querySelector(`[data-track-slug="${trackSlug}"]`);
-        if (trackElement) {
-            const playBtn = trackElement.querySelector('.play-btn');
-            if (playBtn) {
-                playBtn.textContent = state === 'playing' ? 'Pause' : 'Play';
-            }
-        }
+  }
+
+  static updatePlayButtonState(trackSlug, state) {
+    const trackElement = document.querySelector(`[data-track-slug="${trackSlug}"]`);
+    if (trackElement) {
+      const playBtn = trackElement.querySelector('.play-btn');
+      if (playBtn) {
+        playBtn.textContent = state === 'playing' ? 'Pause' : 'Play';
+      }
     }
-    
-    static showStickyPlayer(trackSlug, audioElement) {
-        console.log(`Now playing: ${trackSlug}`);
-    }
+  }
+
+  static showStickyPlayer(trackSlug, audioElement) {
+    console.log(`Now playing: ${trackSlug}`);
+  }
 }
