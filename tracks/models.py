@@ -46,6 +46,9 @@ class Track(models.Model):
     moderation_labels = models.JSONField(blank=True, null=True)
     moderated_at = models.DateTimeField(blank=True, null=True)
 
+    # Track duration
+    duration = models.PositiveIntegerField(null=True, blank=True, help_text="Duration in seconds")
+
     class Meta:
         ordering = ['-created_at'] # Newest tracks first
 
@@ -93,6 +96,15 @@ class Track(models.Model):
         if self.track_image:
             return os.path.basename(self.track_image.name)
         return "No image"
+    
+    def get_duration_display(self):
+        """Return duration in MM:SS format"""
+        if not self.duration:
+            return "Unknown"
+        
+        minutes = self.duration // 60
+        seconds = self.duration % 60
+        return f"{minutes}:{seconds:02d}"
     
     
     

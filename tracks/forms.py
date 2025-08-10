@@ -8,6 +8,7 @@ from .models import Track
 import os
 import re
 from ulid import ULID
+from mutagen import File as MutagenFile
 
 class TrackUploadForm(forms.ModelForm):
     """
@@ -415,19 +416,44 @@ class TrackUploadForm(forms.ModelForm):
         """
         Save the track with moderation status based on image scan results.
         """
-        inst = super().save(commit=False)
+        track = super().save(commit=False)
+        
+        # Detect audio duration if audio file is present
+        if self.cleaned_data.get('audio_file'):
+            try:
+                audio_file = self.cleaned_data['audio_file']
+                # Reset file pointer
+                audio_file.seek(0)
+                
+                # Create temporary file for mutagen
+                import tempfile
+                with tempfile.NamedTemporaryFile() as temp_file:
+                    for chunk in audio_file.chunks():
+                        temp_file.write(chunk)
+                    temp_file.flush()
+                    
+                    # Get duration using mutagen
+                    audio_info = MutagenFile(temp_file.name)
+                    if audio_info and hasattr(audio_info, 'info') and hasattr(audio_info.info, 'length'):
+                        track.duration = int(audio_info.info.length)
+                    
+                    # Reset file pointer for storage
+                    audio_file.seek(0)
+            except Exception:
+                # Fail silently - duration is optional
+                track.duration = None
         
         # Set moderation status based on image scan (if image was uploaded)
         if getattr(self, "_moderation_failed", False):
-            inst.moderation_status = "PENDING"
-            inst.moderation_labels = None
+            track.moderation_status = "PENDING"
+            track.moderation_labels = None
         else:
-            inst.moderation_status = "APPROVED" if getattr(self, "_moderation_allowed", True) else "REJECTED"
-            inst.moderation_labels = getattr(self, "_moderation_labels", [])
+            track.moderation_status = "APPROVED" if getattr(self, "_moderation_allowed", True) else "REJECTED"
+            track.moderation_labels = getattr(self, "_moderation_labels", [])
         
-        inst.moderated_at = timezone.now()
+        track.moderated_at = timezone.now()
         if commit:
-            inst.save()
-        return inst
+            track.save()
+        return track
 
 # End of TrackUploadForm class
