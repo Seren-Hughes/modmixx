@@ -339,43 +339,99 @@ def upload_track(request):
 
 def track_feed_api(request):
     """
-    JSON endpoint for infinite scroll.
-    Only return APPROVED tracks.
+    JSON API endpoint for infinite scroll track feed pagination.
+    
+    Returns paginated track data with moderation-aware media URLs.
+    Used by frontend JavaScript for seamless content loading.
+    
+    Args:
+        request: HTTP request with optional 'page' parameter
+        
+    Returns:
+        JsonResponse: Paginated tracks with metadata and navigation info
     """
-    page = int(request.GET.get('page', 1))
+    from django.core.paginator import Paginator
+    from django.db.models import Count
+    from django.utils.timesince import timesince
+    
+    # Get all tracks with related data 
+    # QuerySet - qs (lazy, not executed yet)
     tracks_qs = (
         Track.objects
-        .filter(moderation_status="APPROVED")  # Only approved tracks
         .select_related('user', 'user__profile')
         .annotate(comment_count=Count('comments'))
         .order_by('-created_at')
     )
+    
+    # Paginate (5 items per page for infinite scroll)
     paginator = Paginator(tracks_qs, 5)
-    page_obj = paginator.get_page(page)
-
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+    
+    # Build track data
     items = []
     for t in page_obj:
         items.append({
             "id": t.id,
             "title": t.title,
             "slug": t.slug,
-            "detail_url": reverse('track_detail', args=[t.slug]),
             "description": t.description or "",
-            "created_ago": f"{timesince(t.created_at)} ago",
             "audio_url": t.audio_file.url,
             "image_url": t.track_image.url if (t.track_image and t.moderation_status == "APPROVED") else None,
-            "comment_count": t.comment_count,  # Annotated (no extra query)
-            "moderation_status": t.moderation_status,
+            "detail_url": reverse('track_detail', args=[t.slug]),
+            "created_ago": timesince(t.created_at) + " ago",
+            "comment_count": t.comment_count,
+            "duration": getattr(t, 'duration', None),
+            "duration_display": t.get_duration_display() if hasattr(t, 'get_duration_display') and t.duration else None,
             "profile": {
                 "username": t.user.profile.username,
-                # Fallback: use username if no display_name set
                 "display_name": t.user.profile.display_name or t.user.profile.username,
                 "url": reverse('profile', args=[t.user.profile.username]),
-                "avatar": t.user.profile.profile_picture.url if t.user.profile.profile_picture else None,
-            },
+                "avatar": t.user.profile.profile_picture.url if (
+                    t.user.profile.profile_picture and 
+                    t.user.profile.moderation_status == "APPROVED"
+                ) else None,
+            }
         })
-
+    
     return JsonResponse({
         "tracks": items,
         "has_next": page_obj.has_next(),
+        "page": page_obj.number,
+        "total_pages": paginator.num_pages,
+    })
+
+@login_required
+def track_audio_api(request, slug):
+    """
+    JSON endpoint providing track audio data for JavaScript audio players.
+    
+    Returns track metadata and secure audio URLs for client-side playback.
+    Includes moderation-aware image URLs and user profile data.
+    
+    Args:
+        request: HTTP request object
+        slug: Track slug identifier
+        
+    Returns:
+        JsonResponse: Track data optimized for audio player integration
+    """
+    track = get_object_or_404(
+        Track.objects.select_related('user', 'user__profile'),
+        slug=slug
+    )
+    
+    return JsonResponse({
+        "id": track.id,
+        "title": track.title,
+        "slug": track.slug,
+        "audio_url": track.audio_file.url,
+        "image_url": track.track_image.url if (track.track_image and track.moderation_status == "APPROVED") else None,
+        "duration": track.duration,
+        "artist": {
+            "username": track.user.profile.username,
+            "display_name": track.user.profile.display_name or track.user.profile.username,
+            "profile_url": reverse('profile', args=[track.user.profile.username]),
+            "avatar": track.user.profile.profile_picture.url if (track.user.profile.profile_picture and track.user.profile.moderation_status == "APPROVED") else None,
+        }
     })
