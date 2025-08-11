@@ -1,0 +1,110 @@
+<div class="card mb-3 ms-{{ level|default:0 }}" data-comment-id="{{ comment.id }}">
+    <div class="card-body">
+        {% if comment.deleted %}
+            <div class="text-muted fst-italic">[deleted comment]</div>
+        {% else %}
+            <!-- Comment header with user info -->
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="d-flex align-items-center">
+                    <!-- User avatar and profile link -->
+                    <a href="{% url 'profile' comment.user.profile.username %}"
+                       class="text-decoration-none d-flex align-items-center">
+                        {% if comment.user.profile.profile_picture %}
+                            <img src="{{ comment.user.profile.profile_picture.url }}"
+                                 class="rounded-circle me-3"
+                                 alt="{{ comment.user.profile.display_name|default:comment.user.profile.username|escape }}"
+                                 style="width: 40px; height: 40px; object-fit: cover">
+                        {% else %}
+                            <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-3"
+                                 style="width: 40px; height: 40px">
+                                <span class="text-white fw-bold" style="font-size: 14px;">
+                                    {{ comment.user.profile.display_name|first|upper|default:comment.user.profile.username|first|upper|escape }}
+                                </span>
+                            </div>
+                        {% endif %}
+                        <div>
+                            <strong class="text-dark">{{ comment.user.profile.display_name|default:comment.user.profile.username|escape }}</strong>
+                            <div class="text-muted small">
+                                {{ comment.created_at|timesince }} ago
+                                {% if comment.updated_at != comment.created_at %}<span class="text-muted">(edited)</span>{% endif %}
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <!-- Comment actions dropdown (for comment owner) -->
+                {% if user == comment.user %}
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                                type="button"
+                                id="commentOptions{{ comment.id }}"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                            <i class="fa fa-ellipsis-h"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end"
+                            aria-labelledby="commentOptions{{ comment.id }}">
+                            <li>
+                                <button class="dropdown-item edit-comment" type="button">
+                                    <i class="fa fa-edit me-2"></i>Edit Comment
+                                </button>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <button class="dropdown-item text-danger delete-comment"
+                                        type="button"
+                                        data-comment-id="{{ comment.id }}">
+                                    <i class="fa fa-trash me-2"></i>Delete Comment
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+            <!-- Comment content (toggles with edit form) -->
+            <div class="comment-content">
+                <p class="mb-0">{{ comment.content|linebreaksbr|escape }}</p>
+            </div>
+            <!-- Edit form (hidden by default) -->
+            <div class="comment-edit-form" style="display: none;">
+                <div class="mt-3">
+                    <textarea class="form-control mb-3"
+                              rows="3"
+                              name="content"
+                              id="edit-content-{{ comment.id }}"
+                              style="resize: vertical">{{ comment.content|escape }}</textarea>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-primary save-comment">
+                            <i class="fa fa-check me-1"></i> Save Changes
+                        </button>
+                        <button class="btn btn-sm btn-secondary cancel-edit">
+                            <i class="fa fa-times me-1"></i> Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Reply button (for all users) -->
+            <div class="mt-2">
+                <button class="btn btn-sm btn-link reply-btn" data-parent-id="{{ comment.id }}">
+                    <i class="fa fa-reply me-1"></i>Reply
+                </button>
+                <!-- Reply form (hidden by default, shown via JS) -->
+                <form method="post"
+                      action="{% url 'comments:post_comment' %}"
+                      class="reply-form mt-2"
+                      style="display:none;">
+                    {% csrf_token %}
+                    <input type="hidden" name="parent" value="{{ comment.id }}">
+                    <input type="hidden" name="track" value="{{ track.id }}">
+                    <textarea class="form-control mb-2" name="content" rows="2" placeholder="Reply..."></textarea>
+                    <button type="submit" class="btn btn-primary btn-sm">Post Reply</button>
+                </form>
+            </div>
+        {% endif %}
+        <!-- Render replies recursively, even if parent is deleted -->
+        {% for reply in comment.replies.all %}
+            {% include "comments/_comment.html" with comment=reply level=level|add:2 %}
+        {% endfor %}
+    </div>
+</div>

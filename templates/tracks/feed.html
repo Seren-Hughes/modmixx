@@ -88,12 +88,12 @@
                                 <a href="{% url 'track_detail' track.slug %}#comments"
                                    class="text-decoration-none text-muted">
                                     <i class="fa fa-comment me-1"></i>
-                                    {% if track.comments.count == 0 %}
+                                    {% if track.visible_comment_count == 0 %}
                                         No comments yet
-                                    {% elif track.comments.count == 1 %}
+                                    {% elif track.visible_comment_count == 1 %}
                                         1 comment
                                     {% else %}
-                                        {{ track.comments.count }} comments
+                                        {{ track.visible_comment_count }} comments
                                     {% endif %}
                                 </a>
                             </div>

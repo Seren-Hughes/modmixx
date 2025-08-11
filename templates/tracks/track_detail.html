@@ -95,152 +95,36 @@
                 <h3 class="mb-4">
                     <i class="fa fa-comments me-2"></i>
                     Comments
-                    <span class="badge bg-secondary ms-2">{{ comments.count }}</span>
+                    <span id="comment-count" class="badge bg-secondary ms-2">{{ visible_comment_count }}</span>
                 </h3>
                 <!-- Comment Submission Form -->
                 <div class="card mb-4">
                     <div class="card-body">
-                        <form method="post" class="comment-form">
+                        <form method="post" 
+                              action="{% url 'comments:post_comment' %}" 
+                              id="comment-form"
+                              class="main-comment-form">
                             {% csrf_token %}
-                            <div class="d-flex align-items-start">
-                                <!-- User avatar -->
-                                {% if user.profile.profile_picture %}
-                                    <img src="{{ user.profile.profile_picture.url }}"
-                                         class="rounded-circle me-3"
-                                         alt="{{ user.profile.display_name|default:user.profile.username|escape }}"
-                                         style="width: 45px;
-                                                height: 45px;
-                                                object-fit: cover">
-                                {% else %}
-                                    <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-3"
-                                         style="width: 45px;
-                                                height: 45px">
-                                        <span class="text-white fw-bold">
-                                            {{ user.profile.display_name|first|upper|default:user.profile.username|first|upper|escape }}
-                                        </span>
-                                    </div>
-                                {% endif %}
-                                <!-- Comment input area -->
-                                <div class="flex-grow-1">
-                                    <!-- Updated textarea with error display -->
-                                    <textarea class="form-control {% if form.content.errors %}is-invalid{% endif %}"
-                                              name="content"
-                                              id="new-comment-content"
-                                              rows="3"
-                                              placeholder="Share your thoughts about this track..."
-                                              style="resize: vertical"
-                                              required>{% if form.content.value %}{{ form.content.value }}{% endif %}</textarea>
-                                    <!-- Display validation errors for toxic content -->
-                                    {% if form.content.errors %}
-                                        <div class="invalid-feedback d-block">
-                                            {% for error in form.content.errors %}{{ error }}{% endfor %}
-                                        </div>
-                                    {% endif %}
-                                    <div class="mt-2 d-flex justify-content-between align-items-center">
-                                        <small class="text-muted">
-                                            <i class="fa fa-info-circle me-1"></i>
-                                            Be respectful and constructive in your feedback
-                                        </small>
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="fa fa-paper-plane me-1"></i> Post Comment
-                                        </button>
-                                    </div>
-                                </div>
+                            <input type="hidden" name="track" value="{{ track.id }}">
+                            <div class="mb-3">
+                                <textarea class="form-control" 
+                                          name="content" 
+                                          rows="3" 
+                                          placeholder="Share your thoughts about this track..."
+                                          required></textarea>
                             </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-comment me-1"></i> Post Comment
+                            </button>
                         </form>
                     </div>
                 </div>
                 <!-- Comments Display -->
                 <div class="comments-list">
                     {% for comment in comments %}
-                        <div class="card mb-3" data-comment-id="{{ comment.id }}">
-                            <div class="card-body">
-                                <!-- Comment header with user info -->
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <!-- User avatar and profile link -->
-                                        <a href="{% url 'profile' comment.user.profile.username %}"
-                                           class="text-decoration-none d-flex align-items-center">
-                                            {% if comment.user.profile.profile_picture %}
-                                                <img src="{{ comment.user.profile.profile_picture.url }}"
-                                                     class="rounded-circle me-3"
-                                                     alt="{{ comment.user.profile.display_name|default:comment.user.profile.username|escape }}"
-                                                     style="width: 40px;
-                                                            height: 40px;
-                                                            object-fit: cover">
-                                            {% else %}
-                                                <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-3"
-                                                     style="width: 40px;
-                                                            height: 40px">
-                                                    <span class="text-white fw-bold" style="font-size: 14px;">
-                                                        {{ comment.user.profile.display_name|first|upper|default:comment.user.profile.username|first|upper|escape }}
-                                                    </span>
-                                                </div>
-                                            {% endif %}
-                                            <div>
-                                                <strong class="text-dark">{{ comment.user.profile.display_name|default:comment.user.profile.username|escape }}</strong>
-                                                <div class="text-muted small">
-                                                    {{ comment.created_at|timesince }} ago
-                                                    {% if comment.updated_at != comment.created_at %}<span class="text-muted">(edited)</span>{% endif %}
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <!-- Comment actions dropdown (for comment owner) -->
-                                    {% if user == comment.user %}
-                                        <div class="dropdown">
-                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
-                                                    type="button"
-                                                    id="commentOptions{{ comment.id }}"
-                                                    data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
-                                                <i class="fa fa-ellipsis-h"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end"
-                                                aria-labelledby="commentOptions{{ comment.id }}">
-                                                <li>
-                                                    <button class="dropdown-item edit-comment" type="button">
-                                                        <i class="fa fa-edit me-2"></i>Edit Comment
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <hr class="dropdown-divider">
-                                                </li>
-                                                <li>
-                                                    <button class="dropdown-item text-danger delete-comment"
-                                                            type="button"
-                                                            data-comment-id="{{ comment.id }}">
-                                                        <i class="fa fa-trash me-2"></i>Delete Comment
-                                                    </button>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    {% endif %}
-                                </div>
-                                <!-- Comment content (toggles with edit form) -->
-                                <div class="comment-content">
-                                    <p class="mb-0">{{ comment.content|linebreaksbr|escape }}</p>
-                                </div>
-                                <!-- Edit form (hidden by default) -->
-                                <div class="comment-edit-form" style="display: none;">
-                                    <div class="mt-3">
-                                        <textarea class="form-control mb-3"
-                                                  rows="3"
-                                                  name="content"
-                                                  id="edit-content-{{ comment.id }}"
-                                                  style="resize: vertical">{{ comment.content|escape }}</textarea>
-                                        <div class="d-flex gap-2">
-                                            <button class="btn btn-sm btn-primary save-comment">
-                                                <i class="fa fa-check me-1"></i> Save Changes
-                                            </button>
-                                            <button class="btn btn-sm btn-secondary cancel-edit">
-                                                <i class="fa fa-times me-1"></i> Cancel
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {% if not comment.parent %}
+                            {% include "comments/_comment.html" with comment=comment level=0 %}
+                        {% endif %}
                     {% empty %}
                         <div class="text-center py-5">
                             <i class="fa fa-comments fa-3x text-muted mb-3"></i>
