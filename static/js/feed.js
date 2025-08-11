@@ -1,34 +1,22 @@
 /*
-  Track Feed Infinite Scroll (5 items/page)
+  Track Feed Infinite Scroll & Audio Management
 
-  Overview:
-  - Uses IntersectionObserver to detect when the sentinel enters the viewport and
-    fetches the next page of tracks from /tracks/feed-api/?page=N.
-  - Assumes the first page of tracks is server-rendered (SSR) in the template; JS starts at page = 2.
-  - Appends new track "cards" that match the existing Bootstrap layout.
-  - Provides basic accessibility: screen-reader live region announces loads, and a "Back to top" button appears after scroll.
-
-  Requirements in template (feed.html):
-  - <div id="track-feed">…first page server-rendered…</div>
-  - <div id="loading" style="display:none;"></div>
-  - <div id="feed-sentinel"></div>
-  - <div id="sr-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
-  - <button id="backToTop" …>↑ Top</button>
+  - Loads more tracks from /tracks/feed-api/?page=N as you scroll (IntersectionObserver or scroll fallback)
+  - Only one audio track plays at a time
+  - Accessibility: screen reader announcements, "Back to top" button
+  - First page is server-side rendered (SSR); JS loads from page 2 onward
 
   Backend API:
-  - Endpoint: /tracks/feed-api/?page=N
-  - Returns JSON: { tracks: [ … ], has_next: boolean }
-  - Each track item includes fields used below (title, slug, detail_url, description, created_ago,
-    audio_url, image_url, comment_count, profile{ username, display_name, url, avatar })
+    /tracks/feed-api/?page=N (returns { tracks: [...], has_next: boolean })
 
-  Accessibility:
-  - Announce new items via #sr-announcer (aria-live region).
-  - Provide a visible “Back to top” button to help keyboard and screen-reader users.
+  Template requirements:
+    track-feed, loading, feed-sentinel, sr-announcer, backToTop
 
   References:
-  - MDN IntersectionObserver: https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
-  - Django Pagination: https://docs.djangoproject.com/en/stable/topics/pagination/
-  - JsonResponse: https://docs.djangoproject.com/en/stable/ref/request-response/#jsonresponse-objects
+    - MDN IntersectionObserver: https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
+    - Django Pagination: https://docs.djangoproject.com/en/stable/topics/pagination/
+    - JsonResponse: https://docs.djangoproject.com/en/stable/ref/request-response/#jsonresponse-objects
+    - escapeHtml adapted from: https://stackoverflow.com/a/6234804
 */
 
 /**
@@ -49,7 +37,7 @@
 let currentAudio = null;
 let currentTrackSlug = null;
 
-let page = 2; // Start at 2 because page 1 is server-rendered in the template
+let page = 2; // Start at 2 because page 1 is server-rendered in the template (SSR)
 let loading = false;
 let hasNext = true; // Will be updated by API responses
 
@@ -77,9 +65,15 @@ function buildCard(t) {
     : `<div class="track-artwork-placeholder">
              <i class="fas fa-music"></i>
            </div>`;
-  const commentsText = t.comment_count === 0 ? 'No comments yet'
-    : t.comment_count === 1 ? '1 comment'
-      : `${t.comment_count} comments`;
+  const visibleCommentCount = t.visible_comment_count || 0;
+  let commentText;
+  if (visibleCommentCount === 0) {
+      commentText = 'No comments yet';
+  } else if (visibleCommentCount === 1) {
+      commentText = '1 comment';
+  } else {
+      commentText = `${visibleCommentCount} comments`;
+  }
   const durationText = t.duration ? ` • ${t.duration_display}` : '';
 
   return `
@@ -141,13 +135,14 @@ function buildCard(t) {
 
 /**
  * Escape HTML to prevent XSS when rendering user-generated content.
+ * adapted from https://stackoverflow.com/questions/6234773/can-i-escape-html-special-chars-in-javascript/6234804#6234804
  */
 function escapeHtml(s) {
   return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
 /**
- * Fetch next page and append items. Announces count via #sr-announcer.
+ * Fetch next page and append items to the feed. Announces count via #sr-announcer.
  */
 async function loadMore() {
   if (loading || !hasNext) return;
@@ -194,6 +189,7 @@ async function loadMore() {
 }
 
 /**
+ * Infinite scroll 
  * Initialize observer and UI behaviours.
  * Falls back gracefully if IntersectionObserver is unavailable.
  */
@@ -227,6 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+// Manages audio playback so only one track plays at a time
 class AudioManager {
   static handlePlay(trackSlug, audioElement) {
     // Stop current track if playing a different one

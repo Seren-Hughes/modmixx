@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils.timesince import timesince
 from django.contrib import messages
 from django.http import Http404
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Prefetch
 from .models import Track
 from .forms import TrackUploadForm
 from comments.models import Comment
@@ -19,12 +19,16 @@ def track_feed(request):
     Server-render (SSR) the first page (5 newest tracks).
     Only show APPROVED tracks to maintain community standards.
     """
-    tracks = (
-        Track.objects
-        .select_related('user', 'user__profile')
-        .annotate(comment_count=Count('comments'))
-        .order_by('-created_at')[:5]
-    )
+    tracks = Track.objects.filter(
+        moderation_status="APPROVED"
+    ).select_related('user__profile').prefetch_related(
+        Prefetch('comments', queryset=Comment.objects.filter(deleted=False))
+    ).order_by('-created_at')
+    
+    # Add visible comment count to each track
+    for track in tracks:
+        track.visible_comment_count = track.comments.filter(deleted=False).count()
+    
     upload_form = TrackUploadForm()
     return render(request, 'tracks/feed.html', {
         'tracks': tracks,
@@ -80,7 +84,16 @@ def track_detail(request, slug):
         slug=slug
     )
     
-    comments = Comment.objects.filter(track=track).order_by('-created_at')
+    comments = (
+        Comment.objects
+        .filter(track=track)
+        .select_related('user__profile')
+        .prefetch_related('replies')
+        .order_by('created_at')
+    )
+    
+    # Only count non-deleted comments
+    visible_comment_count = comments.filter(deleted=False).count()
     
     # Handle comment submission with content moderation
     if request.method == 'POST':
@@ -103,6 +116,7 @@ def track_detail(request, slug):
     return render(request, 'tracks/track_detail.html', {
         'track': track,
         'comments': comments,
+        'visible_comment_count': visible_comment_count,  
         'form': form,
     })
 
