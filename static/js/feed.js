@@ -223,6 +223,15 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+// Show upload modal if share parameter is present
+document.addEventListener('DOMContentLoaded', function() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('share') === '1') {
+        const modal = new bootstrap.Modal(document.getElementById('uploadModal'));
+        modal.show();
+    }
+});
+
 // Manages audio playback so only one track plays at a time
 class AudioManager {
   static handlePlay(trackSlug, audioElement) {

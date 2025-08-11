@@ -30,9 +30,12 @@ def track_feed(request):
         track.visible_comment_count = track.comments.filter(deleted=False).count()
     
     upload_form = TrackUploadForm()
+    # Check for ?share=1 in the URL
+    show_upload_modal = request.GET.get('share') == '1'
     return render(request, 'tracks/feed.html', {
         'tracks': tracks,
         'upload_form': upload_form,
+        'show_upload_modal': show_upload_modal,
     })
 
 
