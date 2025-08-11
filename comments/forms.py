@@ -8,9 +8,15 @@ class CommentForm(forms.ModelForm):
     Form for creating and editing comments with content moderation.
     Uses Google's Perspective API to detect and block toxic content.
     """
+    parent = forms.ModelChoiceField(
+        queryset=Comment.objects.all(),
+        required=False,
+        widget=forms.HiddenInput
+    )
+
     class Meta:
         model = Comment
-        fields = ['content']
+        fields = ['content', 'parent']
         widgets = {
             'content': forms.Textarea(attrs={
                 'rows': 2,

@@ -5,7 +5,11 @@ from django.views.decorators.http import require_POST
 from .models import Track
 from .models import Comment
 from .forms import CommentForm
+from django.template.loader import render_to_string
+import logging
 
+
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 @login_required
@@ -49,23 +53,81 @@ def comment_edit(request, comment_id):
 @login_required
 @require_POST
 def comment_delete(request, comment_id):
+    """
+    Delete a comment: soft delete if has replies, hard delete if no replies.
+    Clean up soft-deleted parents recursively when all replies are gone.
+    """
     comment = get_object_or_404(Comment, id=comment_id, user=request.user)
     track_slug = comment.track.slug
-    comment.delete()
+    
+    # Check if this comment has replies
+    has_replies = comment.replies.exists()
+    
+    if has_replies:
+        # Soft delete: mark as deleted but keep replies visible
+        comment.deleted = True
+        comment.save()
+        delete_type = 'soft'
+        parent_cleanup = None
+    else:
+        # Hard delete: remove completely if no replies
+        parent_comment = comment.parent
+        comment.delete()
+        delete_type = 'hard'
+        
+        # Recursive cleanup of soft-deleted parents
+        parent_cleanup = []
+        current_parent = parent_comment
+        
+        while current_parent and current_parent.deleted:
+            # If parent is soft-deleted and has no more replies, remove it too
+            if not current_parent.replies.exists():
+                parent_id = current_parent.id
+                next_parent = current_parent.parent
+                current_parent.delete()
+                parent_cleanup.append(parent_id)
+                current_parent = next_parent
+            else:
+                # Parent still has other replies, stop cleanup
+                break
     
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        return JsonResponse({'success': True})
+        return JsonResponse({
+            'success': True, 
+            'delete_type': delete_type,
+            'parent_cleanup': parent_cleanup  # Now a list of IDs to remove
+        })
     
     return redirect('track_detail', slug=track_slug)
 
+@login_required
+@require_POST
 def post_comment(request):
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('somewhere')
-        # If not valid, fall through to re-render the form with errors
-        return render(request, 'comments/comment_form.html', {'form': form})
-    else:
-        form = CommentForm()
-    return render(request, 'comments/comment_form.html', {'form': form})
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        track_id = request.POST.get('track')
+        track = get_object_or_404(Track, id=track_id)
+        comment = form.save(commit=False)
+        comment.track = track
+        comment.user = request.user
+        comment.save()
+        
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            html = render_to_string(
+                "comments/_comment.html",
+                {"comment": comment, "level": 0, "user": request.user, "track": track},
+                request=request
+            )
+            return JsonResponse({"success": True, "comment_html": html})
+        
+        return redirect('track_detail', slug=track.slug)
+    
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({"success": False, "errors": form.errors}, status=400)
+    
+    # Fallback redirect
+    track_id = request.POST.get('track')
+    if track_id:
+        track = get_object_or_404(Track, id=track_id)
+        return redirect('track_detail', slug=track.slug)
+    return redirect('/')
