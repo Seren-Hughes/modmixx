@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Page Not Found - ModMixx{% endblock %}
+{% block content %}
+<div class="container text-center py-5">
+    <h1 class="display-1 text-danger">404</h1>
+    <h2 class="mb-3">Page Not Found</h2>
+    <p class="lead mb-4">Sorry, the page you requested could not be found.</p>
+    <a href="{% url 'track_feed' %}" class="btn btn-primary">
+        <i class="fas fa-home me-2"></i>Back to Feed
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Server Error - ModMixx{% endblock %}
+{% block content %}
+<div class="container text-center py-5">
+    <h1 class="display-1 text-warning">500</h1>
+    <h2 class="mb-3">Server Error</h2>
+    <p class="lead mb-4">Oops! Something went wrong on our end.<br>Please try again later.</p>
+    <a href="{% url 'track_feed' %}" class="btn btn-primary">
+        <i class="fas fa-home me-2"></i>Back to Feed
+    </a>
+</div>
+{% endblock %}

@@ -23,3 +23,15 @@ def home(request):
         return track_feed(request)
     else:
         return render(request, 'core/home.html')
+
+
+
+
+def about(request):
+    """About page with community guidelines and site information."""
+    return render(request, 'core/about.html')
+
+
+# Test 500 error view Temporary - delete 
+def test_500(request):
+    raise Exception("Test 500 error")

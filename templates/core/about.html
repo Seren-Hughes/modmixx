@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}About - ModMixx{% endblock %}
+{% block content %}
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Header -->
+                <div class="text-center mb-5">
+                    <h1 class="display-4 mb-3">About modmixx</h1>
+                    <p class="lead text-muted">A music sharing platform for creators and listeners</p>
+                </div>
+                <!-- What is modmixx -->
+                <section class="mb-5">
+                    <h2 class="h3 mb-3">What is modmixx?</h2>
+                    <p>
+                        modmixx is a prototype music sharing platform where artists can upload their tracks, share their creativity, and connect with other music lovers. Whether you're a producer, songwriter, or just someone who loves discovering new music, modmixx provides a space for authentic musical expression.
+                    </p>
+                    <p>
+                        At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus
+                    </p>
+                </section>
+                <!-- Community Guidelines -->
+                <section class="mb-5">
+                    <h2 class="h3 mb-3">Community Guidelines</h2>
+                    <p>
+                        At modmixx, we believe in fostering a positive and inclusive environment for all users. Please adhere to the following guidelines:
+                    </p>
+                    <p>How we mixx</p>
+                    <ul>
+                        <li>Treat all community members with kindness and respect.</li>
+                        <li>Guidelines</li>
+                        <li>Guidelines.</li>
+                    </ul>
+                    <p>
+                        By following these guidelines, we can create a welcoming space for everyone. Thank you for being a part of the modmixx community!
+                    </p>
+                </section>
+                {% if not user.is_authenticated %}
+                    <!-- Join the Community -->
+                    <section class="mb-5">
+                        <h2 class="h3 mb-3">Join the Community</h2>
+                        <p>Become a part of the modmixx community and share your musical journey!</p>
+                        <a href="{% url 'signup' %}" class="btn btn-primary">
+                            <i class="fas fa-user-plus me-2"></i>Sign Up
+                        </a>
+                    </section>
+                {% endif %}
+                <!-- Contact -->
+                <section class="text-center">
+                    <h2 class="h3 mb-3">Questions or Feedback?</h2>
+                    <p>We'd love to hear from you!</p>
+                    <a href="{% url 'contact' %}" class="btn btn-primary">
+                        <i class="fas fa-envelope me-2"></i>Get in Touch
+                    </a>
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock %}
