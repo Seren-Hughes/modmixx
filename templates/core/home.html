@@ -1,16 +1,29 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
-<section class="hero-section text-center py-5">
-  <h1 class="display-3 mb-3">Welcome to modmixx - your space to make some noise.</h1>
-  <p class="lead mb-4">No algorithms. No cliques. Just music.</p>
-  <p class="mb-4">
-    Whether you're sketching beats on the bus, layering synths in a home studio, or messing with a riff that’s been stuck in your head for weeks – you’re in the right place.<br>
-    No pressure to be perfect. No keeping up a “brand.” No chasing the algorithm. modmixx is a safe, supportive place to try new ideas, swap sounds, and get (or give) feedback that actually helps you grow.<br>
-    From first-time producers to long-time gearheads, everyone's welcome here. Here, music isn’t a numbers game – it’s about connection. From phone-made beats to modular synth jams, this is the place to mix people, genres, and creativity.
-  </p>
-  <div class="mb-5">
-    <a href="{% url 'signup' %}" class="btn btn-primary btn-lg me-2">Join the Mixx</a>
-    <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg">Log In</a>
+<section class="hero-section pt-1 pb-5">
+  <div class="container">
+    <div class="row align-items-center">
+      <!-- Image on the left -->
+      <div class="col-lg-5 mb-4 mb-lg-0 text-center">
+        <img src="{% static 'images/hero-image-pexels-jona-meza-20715718-12756988.webp' %}" alt="Music creation" class="img-fluid rounded shadow" style="max-height: 700px;">
+      </div>
+      <!-- Welcome text on the right -->
+      <div class="col-lg-7 text-lg-start text-center">
+        <h1 class="hero-title mb-7">Your space to make some noise.</h1>
+        <p class="lead tagline mb-4">No algorithms. No cliques. Just music.</p>
+        <p class="mb-4">
+          Whether you're sketching beats on the bus, layering synths in a home studio, or messing with a riff that's been stuck in your head for weeks, you're in the right place.<br><br>
+          No pressure to be perfect. No keeping up a brand. No chasing the algorithm. modmixx is a safe, supportive place to try new ideas, swap sounds, and get and give feedback that actually helps you grow.<br><br>
+          From first-time producers to long-time gearheads, everyone's welcome here.<br><br>
+          Here, music isn't a numbers game - it's about connection. From phone-made beats to modular synth jams, this is the place to mix people, genres, and creativity.
+        </p>
+        <div class="mb-5">
+          <a href="{% url 'signup' %}" class="btn btn-primary btn-lg me-2">Join the mixx</a>
+          <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg">Log In</a>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -25,7 +38,7 @@
     This isn't a numbers game. It's a scene. A culture. A space to mix sounds, people, and ideas.<br>
     Create without fear. Inspire without trying. Find your rhythm and let it resonate.
   </p>
-  <a href="{% url 'signup' %}" class="btn btn-success btn-lg">Join the mixx. Make some noise.</a>
+  <a href="{% url 'signup' %}" class="btn btn-brand-gradient btn-lg">Join the mixx. Make some noise.</a>
 </section>
 
 <section class="why-different-section py-5">

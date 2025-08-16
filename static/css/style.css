@@ -1,5 +1,151 @@
+/* Import Google Fonts - nunito, raleway & caveat */
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Nunito:wght@700&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* CSS Variables */
+:root {
+  /* Primary Palette */
+  --color-bg: #FFFFFF;  /* white background */
+  --color-text: #24343c;  /* Charcoal main text */
+
+  /* Brand Colours */
+  --color-primary-yellow:#FFD20B; /* Bright Yellow */
+  --color-primary-orange:#F3682C; /* Vivid Orange */
+  --color-primary-pink:  #F82170; /* Bold Pink */
+  --color-primary-purple:#B544D0; /* Rich Purple */
+  --color-primary-blue:  #5A6AF4; /* Deep Blue */
+  --color-primary-cyan:  #34D3ED; /* Bright Cyan */
+
+  /* Gradient Colours */
+  --color-accent-1: #FFFCF0; /* Light Yellow */
+  --color-accent-2: #FEF6F2; /* Light Coral */
+  --color-accent-3: #FFF2F6; /* Light Pink */
+  --color-accent-4: #FAF4FC; /* Light Lavender */
+  --color-accent-5: #F5F6FE; /* Light Blue */
+  --color-accent-6: #F3FCFE; /* Light Cyan */
+
+  /* Font stacks */
+  --font-main: 'Nunito', Arial, Helvetica, sans-serif;
+  --font-accent: 'Raleway', sans-serif;
+}
+
+/*------------------------------------------------------*/
+/* ------------------- Global Styles -------------------*/
+/*------------------------------------------------------*/
+
+/* Navbar */
+nav.navbar {
+  background: var(--color-bg);
+  box-shadow: 0 4px 0 rgba(248, 33, 112, 0.1),    /* Dusty pink accent line */
+              0 8px 32px rgba(36, 52, 60, 0.06);   /* Soft shadow below */
+  border-bottom: 2px solid transparent;
+  background-clip: padding-box;
+}
 
 
+body {
+  background: linear-gradient(135deg,
+    var(--color-accent-1) 0%,
+    var(--color-accent-2) 25%,
+    var(--color-accent-3) 50%,
+    var(--color-accent-4) 75%,
+    var(--color-accent-5) 100%
+  );
+  color: var(--color-text);
+  font-family: var(--font-main);
+}
+
+h1, h2 {
+  font-family: var(--font-accent);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+p {
+  font-family: var(--font-main);
+  color: var(--color-text);
+}
+
+.hero-title {
+  font-family: var(--font-accent);
+  font-weight: 700;
+  font-size: 2.5rem;
+  background: linear-gradient(90deg,  
+    var(--color-primary-orange),
+    var(--color-primary-pink)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: uppercase;
+  letter-spacing: -2px;
+  margin-bottom: 1rem;
+}
+
+.tagline {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 600;
+  font-size: 2rem;
+}
+
+
+
+/* Home page buttons*/
+/* Join the mixx: Orange to Pink Gradient */
+.btn-primary {
+  background: linear-gradient(90deg, var(--color-primary-orange), var(--color-primary-pink));
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(248,33,112,0.08);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.btn-primary:hover, .btn-primary:focus {
+  background: linear-gradient(90deg, var(--color-primary-pink), var(--color-primary-orange));
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(248,33,112,0.16);
+}
+
+/* Login: White button with orange-pink gradient text and border */
+.btn-outline-secondary {
+  background: #fff;
+  color: var(--color-primary-orange);
+  border: 2px solid var(--color-primary-orange);
+  font-weight: 700;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  /* Gradient text */
+  background-clip: border-box;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(90deg, var(--color-primary-orange), var(--color-primary-pink));
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus {
+  background: linear-gradient(90deg, var(--color-primary-orange), var(--color-primary-pink));
+  color: #fff;
+  border-color: var(--color-primary-pink);
+  -webkit-text-fill-color: #fff;
+  background-clip: border-box;
+}
+
+/* Full Palette Gradient button (CTA) */
+.btn-brand-gradient {
+  background: linear-gradient(90deg,
+    var(--color-primary-orange),
+    var(--color-primary-pink),
+    var(--color-primary-purple),
+    var(--color-primary-blue)
+  );
+  color: #fff;
+  border: none;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(36,52,60,0.08);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.btn-brand-gradient:hover, .btn-brand-gradient:focus {
+  filter: brightness(1.1);
+  color: #fff;
+}
 
 /* ----------------------------------- */
 /* --------Track Feed Styling--------- */
