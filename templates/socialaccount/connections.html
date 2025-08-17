@@ -26,15 +26,14 @@
                             <li>{% trans "No connected accounts." %}</li>
                         {% endfor %}
                     </ul>
-                    <button type="submit" name="action_remove" class="continue-btn">{% trans "Remove" %}</button>
+                    <button type="submit" name="action_remove" class="remove-btn">{% trans "Remove" %}</button>
                 </form>
             {% else %}
                 <p>{% trans "You currently have no third-party accounts connected to this account." %}</p>
             {% endif %}
             <h4 style="margin-top:2em;">{% trans "Add a Third-Party Account" %}</h4>
             <a href="{% provider_login_url 'google' process='connect' %}"
-               class="continue-btn"
-               style="margin-top:10px">Google</a>
+               style="margin-top:10px">Sign in with Google</a>
         </div>
         <button type="button"
                 class="close-btn"

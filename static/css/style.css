@@ -131,10 +131,10 @@ p {
 /*--------------------------------------------*/
 
 /* ------------------------------------------ */
-/* ----------- Connections popup------------- */
+/* ----------- Connections Google-------------*/
 /* ------------------------------------------ */
 
-/* Popup container styling */
+/* Popup container styling for account connections */
 .social-connections-container {
     background: #FFFFFF;
     border-radius: 16px;
@@ -148,6 +148,7 @@ p {
     gap: 1.5rem;
 }
 
+/* Close window button in popup */
 .close-btn {
     background: linear-gradient(90deg, var(--color-primary-orange), var(--color-primary-pink));
     color: #fff;
@@ -170,7 +171,208 @@ p {
     color: #FFFFFF;
 }
 
+/* Social login container for logged-out users */
+.social-login-container {
+    background: #FFFFFF;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(36,52,60,0.08);
+    padding: 2.5rem 2rem;
+    max-width: 450px;
+    margin: 40px auto;
+}
 
+.menu-section h2 {
+    margin: 0 0 15px 0;
+    font-size: 1.3em;
+    color: var(--color-text);
+    font-family: var(--font-accent);
+    font-weight: 700;
+}
+
+.auth-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 25px 0;
+}
+
+.auth-menu li {
+    margin: 8px 0;
+}
+/* Menu link styling for login/signup/home navigation*/
+.menu-link {
+    color: var(--color-primary-orange);
+    text-decoration: none;
+    font-size: 1.05em;
+    font-family: var(--font-main);
+}
+
+.menu-link:hover {
+    text-decoration: underline;
+}
+
+.menu-link.active {
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.google-signin-section {
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+/* Sign in/connect message styling */
+.signin-message {
+    margin: 0 0 25px 0;
+    font-size: 1.05em;
+    color: #666;
+    line-height: 1.4;
+    font-family: var(--font-main);
+}
+
+/* Continue/Connect button styling */
+.continue-btn {
+    background: linear-gradient(90deg, var(--color-primary-orange), var(--color-primary-pink));
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 32px;
+    font-size: 1.1em;
+    font-family: var(--font-main);
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    width: 100%;
+    box-shadow: 0 2px 8px rgba(248,33,112,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.continue-btn:hover {
+    background: linear-gradient(90deg, var(--color-primary-pink), var(--color-primary-orange));
+    box-shadow: 0 4px 16px rgba(248,33,112,0.16);
+}
+
+.continue-btn i {
+    font-size: 1.2em;
+}
+
+/* Connect button specific styling for popup */
+.social-connections-container .continue-btn {
+    width: auto;
+    min-width: 140px;
+    padding: 12px 24px;
+    margin: 0 auto;
+}
+
+.connections-section h3,
+.connections-section h4 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+/* Vertical spacing for connection section */
+.connections-section > *:not(:last-child) {
+    margin-bottom: 1.2rem;
+}
+
+/* Google button specific styling */
+.google-btn {
+    background: #4285f4;
+    color: #fff;
+    border: 1px solid #4285f4;
+    border-radius: 4px;
+    padding: 12px 24px;
+    font-size: 20px;
+    min-width: 180px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+    font-family: var(--font-main);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: 12px; 
+}
+
+.google-btn:hover {
+    background: #357ae8;
+    border-color: #357ae8;
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.google-btn:focus {
+    background: #357ae8;
+    border-color: #357ae8;
+    color: #fff;
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.3);
+    outline: none;
+}
+
+/* Remove button styling  for connected accounts */
+.remove-btn {
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-family: var(--font-main);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 4px rgba(220, 53, 69, 0.2);
+    margin-top: 15px;
+}
+
+.remove-btn:hover {
+    background: #c82333;
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.remove-btn:focus {
+    background: #c82333;
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.3);
+    outline: none;
+}
+
+/* Connected accounts list styling */
+.connected-accounts {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+}
+
+.connected-accounts li {
+    background: #f0f4f8;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 12px 15px;
+    margin: 8px 0;
+}
+
+.connected-accounts label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    margin: 0;
+    font-family: var(--font-main);
+    font-size: 14px;
+}
+
+.connected-accounts input[type="radio"] {
+    margin: 0;
+}
 
 /* ----------------------------------- */
 /* --------Track Feed Styling--------- */

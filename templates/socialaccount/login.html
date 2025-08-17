@@ -2,30 +2,56 @@
 {% load i18n %}
 {% load socialaccount %}
 {% block head_title %}
-    {% trans "Sign In" %}
+    {% if process == "connect" %}
+        {% trans "Connect Google Account" %}
+    {% else %}
+        {% trans "Sign In" %}
+    {% endif %}
 {% endblock %}
 {% block content %}
-    <div class="social-login-container">
-        <div class="menu-section">
-            <h2>Menu:</h2>
-            <ul class="auth-menu">
-                <li>
-                    <a href="{% url 'account_login' %}" class="menu-link">Sign In</a>
-                </li>
-                <li>
-                    <a href="{% url 'account_signup' %}" class="menu-link">Sign Up</a>
-                </li>
-                <li>
-                    <span class="menu-link active">Sign In Via Google</span>
-                </li>
-            </ul>
+    {% if process == "connect" %}
+        <div class="social-connections-container">
+            <div class="connections-section">
+                <h3>{% trans "Connect Google Account" %}</h3>
+                <p class="signin-message">{% trans "You are about to connect your Google account to your modmixx profile." %}</p>
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <button type="submit" class="google-btn">
+                        <i class="fab fa-google"></i>
+                        Sign in with Google
+                    </button>
+                </form>
+            </div>
+            <button type="button" class="close-btn" onclick="window.close();">Close Window</button>
         </div>
-        <div class="google-signin-section">
-            <p class="signin-message">You are about to sign in using a third-party account from Google.</p>
-            <form method="post" action="">
+    {% else %}
+        <div class="social-login-container"
+             style="max-width: 400px;
+                    margin: 40px auto;
+                    padding: 2.5rem 2rem;
+                    background: #fff;
+                    border-radius: 16px;
+                    box-shadow: 0 4px 24px rgba(36,52,60,0.08)">
+            <div style="text-align:center; margin-bottom: 1.5em;">
+                <a href="/" class="menu-link" style="margin-right: 1em;">Home</a>
+                <a href="{% url 'account_signup' %}"
+                   class="menu-link"
+                   style="margin-right: 1em">Sign Up</a>
+                <a href="{% url 'account_login' %}" class="menu-link">Sign In</a>
+            </div>
+            <p class="signin-message" style="text-align:center; margin-bottom: 2em;">
+                You are about to sign in using a third-party account from Google.
+            </p>
+            <form method="post"
+                  action=""
+                  style="display: flex;
+                         justify-content: center">
                 {% csrf_token %}
-                <button type="submit" class="continue-btn">Continue</button>
+                <button type="submit" class="google-btn">
+                    <i class="fab fa-google"></i>
+                    Continue with Google
+                </button>
             </form>
         </div>
-    </div>
+    {% endif %}
 {% endblock %}
