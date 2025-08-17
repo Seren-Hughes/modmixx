@@ -1,0 +1,78 @@
+/* tracks.css */
+/* Audio track components, detail pages, comments and threads */
+
+.track-artwork {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: var(--border-radius-md);
+    flex-shrink: 0;
+}
+
+.track-artwork-placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: var(--border-radius-md);
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.track-card-body {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.track-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.track-detail-artwork {
+    width: 220px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: var(--border-radius-lg);
+    display: block;
+    margin: 0 auto;
+}
+
+.track-detail-artwork-placeholder {
+    width: 220px;
+    height: 220px;
+    border-radius: var(--border-radius-lg);
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    font-size: 32px;
+    margin: 0 auto;
+}
+
+/* --------------------------------------- */
+/*          Comments and threads           */
+/* --------------------------------------- */
+
+
+/* --------------------------------------- */
+/*       Track-specific media queries      */
+/* --------------------------------------- */
+
+@media (max-width: 768px) {
+    .track-card-body {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .track-artwork,
+    .track-artwork-placeholder {
+        width: 100%;
+        height: 200px;
+    }
+}

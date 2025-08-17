@@ -1,0 +1,48 @@
+/* Global styles and typography */
+html, body {
+    height: 100%;
+    min-height: 100%;
+}
+
+body {
+    background: linear-gradient(90deg,
+        var(--color-accent-1) 0%,
+        var(--color-accent-2) 40%,
+        var(--color-accent-3) 80%
+    );
+    color: var(--color-text);
+    font-family: var(--font-main);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+h1, h2 {
+    font-family: var(--font-accent);
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+p {
+    font-family: var(--font-main);
+    color: var(--color-text);
+}
+
+.color-title {
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2.5rem;
+    background: linear-gradient(90deg, var(--color-primary-orange), var(--color-primary-pink));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    margin-bottom: 1rem;
+}
+
+.tagline {
+    font-family: var(--font-accent);
+    font-weight: 600;
+    font-size: 2rem;
+}

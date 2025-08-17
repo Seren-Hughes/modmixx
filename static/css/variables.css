@@ -1,0 +1,46 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Nunito:wght@700&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* CSS Variables */
+:root {
+  /* Primary Palette */
+  --color-bg: #FFFFFF;
+  --color-text: #24343c;
+
+  /* Brand Colours */
+  --color-primary-yellow:#FFD20B;
+  --color-primary-orange:#F3682C;
+  --color-primary-pink:  #F82170;
+  --color-primary-purple:#B544D0;
+  --color-primary-blue:  #5A6AF4;
+  --color-primary-cyan:  #34D3ED;
+
+  /* Gradient Colours */
+  --color-accent-1: #FFFCF0;
+  --color-accent-2: #FEF6F2;
+  --color-accent-3: #FFF2F6;
+  --color-accent-4: #FAF4FC;
+  --color-accent-5: #F5F6FE;
+  --color-accent-6: #F3FCFE;
+
+  /* Font stacks */
+  --font-main: 'Nunito', Arial, Helvetica, sans-serif;
+  --font-accent: 'Raleway', sans-serif;
+  
+  /* Common spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 2.5rem;
+  
+  /* Border radius */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 16px;
+  
+  /* Shadows */
+  --shadow-light: 0 2px 4px rgba(0,0,0,0.1);
+  --shadow-medium: 0 4px 8px rgba(0,0,0,0.15);
+  --shadow-brand: 0 2px 8px rgba(248,33,112,0.08);
+}

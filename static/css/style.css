@@ -41,7 +41,6 @@ nav.navbar {
   background-clip: padding-box;
 }
 
-
 body {
   background: linear-gradient(90deg,
     var(--color-accent-1) 0%,
@@ -50,6 +49,26 @@ body {
   );
   color: var(--color-text);
   font-family: var(--font-main);
+}
+
+/* Sticky footer layout */
+html, body {
+    height: 100%;
+    min-height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    flex: 1 0 auto;
+}
+
+footer {
+    flex-shrink: 0;
 }
 
 h1, h2 {
