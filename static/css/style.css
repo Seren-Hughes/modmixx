@@ -25,7 +25,7 @@
 
   /* Font stacks */
   --font-main: 'Nunito', Arial, Helvetica, sans-serif;
-  --font-accent: 'Raleway', sans-serif;
+  --font-accent: 'Raleway', sans-serif; /* Used for headings */
 }
 
 /*------------------------------------------------------*/
@@ -126,6 +126,51 @@ p {
   background-clip: border-box;
 }
 
+/*--------------------------------------------*/
+/* ----------- Sign In / Log In ------------- */
+/*--------------------------------------------*/
+
+/* ------------------------------------------ */
+/* ----------- Connections popup------------- */
+/* ------------------------------------------ */
+
+/* Popup container styling */
+.social-connections-container {
+    background: #FFFFFF;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(36,52,60,0.08);
+    padding: 2.5rem 2rem 2rem 2rem;
+    max-width: 420px;
+    margin: 40px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.5rem;
+}
+
+.close-btn {
+    background: linear-gradient(90deg, var(--color-primary-orange), var(--color-primary-pink));
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 28px;
+    font-size: 1.05em;
+    font-family: var(--font-main);
+    font-weight: 700;
+    cursor: pointer;
+    margin: 0 auto 0 0;
+    transition: background 0.2s, color 0.2s;
+    box-shadow: 0 2px 8px rgba(248,33,112,0.08);
+    display: block;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    background: linear-gradient(90deg, var(--color-primary-pink), var(--color-primary-orange));
+    color: #FFFFFF;
+}
+
+
 
 /* ----------------------------------- */
 /* --------Track Feed Styling--------- */
@@ -188,7 +233,9 @@ p {
     margin-right: auto;
 }
 
-/* Media Queries */
+/*--------------------------------------------*/
+/* ----------- Media Queries ---------------- */
+/*--------------------------------------------*/
 
 /* Track Feed  */
 @media (max-width: 768px) {

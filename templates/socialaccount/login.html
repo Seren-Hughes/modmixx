@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load socialaccount %}
+{% block head_title %}
+    {% trans "Sign In" %}
+{% endblock %}
+{% block content %}
+    <div class="social-login-container">
+        <div class="menu-section">
+            <h2>Menu:</h2>
+            <ul class="auth-menu">
+                <li>
+                    <a href="{% url 'account_login' %}" class="menu-link">Sign In</a>
+                </li>
+                <li>
+                    <a href="{% url 'account_signup' %}" class="menu-link">Sign Up</a>
+                </li>
+                <li>
+                    <span class="menu-link active">Sign In Via Google</span>
+                </li>
+            </ul>
+        </div>
+        <div class="google-signin-section">
+            <p class="signin-message">You are about to sign in using a third-party account from Google.</p>
+            <form method="post" action="">
+                {% csrf_token %}
+                <button type="submit" class="continue-btn">Continue</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
