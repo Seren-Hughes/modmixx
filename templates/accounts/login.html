@@ -1,14 +1,29 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
-{% block content %}
-  <h2>Log In</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <button type="submit">Log In</button>
-  </form>
 
-  <p>Or <a href="/google/login/">Log in with Google</a></p>
-  <a href="{% url 'password_reset' %}">Forgot your password?</a>
-  <p>Don't have an account? <a href="/signup/">Sign up here</a></p>
+{% block content %}
+<!-- Main login form container -->
+<div class="auth-container">
+    <h2 class="auth-title">Sign In</h2>
+    
+    <!-- Django crispy form for login -->
+    <form method="post" class="auth-form">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="auth-submit-btn">Sign In</button>
+    </form>
+
+    <!-- Social login option -->
+    <div class="auth-social">
+        <p class="auth-social-text">Or</p>
+        <a href="/google/login/" class="google-btn">
+            Sign in with Google
+        </a>
+    </div>
+
+    <!-- Link to signup page if user doesn't have an account -->
+    <div class="auth-links">
+        <p>Don't have an account? <a href="/signup/">Sign up here</a></p>
+    </div>
+</div>
 {% endblock %}
