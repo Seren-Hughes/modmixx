@@ -1,15 +1,35 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-  <h1>Contact Us</h1>
+<!-- Contact form main container (wider than auth forms) -->
+<div class="auth-container contact-container">
+  <h2 class="auth-title">Contact Us</h2>
+  
+  <!-- Show any non-field errors -->
   {% if form.non_field_errors %}
     <div class="alert alert-danger">
       {{ form.non_field_errors }}
     </div>
   {% endif %}
-  <form method="post">
+  
+  <!-- Contact form -->
+  <form method="post" class="auth-form">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Send</button>
+    <!-- Name and email side by side on desktop -->
+    <div class="contact-row">
+      <div class="contact-col">
+        {{ form.name|as_crispy_field }}
+      </div>
+      <div class="contact-col">
+        {{ form.email|as_crispy_field }}
+      </div>
+    </div>
+    <!-- Subject and message fields -->
+    {{ form.subject|as_crispy_field }}
+    {{ form.message|as_crispy_field }}
+    <!-- Submit button -->
+    <button type="submit" class="auth-submit-btn">Send</button>
   </form>
+</div>
 {% endblock %}

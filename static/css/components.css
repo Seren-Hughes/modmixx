@@ -312,3 +312,32 @@
     font-family: var(--font-main);
     font-size: 14px;
 }
+
+/* ---------- Contact form styles ------------ */
+/* Make the contact form container wider */
+.contact-container {
+    max-width: 900px;
+}
+
+/* Contact form: name and email side by side on desktop */
+.contact-row {
+    display: flex;
+    gap: 1.5rem;
+    
+}
+
+.contact-col {
+    flex: 1 1 0;
+}
+
+/* -----------------------------------------------------------------------*/
+/* --------------------------------- Media Queries -----------------------*/
+/* -----------------------------------------------------------------------*/
+
+/* Stack fields on mobile */
+@media (max-width: 700px) {
+    .contact-row {
+        flex-direction: column;
+        gap: 0;
+    }
+}
