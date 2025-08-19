@@ -138,7 +138,7 @@
     box-shadow: 0 4px 16px rgba(248,33,112,0.16);
 }
 
-/* Social login section (Google etc) */
+/* Social login section */
 .auth-social {
     text-align: center;
     padding: var(--spacing-sm) 0;
@@ -334,10 +334,85 @@
 /* --------------------------------- Media Queries -----------------------*/
 /* -----------------------------------------------------------------------*/
 
-/* Stack fields on mobile */
+/* Contact form stack fields on mobile */
 @media (max-width: 700px) {
     .contact-row {
         flex-direction: column;
         gap: 0;
     }
 }
+
+/* Auth and contact containers, buttons, and forms */
+@media (max-width: 992px) {
+    .auth-container,
+    .contact-container {
+        max-width: 95vw;
+        padding: var(--spacing-md) var(--spacing-sm);
+    }
+}
+
+@media (max-width: 768px) {
+    .auth-container,
+    .contact-container {
+        max-width: 98vw;
+        margin: 12px auto;
+        padding: var(--spacing-sm);
+    }
+    .auth-title {
+        font-size: 1.2rem;
+    }
+    .auth-form input,
+    .auth-form textarea {
+        font-size: 1rem;
+        padding: 10px 12px;
+    }
+    .auth-submit-btn,
+    .google-btn {
+        width: 100%;
+        min-width: unset;
+        font-size: 1rem;
+        padding: 12px 0;
+    }
+    .contact-row {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-container,
+    .contact-container {
+        margin: 6px auto;
+        padding: 0.7rem;
+    }
+    .auth-title {
+        font-size: 1rem;
+    }
+    .auth-form input,
+    .auth-form textarea {
+        font-size: 0.97rem;
+        padding: 8px 8px;
+    }
+    .auth-submit-btn,
+    .google-btn {
+        font-size: 0.97rem;
+        padding: 10px 0;
+    }
+}
+
+@media (max-width: 375px) {
+    .auth-container,
+    .contact-container {
+        margin: 2px auto;
+        padding: 0.4rem;
+    }
+    .auth-title {
+        font-size: 0.95rem;
+    }
+    .auth-form input,
+    .auth-form textarea {
+        font-size: 0.93rem;
+        padding: 7px 6px;
+    }
+}
+
