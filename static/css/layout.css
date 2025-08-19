@@ -8,11 +8,11 @@ nav.navbar {
     background-clip: padding-box;
 }
 
-/* Main content container */
+/* Main content container - flex for sticky footer support */
 .container {
     flex: 1 0 auto;
 }
-
+/* Prevent horizontal scrollbars from full-bleed hero etc */
 body, html {
     overflow-x: hidden;
 }
@@ -20,6 +20,10 @@ body, html {
 /* Global content spacing - replaces Bootstrap's mt-4 for better control */
 .main-content-container {
     margin-top: 1.5rem;
+}
+/* Custom bottom padding for sections - lets us control spacing on mobile */
+.section-pb {
+    padding-bottom: 3.5rem;
 }
 
 footer {
@@ -50,7 +54,9 @@ footer {
     margin-top: -1.5rem;
 }
 
-/* ===== HERO SECTION  ===== */
+/* ------------------------------------------------- */
+/* ================= HERO SECTION  ================= */
+/* ------------------------------------------------- */
 
 .hero {
     position: relative;
@@ -176,6 +182,80 @@ footer {
     color: #24343c;
     border-color: #fff;
 }
+/* Down arrow at bottom of hero - always visible, matches headline shadow */
+.hero {
+    position: relative; /* ensures absolute children are positioned to this */
+}
+
+.hero-down-arrow {
+    position: absolute;
+    left: 50%;
+    bottom: 6rem; 
+    transform: translateX(-50%);
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+    opacity: 0.85;
+    text-decoration: none;
+    color: #fff; 
+    text-shadow: 0px 3px 20px rgba(84, 6, 35);
+    font-size: 1.5rem; /* icon size */
+    padding: 0;
+}
+
+.hero-down-arrow:hover,
+.hero-down-arrow:focus {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.12);
+}
+/* Enable smooth scroll for anchor links */
+html {
+    scroll-behavior: smooth;
+}
+
+/* ------------------------------------------------- */
+/* ============== WHY MODMIXX SECTION ============== */
+/* ------------------------------------------------- */
+
+/* List is centered, max width for readability */
+.why-list {
+    padding-left: 0;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    max-width: 700px;
+    width: 100%;
+}
+/* Each list item is a soft card with icon and bold label */
+.why-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.15rem;
+    background: rgba(248,33,112,0.04);
+    border-radius: 1rem;
+    padding: 1.1rem 1.2rem;
+    box-shadow: 0 2px 8px rgba(36,52,60,0.04);
+}
+
+.why-icon {
+    flex-shrink: 0;
+    font-size: 1.5em;
+    color: var(--color-primary-pink, #F82170);
+    margin-top: 0.1em;
+}
+
+.why-strong {
+    font-weight: 800;
+    color: var(--color-primary-orange, #F3682C);
+    margin-right: 0.4em;
+    white-space: nowrap;
+}
 
 /* ===== MEDIA QUERIES ===== */
 
@@ -196,6 +276,18 @@ footer {
     body.home-page .main-content-container {
         margin-top: 0;
     }
+    .why-list {
+        max-width: 100%;
+        font-size: 1rem;
+    }
+    .why-list li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 0.7rem 0.5rem;
+        font-size: 1rem;
+    }
+
 }
 
 /* --- Large Mobile, Tablets & Desktop: 500px and up --- */
@@ -257,6 +349,63 @@ footer {
     }
 }
 
+@media (max-width: 700px) {
+    .hero-text {
+        padding-top: 4.5rem; /* extra space for navbar */
+    }
+    .hero-text .color-title {
+        font-size: 2rem;
+    }
+    .hero-text .tagline {
+        font-size: 1.1rem;
+    }
+    .hero-cta-btn,
+    .btn-lg {
+        font-size: 1.1rem;
+        padding: 0.5rem 1.2rem;
+    }
+    .cta-gradient {
+        font-size: 1.2rem;
+    }
+    .cta-gradient {
+        font-size: 1.2rem;
+        white-space: nowrap;
+    }
+    .hero-cta-btn {
+        white-space: nowrap;
+    }
+    /* Make final CTA container and manifesto section wider on small screens */
+    .final-cta-container {
+        max-width: 95vw;
+    }
+    .manifesto-section .container,
+    .manifesto-section .col-lg-7 {
+        max-width: 100%;
+        flex: 0 0 100%;
+    }
+
+    /* Final CTA and hero CTA buttons: smaller, prevent wrapping */
+    .final-cta-section .btn,
+    .hero-cta-btn,
+    .btn-lg {
+        font-size: 1.05rem;
+        padding: 0.5rem 1.6rem;
+        white-space: nowrap;
+        min-width: 0;
+        max-width: 100%;
+        margin-bottom: 0.7rem;
+        display: inline-block;
+    }
+    
+    .cta-gradient {
+        
+        white-space: nowrap;
+    }
+    .section-pb {
+        padding-bottom: 0.5rem;
+    }
+}
+
 /* --- Desktop: 992px and up --- */
 @media (min-width: 992px) {
     nav.navbar .navbar-brand img {
@@ -265,9 +414,7 @@ footer {
     .home-hero-wrapper {
         margin-top: 0;
     }
-    .hero-img {
-        max-width: 50%;
-    }
+
     .hero-text .color-title {
         font-size: 3.5rem;
         margin-right: 4rem;
@@ -276,9 +423,12 @@ footer {
         font-size: 1.8rem;
         margin-right: 4rem;
     }
+    .why-list {
+        max-width: 900px;
+    }
 }
 
-/* --- XL screens: show more of the image, especially the keyboard --- */
+/* --- XL screens: show more of the hero image, especially the keyboard --- */
 @media (min-width: 1200px) {
     .hero-img {
         width: 40%;

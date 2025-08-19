@@ -1,162 +1,165 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block body_class %}home-page{% endblock %}
-
 {% block content %}
-<!-- Hero Section -->
-<div class="home-hero-wrapper">
-  <section class="hero">
-    <img src="{% static 'images/hero-image-pexels-jona-meza-20715718-12756988.webp' %}"
-         alt="Music creation"
-         class="hero-img">
-    <div class="hero-gradient-overlay"></div>
-    <div class="hero-text">
-      <h1 class="color-title mb-2">Your space to make some noise.</h1>
-      <p class="lead tagline mb-2">No algorithms. No cliques.<br> Just music.</p>
-      <div class="d-flex flex-column gap-2 mt-3">
-          <a href="{% url 'signup' %}" class="btn hero-cta-btn btn-lg"><span class="cta-dark">Join the </span><span class="cta-gradient">mixx</span></a>
-          <a href="{% url 'login' %}" class="btn hero-cta-btn secondary btn-lg">Log In</a>
-      </div>
-    </div>
-  </section>
-</div>
-
-<div class="container">
-  <div class="hero-content mt-4 px-3">
-      <p class="mb-3">
-          Whether you're sketching beats on the bus, layering synths in a home studio, or messing with a riff that's been stuck in your head for weeks, you're in the right place.
-      </p>
-      <p class="mb-3">No pressure to be perfect. No keeping up a brand. No chasing the algorithm. modmixx is a safe, supportive place to try new ideas, swap sounds, and get and give feedback that actually helps you grow creatively.</p>
-      <p class="mb-3">From first-time producers to long-time gearheads, everyone's welcome here.</p>
-      <p class="mb-3">Here, music isn't a numbers game - it's about connection.</p>
-      <p class="mb-4">From phone-made beats to modular synth jams, this is the place to mix people, genres, and creativity.</p>
-      <div class="d-flex flex-column gap-2">
-          <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">Join the mixx</a>
-          <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg">Log In</a>
-      </div>
-  </div>
-</div>
-
-<!-- Manifesto Section -->
-<section class="manifesto-section py-2">
-    <div class="container">
-        <div class="row align-items-center">
-            <!-- Text on the left -->
-            <div class="col-lg-7 mb-4 mb-lg-0">
-                <div class=" p-4">
-                    <h2 class="color-title mb-5">From first beats to final masters</h2>
-                    <p>
-                        This is a space for people who make, tinker, and experiment. For those who play with sounds in bedrooms, professional studios, or on the road.
-                    </p>
-                    <p>
-                        We celebrate the rough sketches, the half-formed riffs, the experiments that go nowhere - because sharing them sparks something in others. Honest ideas inspire honest ideas. Raw expression fuels creativity.
-                    </p>
-                    <p>From first-time producers to seasoned gearheads, everyone has a voice.</p>
-                    <p>This isn't a numbers game. It's a scene. A culture. A space to mix sounds, people, and ideas.</p>
-                    <div class="text-center mt-5">
-                        <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">Join the mixx. Make some noise.</a>
-                    </div>
+    <!-- Hero Section -->
+    <div class="home-hero-wrapper">
+        <section class="hero">
+            <img src="{% static 'images/hero-image-pexels-jona-meza-20715718-12756988.webp' %}"
+                 alt="Music creation"
+                 class="hero-img">
+            <div class="hero-gradient-overlay"></div>
+            <div class="hero-text">
+                <h1 class="color-title mb-2">Your space to make some noise.</h1>
+                <p class="lead tagline mb-2">
+                    No algorithms. No cliques.
+                    <br>
+                    Just music.
+                </p>
+                <div class="d-flex flex-column gap-2 mt-3">
+                    <a href="{% url 'signup' %}" class="btn hero-cta-btn btn-lg"><span class="cta-dark">Join the</span><span class="cta-gradient"> mixx</span></a>
+                    <a href="{% url 'login' %}" class="btn hero-cta-btn secondary btn-lg">Log In</a>
                 </div>
             </div>
-            <!-- Image on the right -->
-            <div class="col-lg-5 text-center">
-                <img src="{% static 'images/producer-playing-controller-pexels-anna-pou-8132529.webp' %}"
-                     alt="Creative music process"
-                     class="img-fluid rounded shadow"
-                     style="max-height: 700px">
+            <!-- Down arrow for smooth scrolling -->
+            <a href="#manifesto"
+               class="hero-down-arrow"
+               aria-label="Scroll to manifesto">
+                <i class="fas fa-chevron-down fa-2x"></i>
+            </a>
+        </section>
+    </div>
+    <!-- Manifesto Section -->
+    <section id="manifesto" class="manifesto-section pt-5 section-pb">
+        <div class="container">
+            <div class="row align-items-center">
+                <!-- Manifesto text -->
+                <div class="col-lg-7 mb-4 mb-lg-0">
+                    <div class="p-2">
+                        <h2 class="color-title mb-4">
+                            <i class="fas fa-backstage"></i> From First Beats to Final Masters
+                        </h2>
+                        <p class="mb-4">
+                            <i class="fas fa-bus"></i> Whether you're sketching beats on the bus, layering synths in a studio, you're in the right place.
+                        </p>
+                        <p class="mb-4">
+                            <i class="fas fa-music"></i> No pressure to be perfect. No chasing algorithms. No cliques. Just music, ideas, and connection.
+                        </p>
+                        <p class="mb-4">
+                            <i class="fas fa-users"></i> This is our backstage, our workshop, our playground - a safe space to swap sounds, test ideas, and share what inspires you, before the spotlight.
+                        </p>
+                        <p class="mb-4">
+                            <i class="fas fa-heart"></i> We celebrate the rough sketches, the half-formed riffs, and the experiments that go nowhere, because sharing sparks something in others. Honest ideas fuel honest ideas.
+                        </p>
+                        <p class="mb-4">
+                            <i class="fas fa-comments"></i> Feedback here is about growth, not ego. Celebrate what you hear. Respect every voice. From first-time producers to seasoned gearheads, everyone has a voice.
+                        </p>
+                    </div>
+                </div>
+                <!-- Manifesto section image -->
+                <div class="col-lg-5 mb-2 text-center">
+                    <img src="{% static 'images/producer-playing-controller-pexels-anna-pou-8132529.webp' %}"
+                         alt="Creative music process"
+                         class="img-fluid rounded shadow"
+                         style="max-height: 700px">
+                </div>
             </div>
         </div>
-    </div>
-</section>
-<section class="why-different-section py-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <!-- Image on the left -->
-            <div class="col-lg-7 text-center mt-5 mb-4 mb-lg-0">
-                <img src="{% static 'images/home-studio-maxwell-hunt-cyKlinHCwV4-unsplash.webp' %}"
-                     alt="Home studio"
-                     class="img-fluid rounded shadow"
-                     style="max-width: 400px">
-            </div>
-            <!-- List on the right -->
-            <div class="col-lg-5">
-                <h3 class="h2 color-title">Why modmixx Is Different</h3>
-                <ul class="list-unstyled" style="max-width: 600px;">
-                    <li>
-                        <strong>No Popularity Contests</strong> - Your music's value isn't measured in plays or follows.
-                    </li>
-                    <br>
-                    <li>
-                        <strong>Feedback That Helps</strong> - No lazy “lose the vocals” takes - we ask why and how to make it stronger.
-                    </li>
-                    <br>
-                    <li>
-                        <strong>Every Sound Has a Place</strong> - Lo-fi sketches, club-ready bangers, late-night experiments - all welcome.
-                    </li>
-                    <br>
-                    <li>
-                        <strong>Safe & Inclusive</strong> - No ego trips. No toxicity. Respect first, always.
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="creativity-section py-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <!-- Text on the left -->
-            <div class="col-lg-6 mb-4 mb-lg-0">
-                <h4 class="h3 mb-3 color-title">Creativity Sparks Creativity</h4>
-                <p>Sharing music isn't just about the final track - it's about the process.</p>
-                <p>
-                    Post that half-finished beat, the riff that needs direction, or the experiment you're not sure about yet. Ask for ideas. See what others hear in it.
-                </p>
-                <p>
-                    When you share openly, you inspire others to do the same - sparking raw expression and fresh ideas that can push everyone further.
-                </p>
-            </div>
-            <!-- Image on the right -->
-            <div class="align-items-center col-lg-6 text-center">
-                <img src="{% static 'images/mobile-beats-bandlab-cqFBTqhPKXQ-unsplash.webp' %}"
-                     alt="[Describe the image]"
-                     class="img-fluid rounded shadow"
-                     style="max-height: 700px">
+    </section>
+    <!-- ===== WHY MODMIXX SECTION ===== -->
+    <section class="why-different-section pt-5 section-pb">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-9">
+                    <h3 class="h2 color-title mb-4 text-center">Why modmixx is different</h3>
+                    <ul class="why-list list-unstyled mx-auto">
+                        <li>
+                            <span class="why-icon"><i class="fas fa-star"></i></span>
+                            <span class="why-strong">No Popularity Contests</span>
+                            <span>Your music isn't judged by plays or follows.</span>
+                        </li>
+                        <li>
+                            <span class="why-icon"><i class="fas fa-comments"></i></span>
+                            <span class="why-strong">Real Feedback</span>
+                            <span>We ask why and how, not just “lose the vocals.”</span>
+                        </li>
+                        <li>
+                            <span class="why-icon"><i class="fas fa-music"></i></span>
+                            <span class="why-strong">Every Sound Welcome</span>
+                            <span>Lo-fi sketches, club bangers, experiments - bring it all.</span>
+                        </li>
+                        <li>
+                            <span class="why-icon"><i class="fas fa-heart"></i></span>
+                            <span class="why-strong">Safe & Inclusive</span>
+                            <span>No egos. No toxicity. Respect first, always.</span>
+                        </li>
+                        <li>
+                            <span class="why-icon"><i class="fas fa-users"></i></span>
+                            <span class="why-strong">Backstage Access</span>
+                            <span>Share, experiment, and learn with fellow creators before going public.</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
-</section>
-<section class="play-section py-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <!-- Image on the left -->
-            <div class="col-lg-6 text-center mb-4 mb-lg-0">
-                <img src="{% static 'images/monitors-maschine-bandlab-gjqL19jYoAI-unsplash.webp' %}"
-                     alt="Making music at any level"
-                     class="img-fluid rounded shadow"
-                     style="max-height: 700px">
-            </div>
-            <!-- Text on the right -->
-            <div class="col-lg-6">
-                <h5 class="h4 mb-3 color-title">A Place to Play, Whatever Your Level</h5>
-                <p>
-                    Whether music's your full-time job, your weekend hobby, or something you're just getting into, modmixx is a space to explore.
-                </p>
-                <p>Try out a new genre. Test a half-formed idea. Learn a new production trick.</p>
-                <p>
-                    Even seasoned pros need room to play without worrying about their brand. Here, creating is its own reward - good for your skills, your creativity, and your headspace.
-                </p>
+    </section>
+    <!-- ===== CREATIVITY SECTION ===== -->
+    <section class="creativity-section pt-5 section-pb">
+        <div class="container">
+            <div class="row align-items-center">
+                <!-- Text on the left -->
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h4 class="h3 mb-3 color-title">Creativity Sparks Creativity</h4>
+                    <p>Sharing music isn't just about the final track - it's about the process.</p>
+                    <p>
+                        Post that half-finished beat, the riff that needs direction, or the experiment you're not sure about yet. Ask for ideas. See what others hear in it.
+                    </p>
+                    <p>
+                        When you share openly, you inspire others to do the same - sparking raw expression and fresh ideas that can push everyone further.
+                    </p>
+                </div>
+                <!-- Creativity section image on the right -->
+                <div class="align-items-center col-lg-6 text-center">
+                    <img src="{% static 'images/mobile-beats-bandlab-cqFBTqhPKXQ-unsplash.webp' %}"
+                         alt="[Describe the image]"
+                         class="img-fluid rounded shadow"
+                         style="max-height: 700px">
+                </div>
             </div>
         </div>
-    </div>
-</section>
-<section class="final-cta-section py-5">
-    <div class="mx-auto text-center" style="max-width: 33vw;">
-        <h4 class="mb-3 h4 color-title">Hangout, workshop and open-mic - without the stage fright</h4>
-        <p class="lead mb-4">Ready to dive in?</p>
-        <a href="{% url 'signup' %}" class="btn btn-primary btn-lg me-2">Join the Mixx</a>
-        <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg">Log In</a>
-    </div>
-</section>
+    </section>
+    <!-- ===== PLAY SECTION ===== -->
+    <section class="play-section pt-5 section-pb">
+        <div class="container">
+            <div class="row align-items-center">
+                <!-- Image on the left -->
+                <div class="col-lg-6 text-center mb-4 mb-lg-0">
+                    <img src="{% static 'images/monitors-maschine-bandlab-gjqL19jYoAI-unsplash.webp' %}"
+                         alt="Making music at any level"
+                         class="img-fluid rounded shadow"
+                         style="max-height: 700px">
+                </div>
+                <!-- Text on the right -->
+                <div class="col-lg-6">
+                    <h5 class="h4 mb-3 color-title">A Place to Play, Whatever Your Level</h5>
+                    <p>
+                        Whether music's your full-time job, your weekend hobby, or something you're just getting into, modmixx is a space to explore.
+                    </p>
+                    <p>Try out a new genre. Test a half-formed idea. Learn a new production trick.</p>
+                    <p>
+                        Even seasoned pros need room to play without worrying about their brand. Here, creating is its own reward - good for your skills, your creativity, and your headspace.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ===== FINAL CTA SECTION ===== -->
+    <section class="final-cta-section pt-5 section-pb">
+        <div class="mx-auto text-center final-cta-container" style="max-width: 65vw;">
+            <h4 class="mb-3 h4 color-title">Hangout, workshop and open-mic - without the stage fright</h4>
+            <p class="lead mb-4">Ready to dive in?</p>
+            <a href="{% url 'signup' %}" class="btn btn-primary btn-lg me-2">Join the Mixx</a>
+            <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg">Log In</a>
+        </div>
+    </section>
 {% endblock %}
