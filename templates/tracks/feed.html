@@ -70,7 +70,7 @@
                                 </a>
                             </h5>
                             {% if track.description %}
-                                <p class="card-text text-muted mb-3" style="font-size: 0.9em;">{{ track.description }}</p>
+                                <p class="card-text text-muted mb-3" style="font-size: 0.9em;">{{ track.description|truncatewords:10 }}</p>
                             {% endif %}
                             <!-- Audio player -->
                             <div class="mb-3">

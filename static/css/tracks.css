@@ -1,6 +1,9 @@
 /* tracks.css */
 /* Audio track components, detail pages, comments and threads */
 
+/* Track components and audio player styling */
+
+/* Default track artwork - square and responsive */
 .track-artwork {
     width: 120px;
     height: 120px;
@@ -22,6 +25,7 @@
     flex-shrink: 0;
 }
 
+/* Track card layout - artwork and content side by side */
 .track-card-body {
     display: flex;
     gap: 16px;
@@ -33,6 +37,7 @@
     min-width: 0;
 }
 
+/* Track detail page artwork - larger and centered */
 .track-detail-artwork {
     width: 220px;
     height: 220px;
@@ -55,24 +60,95 @@
     margin: 0 auto;
 }
 
-/* --------------------------------------- */
-/*          Comments and threads           */
-/* --------------------------------------- */
+/* ===== RESPONSIVE TRACK LAYOUTS ===== */
 
-
-/* --------------------------------------- */
-/*       Track-specific media queries      */
-/* --------------------------------------- */
-
-@media (max-width: 768px) {
+/* Mobile - stacked layout with compact audio player */
+@media (max-width: 767px) {
     .track-card-body {
         flex-direction: column;
         gap: 12px;
+        align-items: center;
     }
     
     .track-artwork,
     .track-artwork-placeholder {
-        width: 100%;
+        width: 200px;
         height: 200px;
+        border-radius: 8px;
+    }
+    
+    .track-content {
+        text-align: center;
+        width: 100%;
+    }
+    
+    /* Compact audio player for mobile */
+    .track-card-body audio {
+        width: 200px;
+        max-width: 200px;
+        height: 32px;
+        margin-top: 8px;
+    }
+}
+
+/* Small mobile - smaller artwork and audio */
+@media (max-width: 480px) {
+    .track-artwork,
+    .track-artwork-placeholder {
+        width: 160px;
+        height: 160px;
+    }
+    
+    .track-card-body audio {
+        width: 160px;
+        max-width: 160px;
+    }
+}
+
+/* Tablet - compact side-by-side layout */
+@media (min-width: 768px) and (max-width: 991px) {
+    .track-card-body {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+    }
+    
+    .track-artwork,
+    .track-artwork-placeholder {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+/* Desktop - standard layout */
+@media (min-width: 992px) {
+    .track-card-body {
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+    }
+    
+    .track-artwork,
+    .track-artwork-placeholder {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .track-content {
+        flex: 1;
+        min-width: 0;
+    }
+}
+
+/* Large screens - bigger artwork for better visual impact */
+@media (min-width: 1200px) {
+    .track-artwork,
+    .track-artwork-placeholder {
+        width: 140px;
+        height: 140px;
+    }
+    
+    .track-card-body {
+        gap: 24px;
     }
 }

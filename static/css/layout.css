@@ -8,20 +8,21 @@ nav.navbar {
     background-clip: padding-box;
 }
 
+/* Prevent horizontal scroll caused by hero section */
+body {
+    overflow-x: hidden;
+}
+
 /* Main content container - flex for sticky footer support */
 .container {
     flex: 1 0 auto;
 }
-/* Prevent horizontal scrollbars from full-bleed hero etc */
-body, html {
-    overflow-x: hidden;
-}
 
-/* Global content spacing - replaces Bootstrap's mt-4 for better control */
+/* Global content spacing */
 .main-content-container {
     margin-top: 1.5rem;
 }
-/* Custom bottom padding for sections - lets us control spacing on mobile */
+
 .section-pb {
     padding-bottom: 3.5rem;
 }
@@ -30,7 +31,7 @@ footer {
     flex-shrink: 0;
 }
 
-/* Social login/connection cards - centered, rounded, and shadowed */
+/* Social login/connection cards */
 .social-connections-container,
 .social-login-container {
     background: var(--color-bg);
@@ -49,15 +50,14 @@ footer {
     max-width: 420px;
 }
 
-/* Home page hero - nudge up to remove gap above */
+/* Home page hero - remove gap above */
 .home-hero-wrapper {
     margin-top: -1.5rem;
 }
 
-/* ------------------------------------------------- */
-/* ================= HERO SECTION  ================= */
-/* ------------------------------------------------- */
+/* ===== HERO SECTION ===== */
 
+/* Full-width hero that breaks out of container */
 .hero {
     position: relative;
     display: flex;
@@ -68,12 +68,11 @@ footer {
     overflow: hidden;
     min-height: 100vh;
     width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
     box-sizing: border-box;
 }
 
-/* Hero image */
 .hero-img {
     width: 100%;
     height: 100vh;
@@ -91,7 +90,7 @@ footer {
     z-index: 1;
 }
 
-/* Hero text sits above everything, centered by default */
+/* Hero text positioned above everything */
 .hero-text {
     position: absolute;
     inset: 2rem;
@@ -104,7 +103,6 @@ footer {
     z-index: 2;
 }
 
-/* Hero heading */
 .hero-text .color-title {
     font-size: 2.5rem;
     font-weight: 800;
@@ -116,7 +114,6 @@ footer {
     background: none;
 }
 
-/* Tagline under the heading */
 .hero-text .tagline {
     font-size: 1.3rem;
     font-weight: 700;
@@ -125,13 +122,12 @@ footer {
     color: #fff;
 }
 
-/* ===== HERO CTA BUTTONS ===== */
+/* Hero CTA buttons */
 .hero-cta-btn,
 .hero-cta-btn.secondary {
     text-shadow: none;
 }
 
-/* Main CTA: subtle shadow for contrast */
 .hero-cta-btn {
     background: #fff;
     border: 3px solid #fff;
@@ -146,7 +142,6 @@ footer {
     display: inline-block;
 }
 
-/* On hover */
 .hero-cta-btn:hover,
 .hero-cta-btn:focus {
     background: #fff2ff;
@@ -168,29 +163,25 @@ footer {
     font-size: 1.8rem;
 }
 
-/* Secondary CTA: transparent, white border, white text */
+/* Secondary CTA button */
 .hero-cta-btn.secondary {
     background: transparent;
     color: #fff;
     border: 2px solid #fff;
 }
 
-/* Secondary hover: inverts to white bg, dark text */
 .hero-cta-btn.secondary:hover,
 .hero-cta-btn.secondary:focus {
     background: #fff;
     color: #24343c;
     border-color: #fff;
 }
-/* Down arrow at bottom of hero - always visible, matches headline shadow */
-.hero {
-    position: relative; /* ensures absolute children are positioned to this */
-}
 
+/* Down arrow at bottom of hero */
 .hero-down-arrow {
     position: absolute;
     left: 50%;
-    bottom: 6rem; 
+    bottom: 6rem;
     transform: translateX(-50%);
     z-index: 20;
     display: flex;
@@ -202,9 +193,9 @@ footer {
     transition: opacity 0.2s, transform 0.2s;
     opacity: 0.85;
     text-decoration: none;
-    color: #fff; 
+    color: #fff;
     text-shadow: 0px 3px 20px rgba(84, 6, 35);
-    font-size: 1.5rem; /* icon size */
+    font-size: 1.5rem;
     padding: 0;
 }
 
@@ -213,16 +204,14 @@ footer {
     opacity: 1;
     transform: translateX(-50%) scale(1.12);
 }
-/* Enable smooth scroll for anchor links */
+
+/* Smooth scroll for anchor links */
 html {
     scroll-behavior: smooth;
 }
 
-/* ------------------------------------------------- */
-/* ============== WHY MODMIXX SECTION ============== */
-/* ------------------------------------------------- */
+/* ===== WHY MODMIXX SECTION ===== */
 
-/* List is centered, max width for readability */
 .why-list {
     padding-left: 0;
     margin-top: 2rem;
@@ -230,7 +219,7 @@ html {
     max-width: 700px;
     width: 100%;
 }
-/* Each list item is a soft card with icon and bold label */
+
 .why-list li {
     display: flex;
     align-items: flex-start;
@@ -255,6 +244,29 @@ html {
     color: var(--color-primary-orange, #F3682C);
     margin-right: 0.4em;
     white-space: nowrap;
+}
+
+/* ===== FEED LAYOUT ===== */
+
+/* Centered single-column feed layout design */
+.feed-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    overflow: visible; /* Ensure no scrollable area is created */
+    overflow-x: visible; /* Prevent horizontal scrollbars */
+}
+
+.feed-main {
+    width: 100%;
+    overflow: visible; /* Ensure no scrollable area is created */
+}
+
+/* Track feed column widths */
+#track-feed {
+    max-width: 800px;
+    margin: 0 auto;
+    overflow: visible; /* Ensure no scrollable area is created */
 }
 
 /* ===== MEDIA QUERIES ===== */
@@ -366,15 +378,11 @@ html {
     }
     .cta-gradient {
         font-size: 1.2rem;
-    }
-    .cta-gradient {
-        font-size: 1.2rem;
         white-space: nowrap;
     }
     .hero-cta-btn {
         white-space: nowrap;
     }
-    /* Make final CTA container and manifesto section wider on small screens */
     .final-cta-container {
         max-width: 95vw;
     }
@@ -383,8 +391,6 @@ html {
         max-width: 100%;
         flex: 0 0 100%;
     }
-
-    /* Final CTA and hero CTA buttons: smaller, prevent wrapping */
     .final-cta-section .btn,
     .hero-cta-btn,
     .btn-lg {
@@ -396,17 +402,22 @@ html {
         margin-bottom: 0.7rem;
         display: inline-block;
     }
-    
-    .cta-gradient {
-        
-        white-space: nowrap;
-    }
     .section-pb {
         padding-bottom: 0.5rem;
     }
 }
 
-/* --- Desktop: 992px and up --- */
+/* Feed responsive layout */
+@media (max-width: 767px) {
+    .feed-container {
+        padding: 0 5%;
+    }
+    #track-feed {
+        max-width: 90%;
+    }
+}
+
+/* Desktop and larger */
 @media (min-width: 992px) {
     nav.navbar .navbar-brand img {
         height: 50px;
@@ -414,7 +425,6 @@ html {
     .home-hero-wrapper {
         margin-top: 0;
     }
-
     .hero-text .color-title {
         font-size: 3.5rem;
         margin-right: 4rem;
@@ -428,12 +438,12 @@ html {
     }
 }
 
-/* --- XL screens: show more of the hero image, especially the keyboard --- */
+/* Extra large screens - show more of hero image */
 @media (min-width: 1200px) {
     .hero-img {
         width: 40%;
         object-fit: cover;
-        object-position: center bottom; /* Anchor to bottom so keyboard is visible */
+        object-position: center bottom;
     }
     .hero-text {
         max-width: 55vw;
