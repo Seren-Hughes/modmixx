@@ -9,13 +9,14 @@
 
 // AJAX comment functionality for modmixx
 // Uses event delegation and fetch API for edit/delete actions and updates DOM instantly
-// Toast notifications for user feedback
+// Toast notifications for user feedback and toxicity moderation with clear error messages
 
 document.addEventListener('DOMContentLoaded', function() {
 
-    // Use event delegation for all comment actions (works for new comments too)
+    // Use event delegation for all comment actions - works for dynamically added comments too
     document.addEventListener('click', function(e) {
-        // Edit button: show edit form, hide comment content
+        
+        // Edit button: swap comment content for edit form, focus textarea
         if (e.target.classList.contains('edit-comment')) {
             const comment = e.target.closest('[data-comment-id]');
             const content = comment.querySelector('.comment-content');
@@ -27,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Cancel edit: hide edit form, show comment content again
+        // Cancel edit: revert back to original comment display
         if (e.target.classList.contains('cancel-edit')) {
             const comment = e.target.closest('[data-comment-id]');
             const content = comment.querySelector('.comment-content');
@@ -38,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Save edited comment: send AJAX, update DOM in place
+        // Save edited comment: AJAX update, refresh DOM content in place
         if (e.target.classList.contains('save-comment')) {
             const comment = e.target.closest('[data-comment-id]');
             const commentId = comment.dataset.commentId;
@@ -57,14 +58,14 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Update comment content and hide edit form
+                    // Update comment content with new text and hide edit form
                     const content = comment.querySelector('.comment-content');
                     const editForm = comment.querySelector('.comment-edit-form');
                     content.innerHTML = data.content.replace(/\n/g, '<br>');
                     content.style.display = 'block';
                     editForm.style.display = 'none';
 
-                    // Add or update "edited" indicator
+                    // Add "(edited)" indicator if it doesn't exist yet
                     let editedSpan = comment.querySelector('.edited-indicator');
                     if (!editedSpan) {
                         editedSpan = document.createElement('span');
@@ -77,7 +78,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     showToast('Comment updated!');
                 } else {
-                    alert('Error saving comment');
+                    // Handle toxicity/validation errors for edits
+                    if (data.errors && data.errors.content && data.errors.content[0]) {
+                        const editForm = comment.querySelector('.comment-edit-form');
+                        showCommentError(data.errors.content[0], editForm);
+                    } else {
+                        alert('Error saving comment');
+                    }
                 }
             })
             .catch(error => {
@@ -86,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        // Delete comment
+        // Delete comment: soft or hard delete with parent cleanup logic
         if (e.target.classList.contains('delete-comment')) {
             if (confirm('Are you sure you want to delete this comment?')) {
                 const commentId = e.target.dataset.commentId;
@@ -104,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (data.success) {
                         if (comment) {
                             if (data.delete_type === 'soft') {
-                                // Show "[deleted comment]" and hide actions
+                                // Soft delete: show "[deleted comment]" placeholder, hide actions
                                 const commentContent = comment.querySelector('.comment-content');
                                 const dropdown = comment.querySelector('.dropdown');
                                 const replyButton = comment.querySelector('.reply-btn');
@@ -116,10 +123,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                 updateCommentCount(-1);
                                 showToast('Comment deleted (replies preserved)');
                             } else {
-                                // Remove comment from DOM
+                                // Hard delete: remove from DOM completely
                                 comment.remove();
                                 updateCommentCount(-1);
-                                // Clean up any empty soft-deleted parents
+                                
+                                // Clean up any empty soft-deleted parent comments recursively
                                 if (data.parent_cleanup && data.parent_cleanup.length > 0) {
                                     data.parent_cleanup.forEach(parentId => {
                                         const parentComment = document.querySelector(`[data-comment-id="${parentId}"]`);
@@ -145,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Toggle reply form
+        // Toggle reply form: show/hide inline reply textarea
         if (e.target.classList.contains('reply-btn')) {
             const card = e.target.closest('.card-body');
             const form = card.querySelector('.reply-form');
@@ -155,9 +163,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Handle form submissions (main comment and replies)
+    // Handle form submissions - main comments and threaded replies
     document.addEventListener('submit', function(e) {
-        // Reply form
+        
+        // Reply form submission: nested under parent comment
         if (e.target.classList.contains('reply-form')) {
             e.preventDefault();
             const form = e.target;
@@ -177,10 +186,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     track: trackId
                 })
             })
-            .then(response => response.json())
+            .then(response => {
+                // Handle both success and 400 validation errors as JSON
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
-                    // Add the new reply under the parent comment
+                    // Add the new reply HTML under the parent comment
                     const parentCard = document.querySelector(`[data-comment-id="${parentId}"]`);
                     parentCard.insertAdjacentHTML('beforeend', data.comment_html);
                     form.reset();
@@ -188,23 +200,30 @@ document.addEventListener('DOMContentLoaded', function() {
                     updateCommentCount(1);
                     showToast('Reply posted successfully!');
                 } else {
-                    console.error('Error:', data.errors);
+                    // Show toxicity moderation or other validation errors to user
+                    if (data.errors && data.errors.content && data.errors.content[0]) {
+                        showCommentError(data.errors.content[0], form);
+                    } else {
+                        showCommentError('Error posting reply. Please try again.', form);
+                    }
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.error('Network error:', error);
+                showCommentError('Network error. Please try again.', form);
             });
         }
 
-        // Main comment form
+        // Main comment form submission: top-level comments
         if (e.target.id === 'comment-form' || e.target.classList.contains('main-comment-form')) {
             e.preventDefault();
             const form = e.target;
             const trackId = form.querySelector('input[name="track"]').value;
             const content = form.querySelector('textarea[name="content"]').value;
 
+            // Basic client-side validation before sending to server
             if (!content.trim()) {
-                alert('Please enter a comment');
+                showCommentError('Please enter a comment', form);
                 return;
             }
 
@@ -219,28 +238,36 @@ document.addEventListener('DOMContentLoaded', function() {
                     track: trackId
                 })
             })
-            .then(response => response.json())
+            .then(response => {
+                // Handle both success and 400 validation errors as JSON
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
+                    // Add new comment at the top of the comments list
                     const commentsList = document.querySelector('.comments-list');
                     commentsList.insertAdjacentHTML('afterbegin', data.comment_html);
                     form.reset();
                     updateCommentCount(1);
                     showToast('Comment posted successfully!');
                 } else {
-                    console.error('Error:', data.errors);
-                    alert('Error posting comment');
+                    // Show toxicity moderation or other validation errors to user
+                    if (data.errors && data.errors.content && data.errors.content[0]) {
+                        showCommentError(data.errors.content[0], form);
+                    } else {
+                        showCommentError('Error posting comment. Please try again.', form);
+                    }
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
-                alert('Error posting comment');
+                console.error('Network error:', error);
+                showCommentError('Network error. Please try again.', form);
             });
         }
     });
 });
 
-// Simple toast notification (Bootstrap)
+// Toast notifications using Bootstrap classes - success messages in bottom right
 function showToast(message) {
     let toast = document.createElement('div');
     toast.className = 'toast align-items-center text-bg-success border-0 show position-fixed bottom-0 end-0 m-3';
@@ -257,7 +284,7 @@ function showToast(message) {
     setTimeout(() => toast.remove(), 2500);
 }
 
-// getCookie adapted from Django docs: https://docs.djangoproject.com/en/5.2/howto/csrf/#:~:text=getCookie%28name%29%20%7B
+// getCookie CSRF token helper adapted from Django docs: https://docs.djangoproject.com/en/5.2/howto/csrf/#:~:text=getCookie%28name%29%20%7B
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -271,11 +298,38 @@ function getCookie(name) {
     return cookieValue;
 }
 
-// Update the comment count badge
+// Update the comment count badge in the track header
 function updateCommentCount(delta) {
     const countElem = document.getElementById('comment-count');
     if (countElem) {
         let count = parseInt(countElem.textContent, 10) || 0;
         countElem.textContent = count + delta;
+    }
+}
+
+// Show validation errors (toxicity, empty content) directly below comment forms
+function showCommentError(message, form) {
+    // Remove any existing error messages to avoid stacking
+    const existingError = form.querySelector('.comment-error');
+    if (existingError) {
+        existingError.remove();
+    }
+    
+    // Create red alert with error message
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'alert alert-danger mt-2 comment-error';
+    errorDiv.textContent = message;
+    
+    // Insert error message after the textarea
+    const textarea = form.querySelector('textarea[name="content"]');
+    if (textarea) {
+        textarea.parentNode.insertBefore(errorDiv, textarea.nextSibling);
+        
+        // Auto-remove error after 7 seconds so it doesn't clutter the UI
+        setTimeout(() => {
+            if (errorDiv.parentNode) {
+                errorDiv.remove();
+            }
+        }, 7000);
     }
 }
