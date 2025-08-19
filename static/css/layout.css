@@ -246,29 +246,6 @@ html {
     white-space: nowrap;
 }
 
-/* ===== FEED LAYOUT ===== */
-
-/* Centered single-column feed layout design */
-.feed-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
-    overflow: visible; /* Ensure no scrollable area is created */
-    overflow-x: visible; /* Prevent horizontal scrollbars */
-}
-
-.feed-main {
-    width: 100%;
-    overflow: visible; /* Ensure no scrollable area is created */
-}
-
-/* Track feed column widths */
-#track-feed {
-    max-width: 800px;
-    margin: 0 auto;
-    overflow: visible; /* Ensure no scrollable area is created */
-}
-
 /* ===== MEDIA QUERIES ===== */
 
 /* --- Small Mobile: Up to 499px --- */
@@ -404,16 +381,6 @@ html {
     }
     .section-pb {
         padding-bottom: 0.5rem;
-    }
-}
-
-/* Feed responsive layout */
-@media (max-width: 767px) {
-    .feed-container {
-        padding: 0 5%;
-    }
-    #track-feed {
-        max-width: 90%;
     }
 }
 
