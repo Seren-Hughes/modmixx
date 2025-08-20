@@ -54,17 +54,14 @@
                     </div>
                 {% endif %}
                 <!-- Audio Player -->
-                <div class="mb-4">
-                    <h5>Listen</h5>
+                <div class="mb-4 track-audio-section">
                     <audio controls
-                           controlsList="nodownload noremoteplayback noplaybackrate"
-                           data-duration="{{ track.duration|default:0 }}">
+                           preload="metadata"
+                           controlsList="nodownload noplaybackrate"
+                           class="w-100"
+                           data-track-slug="{{ track.slug }}"
+                           aria-label="Play {{ track.title }} by {{ track.user.profile.display_name }}">
                         <source src="{{ track.audio_file.url }}" type="audio/mpeg">
-                        <source src="{{ track.audio_file.url }}" type="audio/wav">
-                        <source src="{{ track.audio_file.url }}" type="audio/ogg">
-                        <source src="{{ track.audio_file.url }}" type="audio/flac">
-                        <source src="{{ track.audio_file.url }}" type="audio/aac">
-                        Your browser does not support the audio element.
                     </audio>
                 </div>
                 <!-- Navigation and actions -->
@@ -100,16 +97,16 @@
                 <!-- Comment Submission Form -->
                 <div class="card mb-4">
                     <div class="card-body">
-                        <form method="post" 
-                              action="{% url 'comments:post_comment' %}" 
+                        <form method="post"
+                              action="{% url 'comments:post_comment' %}"
                               id="comment-form"
                               class="main-comment-form">
                             {% csrf_token %}
                             <input type="hidden" name="track" value="{{ track.id }}">
                             <div class="mb-3">
-                                <textarea class="form-control" 
-                                          name="content" 
-                                          rows="3" 
+                                <textarea class="form-control"
+                                          name="content"
+                                          rows="3"
                                           placeholder="Share your thoughts about this track..."
                                           required></textarea>
                             </div>
