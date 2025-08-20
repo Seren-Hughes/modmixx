@@ -251,8 +251,8 @@ body .feed-page,
 
     .track-artwork,
     .track-artwork-placeholder {
-        width: 160px;
-        height: 160px;
+        width: 180px;
+        height: 180px;
     }
 
     /* detail page */
@@ -289,8 +289,8 @@ body .feed-page,
 
     .track-artwork,
     .track-artwork-placeholder {
-        width: 200px;
-        height: 200px;
+        width: 150px;
+        height: 150px;
     }
 
     .feed-page #track-feed {
@@ -303,8 +303,8 @@ body .feed-page,
 
     .track-artwork,
     .track-artwork-placeholder {
-        width: 290px;
-        height: 290px;
+        width: 200px;
+        height: 200px;
     }
 
     .feed-page #track-feed {
