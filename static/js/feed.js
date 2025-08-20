@@ -33,22 +33,39 @@
  * - Seamless integration between server-rendered and dynamic content
  */
 
-// Global audio state management
-let currentAudio = null;
-let currentTrackSlug = null;
+// -------------   Global audio state management -------------
+let currentAudio = null; // Currently playing audio element
+let currentTrackSlug = null; // Slug of the currently playing track
 
-let page = 2; // Start at 2 because page 1 is server-rendered in the template (SSR)
-let loading = false;
-let hasNext = true; // Will be updated by API responses
+// Get initial pagination info from the HTML template
+const feedEl = document.getElementById('track-feed');
+let hasNext = feedEl?.dataset.hasNext === 'true';  // Are there more pages to load?
+let page = parseInt(feedEl?.dataset.nextPage || '2', 10);  // Next page number to fetch
+let loading = false; // Prevent multiple API calls at once
+let ioRef = null; // Reference to the IntersectionObserver (for cleanup)
+
+// Keep track of which tracks already added to prevent duplicates
+// This fixes the bug where the same tracks appeared multiple times
+const seenSlugs = new Set();
+
+// -------------------- Helper functions --------------------
+
+/**
+ * Escape HTML to prevent XSS attacks when showing user-generated content
+ */
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
 
 
 /**
- * Build avatar HTML. Uses profile avatar if present; falls back to initial badge.
+ * Build the user avatar HTML (profile pic or initial badge)
  */
 function buildAvatarHTML(profile) {
   if (profile.avatar) {
     return `<img src="${profile.avatar}" class="rounded-circle me-2" alt="${escapeHtml(profile.display_name)}" style="width:32px;height:32px;object-fit:cover">`;
   }
+  // Fallback: show first letter of display name in a circle
   const initial = (profile.display_name || profile.username || '?').trim().charAt(0).toUpperCase();
   return `<div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-2" style="width:32px;height:32px">
             <span class="text-white" style="font-size:14px;">${escapeHtml(initial)}</span>
@@ -56,93 +73,81 @@ function buildAvatarHTML(profile) {
 }
 
 /**
- * Build a Bootstrap card for a track.
+ * Build a complete track card HTML
+ * This matches the Django template for consistency 
  */
 function buildCard(t) {
   const avatar = buildAvatarHTML(t.profile);
   const image = t.image_url
     ? `<img src="${t.image_url}" class="track-artwork" alt="Cover art for ${escapeHtml(t.title)}">`
-    : `<div class="track-artwork-placeholder">
-             <i class="fas fa-music"></i>
-           </div>`;
+    : `<div class="track-artwork-placeholder"><i class="fas fa-music"></i></div>`;
+
+  // Handle comment count text
   const visibleCommentCount = t.visible_comment_count || 0;
-  let commentText;
-  if (visibleCommentCount === 0) {
-      commentText = 'No comments yet';
-  } else if (visibleCommentCount === 1) {
-      commentText = '1 comment';
-  } else {
-      commentText = `${visibleCommentCount} comments`;
-  }
-  const durationText = t.duration ? ` • ${t.duration_display}` : '';
+  const commentText = visibleCommentCount === 0
+    ? 'No comments yet'
+    : visibleCommentCount === 1
+      ? '1 comment'
+      : `${visibleCommentCount} comments`;
 
   return `
-        <div class="card mb-3" data-track-slug="${t.slug}">
-            <div class="card-body">
-                <div class="track-card-body">
-                    ${image}
-                    
-                    <div class="track-content">
-                        <div class="track-profile-info">
-                            <div class="track-profile-left">
-                                ${avatar}
-                                <span class="track-profile-name">${escapeHtml(t.profile.display_name)}</span>
-                            </div>
-                            <span class="track-profile-timestamp">${escapeHtml(t.created_ago)}</span>
-                        </div>
-                        
-                        <h5 class="track-title">
-                            <a href="${t.detail_url}">${escapeHtml(t.title)}</a>
-                        </h5>
-                        
-                        ${t.description ? `<p class="track-description">${escapeHtml(t.description)}</p>` : '<p class="track-description"></p>'}
-                        
-                        <div class="track-audio-section">
-                            <audio controls 
-                                   preload="metadata"
-                                   controlsList="nodownload noplaybackrate" 
-                                   class="w-100"
-                                   data-track-slug="${t.slug}"
-                                   aria-label="Play ${escapeHtml(t.title)} by ${escapeHtml(t.profile.display_name)}">
-                                <source src="${t.audio_url}" type="audio/mpeg">
-                            </audio>
-                            <a href="${t.detail_url}#comments" class="text-decoration-none">
-                                <i class="fa fa-comment me-1"></i>${commentText}
-                            </a>
-                        </div>
-                    </div>
-                </div>
+    <div class="card mb-3" data-track-slug="${t.slug}">
+      <div class="card-body">
+        <div class="track-card-body">
+          ${image}
+          <div class="track-content">
+            <div class="track-profile-info">
+              <div class="track-profile-left">
+                ${avatar}
+                <span class="track-profile-name">${escapeHtml(t.profile.display_name)}</span>
+              </div>
+              <span class="track-profile-timestamp">${escapeHtml(t.created_ago)}</span>
             </div>
-        </div>`;
+            <h5 class="track-title">
+              <a href="${t.detail_url}">${escapeHtml(t.title)}</a>
+            </h5>
+            ${t.description ? `<p class="track-description">${escapeHtml(t.description)}</p>` : '<p class="track-description"></p>'}
+            <div class="track-audio-section">
+              <audio controls preload="metadata" controlsList="nodownload noplaybackrate" class="w-100"
+                     data-track-slug="${t.slug}"
+                     aria-label="Play ${escapeHtml(t.title)} by ${escapeHtml(t.profile.display_name)}">
+                <source src="${t.audio_url}" type="audio/mpeg">
+              </audio>
+              <a href="${t.detail_url}#comments" class="text-decoration-none">
+                <i class="fa fa-comment me-1"></i>${commentText}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
 }
 
 /**
- * Escape HTML to prevent XSS when rendering user-generated content.
- * adapted from https://stackoverflow.com/questions/6234773/can-i-escape-html-special-chars-in-javascript/6234804#6234804
- */
-function escapeHtml(s) {
-  return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-}
-
-/**
- * Bind audio events to audio elements.
- * Uses event delegation for efficiency.
+ * Attach play/pause event listeners to audio elements
+ * Uses data-audio-bound to avoid adding listeners multiple times to the same element
+ * This replaced the old inline onplay/onpause handlers for better security and maintainability
  * https://javascript.info/event-delegation
  */
 function bindAudioEvents(root = document) {
   const audios = root.querySelectorAll('audio[data-track-slug]:not([data-audio-bound])');
   audios.forEach((audio) => {
     const slug = audio.dataset.trackSlug;
-    audio.addEventListener('play', () => AudioManager.handlePlay(slug, audio));
-    audio.addEventListener('pause', () => AudioManager.handlePause(slug, audio));
-    audio.setAttribute('data-audio-bound', '1');
+    audio.addEventListener('play', () => window.AudioManager?.handlePlay(slug, audio));
+    audio.addEventListener('pause', () => window.AudioManager?.handlePause(slug, audio));
+    audio.setAttribute('data-audio-bound', '1');  // Mark as processed
   });
 }
 
+// -------------------- Infinite scroll logic --------------------
+
 /**
- * Fetch next page and append items to the feed. Announces count via #sr-announcer.
+ * Fetch the next page of tracks and add them to the feed
+ * Announce new tracks to screen readers (sr-announcer)
+ * Only adds tracks we haven't seen before (prevents duplicates)
  */
 async function loadMore() {
+  // Don't load if already loading or no more pages
   if (loading || !hasNext) return;
   loading = true;
 
@@ -152,35 +157,41 @@ async function loadMore() {
   try {
     const res = await fetch(`/tracks/feed-api/?page=${page}`, { headers: { 'Accept': 'application/json' } });
     if (!res.ok) throw new Error('Network error');
-
     const data = await res.json();
+
     const container = document.getElementById('track-feed');
     if (!container) return;
 
-    let appended = 0;
-    data.tracks.forEach(t => {
+    // Filter out tracks already shown (this was the key fix for duplicates!)
+    const uniqueTracks = (data.tracks || []).filter(t => t?.slug && !seenSlugs.has(t.slug));
+    
+    // Add each new track to the page and remember
+    uniqueTracks.forEach(t => {
       container.insertAdjacentHTML('beforeend', buildCard(t));
-      appended += 1;
+      seenSlugs.add(t.slug);  // Remember this track so it's not added again
     });
 
-    // Bind events for newly added audio elements
+    // Set up audio event listeners for the new tracks
     bindAudioEvents(container);
 
-    hasNext = data.has_next;
+    // Update pagination state
+    hasNext = !!data.has_next;
     page += 1;
 
     // Announce to screen readers
     const announcer = document.getElementById('sr-announcer');
-    if (announcer && appended > 0) {
-      announcer.textContent = `Loaded ${appended} more tracks`;
+    if (announcer) {
+      if (uniqueTracks.length > 0) announcer.textContent = `Loaded ${uniqueTracks.length} more tracks`;
+      if (!hasNext) announcer.textContent = `${uniqueTracks.length > 0 ? 'Loaded more tracks. ' : ''}End of feed.`;
     }
 
-    //  announce end of feed
-    if (!hasNext && announcer) {
-      announcer.textContent = `${appended > 0 ? 'Loaded more tracks. ' : ''}End of feed.`;
+    // Clean up: stop watching for scroll when we're done
+    if (!hasNext && ioRef) {
+      ioRef.disconnect();
+      ioRef = null;
     }
   } catch (e) {
-    console.error(e);
+    console.error('Failed to load more tracks:', e);
     const announcer = document.getElementById('sr-announcer');
     if (announcer) announcer.textContent = 'Could not load more tracks. Please try again.';
   } finally {
@@ -189,29 +200,37 @@ async function loadMore() {
   }
 }
 
-/**
- * Infinite scroll 
- * Initialize observer and UI behaviours.
- * Falls back gracefully if IntersectionObserver is unavailable.
- */
+// -------------------- Page initialization --------------------
 document.addEventListener('DOMContentLoaded', () => {
-  // Bind events for server-rendered audio elements
+  // Find all tracks that were rendered by Django (server-side) and remember their slugs
+  // This prevents adding duplicates of tracks that are already on the page
+  document.querySelectorAll('.card[data-track-slug]').forEach(el => {
+    const slug = el.dataset.trackSlug;
+    if (slug) seenSlugs.add(slug);
+  });
+
+  // Set up audio event listeners for tracks that were server-rendered
   bindAudioEvents(document);
 
+  // Set up infinite scroll (only if there are more pages to load)
   const sentinel = document.getElementById('feed-sentinel');
-
-  if ('IntersectionObserver' in window && sentinel) {
-    const io = new IntersectionObserver(
+  if (hasNext && 'IntersectionObserver' in window && sentinel) {
+    // Load more when the sentinel comes into view 
+    ioRef = new IntersectionObserver(
       entries => entries.forEach(entry => { if (entry.isIntersecting) loadMore(); }),
-      { rootMargin: '200px' } // start loading a bit before the sentinel is fully visible
+      { rootMargin: '200px' }  // Start loading 200px before sentinel is visible
     );
-    io.observe(sentinel);
-  } else {
-    // Fallback: load on scroll near bottom
+    ioRef.observe(sentinel);
+  } else if (hasNext) {
+    // Fallback for older browsers: load more when scrolled near bottom
+    let scrollTimeout = null;
     window.addEventListener('scroll', () => {
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
-        loadMore();
-      }
+      if (scrollTimeout) clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
+          loadMore();
+        }
+      }, 100);
     });
   }
 
@@ -224,56 +243,50 @@ document.addEventListener('DOMContentLoaded', () => {
   backToTop?.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+
+  // Show upload modal if ?share=1 is in the URL
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('share') === '1') {
+    const modal = document.getElementById('uploadModal');
+    if (modal && window.bootstrap?.Modal) new bootstrap.Modal(modal).show();
+  }
 });
 
-// Show upload modal if share parameter is present
-document.addEventListener('DOMContentLoaded', function() {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('share') === '1') {
-        const modal = new bootstrap.Modal(document.getElementById('uploadModal'));
-        modal.show();
-    }
-});
-
-// Manages audio playback so only one track plays at a time
+// -------------------- Audio playback management --------------------
+/**
+ * Manages audio playback so only one track plays at a time
+ * When you play a new track, it automatically pauses the previous one
+ */
 class AudioManager {
   static handlePlay(trackSlug, audioElement) {
-    // Stop current track if playing a different one
+    // Stop whatever was playing before
     if (currentAudio && currentAudio !== audioElement) {
       currentAudio.pause();
-      currentAudio.currentTime = 0;
+      currentAudio.currentTime = 0;  // Reset to beginning
       this.updatePlayButtonState(currentTrackSlug, 'stopped');
     }
-
-    // Update current references
+    
+    // Update tracking of what's currently playing
     currentAudio = audioElement;
     currentTrackSlug = trackSlug;
-
-    // Update UI state
     this.updatePlayButtonState(trackSlug, 'playing');
-
-    // Show sticky player = ***** To Do!***** 
     this.showStickyPlayer(trackSlug, audioElement);
   }
 
   static handlePause(trackSlug, audioElement) {
-    // Only update state if this is the currently playing track
+    // Only update UI if this is the track playing
     if (currentAudio === audioElement) {
       this.updatePlayButtonState(trackSlug, 'paused');
     }
   }
 
   static updatePlayButtonState(trackSlug, state) {
-    const trackElement = document.querySelector(`[data-track-slug="${trackSlug}"]`);
-    if (trackElement) {
-      const playBtn = trackElement.querySelector('.play-btn');
-      if (playBtn) {
-        playBtn.textContent = state === 'playing' ? 'Pause' : 'Play';
-      }
-    }
-  }
-
-  static showStickyPlayer(trackSlug, audioElement) {
-    console.log(`Now playing: ${trackSlug}`);
+    // Update play/pause buttons 
+    const el = document.querySelector(`[data-track-slug="${trackSlug}"] .play-btn`);
+    if (el) el.textContent = state === 'playing' ? 'Pause' : 'Play';
   }
 }
+// TODO: implement sticky player at bottom of screen (unlikely for this mvp version)
+
+// Make AudioManager available globally so the event handlers can find it
+window.AudioManager = AudioManager;

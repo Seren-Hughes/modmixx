@@ -17,7 +17,9 @@
         </p>
     </div>
     <!-- Track feed container for server-rendered and dynamic content -->
-    <div id="track-feed">
+    <div id="track-feed"
+         data-has-next="{{ tracks.has_next|yesno:'true,false' }}"
+         data-next-page="2">
         {% for track in tracks %}
             <!-- Server-rendered track cards (first page) -->
             <div class="card mb-3" data-track-slug="{{ track.slug }}">
