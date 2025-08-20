@@ -52,7 +52,7 @@
                         {% if user.is_authenticated %}
                             <a class="nav-link" href="/">Discover</a>
                             <a class="nav-link" href="/?share=1">Share Track</a>
-                            <a class="nav-link" href="{% url 'core:about' %}">Community Guidelines</a>
+                            <a class="nav-link" href="{% url 'core:about' %}#community-guidelines">Community Guidelines</a>
                             {% if user.is_authenticated and user.profile.username %}
                                 <a class="nav-link" href="{% url 'profile' user.profile.username %}">Profile</a>
                             {% endif %}
