@@ -79,52 +79,35 @@ function buildCard(t) {
   return `
         <div class="card mb-3" data-track-slug="${t.slug}">
             <div class="card-body">
-                <!-- User info header -->
-                <div class="d-flex align-items-center mb-3">
-                    <a href="${t.profile.url}" class="text-decoration-none">
-                        ${avatar}
-                    </a>
-                    <div>
-                        <div>
-                            <a href="${t.profile.url}" class="text-decoration-none fw-semibold">
-                                ${escapeHtml(t.profile.display_name)}
-                            </a>
-                        </div>
-                        <small class="text-muted">${escapeHtml(t.created_ago)}</small>
-                    </div>
-                </div>
-                
-                <!-- SoundCloud-style track layout -->
                 <div class="track-card-body">
-                    <!-- Square artwork -->
                     ${image}
                     
-                    <!-- Track content -->
                     <div class="track-content">
-                        <h5 class="card-title mb-2">
-                            <a href="${t.detail_url}" class="text-decoration-none">
-                                ${escapeHtml(t.title)}${durationText}
-                            </a>
-                        </h5>
-                        
-                        ${t.description ? `<p class="card-text text-muted mb-3" style="font-size: 0.9em;">${escapeHtml(t.description)}</p>` : ''}
-                        
-                        <!-- Audio player -->
-                        <div class="mb-3">
-                            <audio controls 
-                                   controlsList="nodownload" 
-                                   class="w-100" 
-                                   style="max-width:400px;" 
-                                   onplay="AudioManager.handlePlay('${t.slug}', this)"
-                                   onpause="AudioManager.handlePause('${t.slug}', this)">
-                                <source src="${t.audio_url}" type="audio/mpeg">
-                            </audio>
+                        <div class="track-profile-info">
+                            <div class="track-profile-left">
+                                ${avatar}
+                                <span class="track-profile-name">${escapeHtml(t.profile.display_name)}</span>
+                            </div>
+                            <span class="track-profile-timestamp">${escapeHtml(t.created_ago)}</span>
                         </div>
                         
-                        <!-- Comments link -->
-                        <div>
-                            <a href="${t.detail_url}#comments" class="text-decoration-none text-muted">
-                                <i class="fa fa-comment me-1"></i>${commentsText}
+                        <h5 class="track-title">
+                            <a href="${t.detail_url}">${escapeHtml(t.title)}</a>
+                        </h5>
+                        
+                        ${t.description ? `<p class="track-description">${escapeHtml(t.description)}</p>` : '<p class="track-description"></p>'}
+                        
+                        <div class="track-audio-section">
+                            <audio controls 
+                                   preload="metadata"
+                                   controlsList="nodownload noplaybackrate" 
+                                   class="w-100"
+                                   data-track-slug="${t.slug}"
+                                   aria-label="Play ${escapeHtml(t.title)} by ${escapeHtml(t.profile.display_name)}">
+                                <source src="${t.audio_url}" type="audio/mpeg">
+                            </audio>
+                            <a href="${t.detail_url}#comments" class="text-decoration-none">
+                                <i class="fa fa-comment me-1"></i>${commentText}
                             </a>
                         </div>
                     </div>
@@ -139,6 +122,21 @@ function buildCard(t) {
  */
 function escapeHtml(s) {
   return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+/**
+ * Bind audio events to audio elements.
+ * Uses event delegation for efficiency.
+ * https://javascript.info/event-delegation
+ */
+function bindAudioEvents(root = document) {
+  const audios = root.querySelectorAll('audio[data-track-slug]:not([data-audio-bound])');
+  audios.forEach((audio) => {
+    const slug = audio.dataset.trackSlug;
+    audio.addEventListener('play', () => AudioManager.handlePlay(slug, audio));
+    audio.addEventListener('pause', () => AudioManager.handlePause(slug, audio));
+    audio.setAttribute('data-audio-bound', '1');
+  });
 }
 
 /**
@@ -164,6 +162,9 @@ async function loadMore() {
       container.insertAdjacentHTML('beforeend', buildCard(t));
       appended += 1;
     });
+
+    // Bind events for newly added audio elements
+    bindAudioEvents(container);
 
     hasNext = data.has_next;
     page += 1;
@@ -194,6 +195,8 @@ async function loadMore() {
  * Falls back gracefully if IntersectionObserver is unavailable.
  */
 document.addEventListener('DOMContentLoaded', () => {
+  // Bind events for server-rendered audio elements
+  bindAudioEvents(document);
 
   const sentinel = document.getElementById('feed-sentinel');
 

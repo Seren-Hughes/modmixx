@@ -61,9 +61,7 @@
                             <!-- Track title -->
                             <h5 class="track-title">
                                 <a href="{% url 'track_detail' track.slug %}"
-                                   class="text-decoration-none">
-                                    {{ track.title }}
-                                </a>
+                                   class="text-decoration-none">{{ track.title }}</a>
                             </h5>
                             <!-- Description -->
                             <p class="track-description">
@@ -72,10 +70,11 @@
                             <!-- Audio player at bottom -->
                             <div class="track-audio-section">
                                 <audio controls
+                                       preload="metadata"
                                        controlsList="nodownload noplaybackrate"
                                        class="w-100"
-                                       onplay="AudioManager.handlePlay('{{ track.slug }}', this)"
-                                       onpause="AudioManager.handlePause('{{ track.slug }}', this)">
+                                       data-track-slug="{{ track.slug }}"
+                                       aria-label="Play {{ track.title }} by {{ track.user.profile.display_name }}">
                                     <source src="{{ track.audio_file.url }}" type="audio/mpeg">
                                 </audio>
                                 <!-- Comments link -->
