@@ -1,0 +1,120 @@
+/* Profile page styles */
+
+.profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.profile-picture-container {
+    margin-bottom: 1rem;
+}
+
+/* Profile picture styling */
+.profile-picture {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #e9ecef;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    transition: transform 0.2s ease;
+}
+
+.profile-picture-placeholder {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #e9ecef;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+
+.profile-initial {
+    font-size: 4rem;
+    font-weight: 600;
+    color: #6c757d;
+}
+
+/* Profile info styling */
+.profile-info h2 {
+    margin-bottom: 0.25rem;
+}
+
+.profile-bio h5 {
+    margin-bottom: 0.75rem;
+}
+
+/* Users Tracks header section */
+.profile-tracks-header {
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* ----------------- Media queries --------------------- */
+
+/* Tablets and small desktops (768px and below) */
+@media (max-width: 768px) {
+    .profile-header {
+        flex-direction: row;
+        align-items: flex-start;
+        text-align: left;
+        gap: 1rem;
+        margin-bottom: 0.6rem;
+    }
+    
+    .profile-picture-container {
+        margin-bottom: 0;
+        flex-shrink: 0;
+    }
+    
+    .profile-info {
+        flex: 1;
+        text-align: left;
+    }
+    
+    .profile-picture,
+    .profile-picture-placeholder {
+        width: 130px;
+        height: 130px;
+    }
+    
+    .profile-initial {
+        font-size: 2.5rem;
+    }
+    
+    .profile-info h2 {
+        font-size: 2rem;
+        margin-bottom: 0.25rem;
+        text-align: left;
+    }
+    
+    .profile-bio {
+        margin-top: 0.5rem;
+        padding: 0.25rem;
+    }
+}
+
+/* Mobile phones (576px and below) */
+@media (max-width: 576px) {
+    .profile-picture,
+    .profile-picture-placeholder {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .profile-initial {
+        font-size: 2rem;
+    }
+    
+    .profile-info h2 {
+        font-size: 1.9rem;
+    }
+}
+

@@ -1,33 +1,51 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+{% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-md-4">
-            {% if profile.profile_picture %}
-                <img src="{{ profile.profile_picture.url }}"
-                     class="img-fluid rounded-circle mb-3"
-                     alt="Profile Picture"
-                     style="max-width: 200px">
-            {% else %}
-                <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mb-3"
-                     style="width: 200px;
-                            height: 200px">
-                    <span class="text-muted fs-1">{{ profile.display_name|first|upper|default:profile.username|first|upper }}</span>
+            <!-- Profile Header - Responsive Layout -->
+            <div class="profile-header">
+                <!-- Profile Picture -->
+                <div class="profile-picture-container">
+                    {% if profile.profile_picture %}
+                        <img src="{{ profile.profile_picture.url }}"
+                             class="profile-picture"
+                             alt="{{ profile.display_name|default:profile.username }}">
+                    {% else %}
+                        <div class="profile-picture-placeholder">
+                            <span class="profile-initial">{{ profile.display_name|first|upper|default:profile.username|first|upper }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+                <!-- Profile Info -->
+                <div class="profile-info">
+                    <h2>{{ profile.display_name|default:profile.username }}</h2>
+                    <p class="text-muted">@{{ profile.username }}</p>
+                    {% if profile.pronouns %}
+                        <p class="profile-pronouns">
+                            <small class="text-muted">{{ profile.pronouns }}</small>
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- Bio Section - Full Width Below on Mobile -->
+            {% if profile.bio %}
+                <div class="profile-bio">
+                    <h5>About</h5>
+                    <div>{{ profile.bio|linebreaks }}</div>
                 </div>
             {% endif %}
-            <h2>{{ profile.display_name|default:profile.username }}</h2>
-            <p class="text-muted">@{{ profile.username }}</p>
-            {% if profile.pronouns %}
-                <p>
-                    <small class="text-muted">{{ profile.pronouns }}</small>
-                </p>
-            {% endif %}
             {% if is_owner %}
-                <a href="{% url 'profile_edit' %}"
-                   class="btn btn-outline-primary btn-sm">Edit Profile</a>
+                <div class="mt-3 mb-5">
+                    <a href="{% url 'profile_edit' %}"
+                       class="btn btn-outline-primary btn-sm">Edit Profile</a>
+                </div>
             {% endif %}
             <!-- Profile Picture Moderation Status Messages -->
             {% if user.profile.moderation_status == "PENDING" %}
-                <div class="alert alert-info d-flex align-items-center mb-3">
+                <div class="alert alert-info d-flex align-items-center mt-3">
                     <i class="fas fa-clock me-2"></i>
                     <div>
                         <strong>Profile Picture Pending</strong>
@@ -36,7 +54,7 @@
                     </div>
                 </div>
             {% elif user.profile.moderation_status == "REJECTED" %}
-                <div class="alert alert-warning d-flex align-items-center mb-3">
+                <div class="alert alert-warning d-flex align-items-center mt-3">
                     <i class="fas fa-exclamation-triangle me-2"></i>
                     <div>
                         <strong>Profile Picture Rejected</strong>
@@ -47,10 +65,6 @@
             {% endif %}
         </div>
         <div class="col-md-8">
-            {% if profile.bio %}
-                <h5>About</h5>
-                <p>{{ profile.bio|linebreaks }}</p>
-            {% endif %}
             <!-- User's Tracks Section -->
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5>Tracks ({{ user_tracks.count }})</h5>
@@ -109,7 +123,10 @@
                             </div>
                             <!-- Audio Player -->
                             <div class="mt-3">
-                                <audio controls controlsList="nodownload" class="w-100" style="height: 40px;">
+                                <audio controls
+                                       controlsList="nodownload"
+                                       class="w-100"
+                                       style="height: 40px">
                                     <source src="{{ track.audio_file.url }}" type="audio/mpeg">
                                     <source src="{{ track.audio_file.url }}" type="audio/wav">
                                     <source src="{{ track.audio_file.url }}" type="audio/ogg">
