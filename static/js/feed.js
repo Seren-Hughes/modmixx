@@ -144,7 +144,7 @@ function bindAudioEvents(root = document) {
 /**
  * Fetch the next page of tracks and add them to the feed
  * Announce new tracks to screen readers (sr-announcer)
- * Only adds tracks we haven't seen before (prevents duplicates)
+ * Only adds tracks not seen before (prevents duplicates)
  */
 async function loadMore() {
   // Don't load if already loading or no more pages
@@ -185,7 +185,7 @@ async function loadMore() {
       if (!hasNext) announcer.textContent = `${uniqueTracks.length > 0 ? 'Loaded more tracks. ' : ''}End of feed.`;
     }
 
-    // Clean up: stop watching for scroll when we're done
+    // Clean up: stop watching for scroll when done
     if (!hasNext && ioRef) {
       ioRef.disconnect();
       ioRef = null;

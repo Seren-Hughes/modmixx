@@ -173,7 +173,9 @@ SOCIALACCOUNT_PROVIDERS = {
         ],
         'AUTH_PARAMS': {
             'access_type': 'online',
-        }
+            'prompt': 'select_account consent',  # Forces both account picker and consent
+        },
+        'VERIFIED_EMAIL': True,
     }
 }
 
@@ -194,7 +196,7 @@ ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 ACCOUNT_EMAIL_VERIFICATION = 'none' # Disabled for development
 ACCOUNT_ALLOW_REGISTRATION = True
 SOCIALACCOUNT_AUTO_SIGNUP = True
-SOCIALACCOUNT_QUERY_EMAIL = True
+SOCIALACCOUNT_QUERY_EMAIL = True 
 
 # allauth-specific logout settings:
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'  # For allauth logout
