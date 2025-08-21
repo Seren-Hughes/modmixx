@@ -10,7 +10,7 @@
             <h3>{% trans "Account Connections" %}</h3>
             {% if form.accounts %}
                 <p>{% trans "You have the following third-party accounts connected:" %}</p>
-                <form method="post" action="">
+                <form method="post">
                     {% csrf_token %}
                     <ul class="connected-accounts">
                         {% for base_account in form.accounts %}

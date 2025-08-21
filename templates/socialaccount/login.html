@@ -14,7 +14,7 @@
             <div class="connections-section">
                 <h3>{% trans "Connect Google Account" %}</h3>
                 <p class="signin-message">{% trans "You are about to connect your Google account to your modmixx profile." %}</p>
-                <form method="post" action="">
+                <form method="post">
                     {% csrf_token %}
                     <button type="submit" class="google-btn">
                         <i class="fab fa-google"></i>
@@ -43,7 +43,6 @@
                 You are about to sign in using a third-party account from Google.
             </p>
             <form method="post"
-                  action=""
                   style="display: flex;
                          justify-content: center">
                 {% csrf_token %}
