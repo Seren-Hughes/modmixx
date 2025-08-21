@@ -392,6 +392,7 @@ html {
     .home-hero-wrapper {
         margin-top: 0;
     }
+    
     .hero-text .color-title {
         font-size: 3.5rem;
         margin-right: 4rem;
@@ -402,6 +403,9 @@ html {
     }
     .why-list {
         max-width: 900px;
+    }
+    .hero-cta-btn {
+        margin-left: -2.5rem; /* negative margin to pull button left! */
     }
 }
 
@@ -415,5 +419,8 @@ html {
     .hero-text {
         max-width: 55vw;
         margin-left: 3vw;
+    }
+    .hero-cta-btn {
+        margin-left: -4rem; /* negative margin to pull button left! */
     }
 }
