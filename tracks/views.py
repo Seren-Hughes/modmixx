@@ -19,21 +19,26 @@ def track_feed(request):
     Server-render (SSR) the first page (5 newest tracks).
     Only show APPROVED tracks to maintain community standards.
     """
-    tracks = Track.objects.filter(
+    # Query set for approved tracks (qs)
+    tracks_qs = Track.objects.filter(
         moderation_status="APPROVED"
     ).select_related('user__profile').prefetch_related(
         Prefetch('comments', queryset=Comment.objects.filter(deleted=False))
     ).order_by('-created_at')
+
+    # Paginate first page to match AJAX API
+    paginator = Paginator(tracks_qs, 5)
+    page_obj = paginator.get_page(1)  # Always get page 1 for server render
     
-    # Add visible comment count to each track
-    for track in tracks:
+    # Add visible comment count to each track for template rendering
+    for track in page_obj:
         track.visible_comment_count = track.comments.filter(deleted=False).count()
     
     upload_form = TrackUploadForm()
     # Check for ?share=1 in the URL
     show_upload_modal = request.GET.get('share') == '1'
     return render(request, 'tracks/feed.html', {
-        'tracks': tracks,
+        'tracks': page_obj,  # Fixed: Now this is paginated :D
         'upload_form': upload_form,
         'show_upload_modal': show_upload_modal,
     })
@@ -385,7 +390,7 @@ def track_feed_api(request):
     page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
     
-    # Build track data
+    # Build JSON data for each track
     items = []
     for t in page_obj:
         items.append({

@@ -73,6 +73,16 @@ function buildAvatarHTML(profile) {
 }
 
 /**
+ * Truncate text to a specific word count (mimics Django's truncatewords filter)
+ */
+function truncateWords(text, wordCount = 10) {
+  if (!text) return '';
+  const words = text.trim().split(/\s+/);
+  if (words.length <= wordCount) return text;
+  return words.slice(0, wordCount).join(' ') + '…';
+}
+
+/**
  * Build a complete track card HTML
  * This matches the Django template for consistency 
  */
@@ -82,13 +92,13 @@ function buildCard(t) {
     ? `<img src="${t.image_url}" class="track-artwork" alt="Cover art for ${escapeHtml(t.title)}">`
     : `<div class="track-artwork-placeholder"><i class="fas fa-music"></i></div>`;
 
-  // Handle comment count text
-  const visibleCommentCount = t.visible_comment_count || 0;
-  const commentText = visibleCommentCount === 0
+  // t.comment_count (from API) not t.visible_comment_count!
+  const commentCount = t.comment_count || 0;
+  const commentText = commentCount === 0
     ? 'No comments yet'
-    : visibleCommentCount === 1
+    : commentCount === 1
       ? '1 comment'
-      : `${visibleCommentCount} comments`;
+      : `${commentCount} comments`;
 
   return `
     <div class="card mb-3" data-track-slug="${t.slug}">
@@ -98,24 +108,32 @@ function buildCard(t) {
           <div class="track-content">
             <div class="track-profile-info">
               <div class="track-profile-left">
-                ${avatar}
-                <span class="track-profile-name">${escapeHtml(t.profile.display_name)}</span>
+                <a href="${t.profile.url}" class="text-decoration-none">
+                  ${avatar}
+                </a>
+                <a href="${t.profile.url}" class="text-decoration-none track-profile-name">${escapeHtml(t.profile.display_name)}</a>
               </div>
-              <span class="track-profile-timestamp">${escapeHtml(t.created_ago)}</span>
+              <div class="track-profile-timestamp">
+                <small class="text-muted">${escapeHtml(t.created_ago)}</small>
+              </div>
             </div>
             <h5 class="track-title">
-              <a href="${t.detail_url}">${escapeHtml(t.title)}</a>
+              <a href="${t.detail_url}" class="text-decoration-none">${escapeHtml(t.title)}</a>
             </h5>
-            ${t.description ? `<p class="track-description">${escapeHtml(t.description)}</p>` : '<p class="track-description"></p>'}
+            <p class="track-description">
+              ${t.description ? truncateWords(escapeHtml(t.description), 10) : ''}
+            </p>
             <div class="track-audio-section">
               <audio controls preload="metadata" controlsList="nodownload noplaybackrate" class="w-100"
                      data-track-slug="${t.slug}"
                      aria-label="Play ${escapeHtml(t.title)} by ${escapeHtml(t.profile.display_name)}">
                 <source src="${t.audio_url}" type="audio/mpeg">
               </audio>
-              <a href="${t.detail_url}#comments" class="text-decoration-none">
-                <i class="fa fa-comment me-1"></i>${commentText}
-              </a>
+              <div class="mt-2">
+                <a href="${t.detail_url}#comments" class="text-decoration-none text-muted">
+                  <i class="fa fa-comment me-1"></i>${commentText}
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -184,6 +202,26 @@ async function loadMore() {
       if (uniqueTracks.length > 0) announcer.textContent = `Loaded ${uniqueTracks.length} more tracks`;
       if (!hasNext) announcer.textContent = `${uniqueTracks.length > 0 ? 'Loaded more tracks. ' : ''}End of feed.`;
     }
+
+    // Show end message if no more tracks
+    if (!hasNext) {
+  const endMessage = document.createElement('div');
+  endMessage.className = 'text-center py-5';
+  endMessage.innerHTML = `
+    <div class="mb-3">
+      <i class="fas fa-music text-muted" style="font-size: 2rem;"></i>
+    </div>
+    <h5 class="text-muted mb-2">You've heard all the mixx!</h5>
+    <p class="text-muted mb-3">That's every track in the feed for now.</p>
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" 
+           class="btn btn-outline-primary btn-sm">
+      <i class="fas fa-arrow-up me-2"></i>Back to the top
+    </button>
+  `;
+  container.appendChild(endMessage);
+} else {
+  console.log('Debug: Still has more tracks, hasNext =', hasNext);
+}
 
     // Clean up: stop watching for scroll when done
     if (!hasNext && ioRef) {
