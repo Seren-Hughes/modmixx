@@ -135,7 +135,7 @@ def profile(request, username):
 
 class CustomPasswordResetView(auth_views.PasswordResetView):
     """Custom password reset view with branded from_email."""
-    from_email = "modmixx.platform@gmail.com"
+    from_email = "modmixx <modmixx.platform@gmail.com>"
     template_name = 'accounts/password_reset.html'
 
 @login_required
