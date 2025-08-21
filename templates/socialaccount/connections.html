@@ -1,6 +1,10 @@
 {% extends "base_popup.html" %}
 {% load i18n %}
 {% load socialaccount %}
+{# Clear any messages that might be set by allauth #}
+{% if messages %}
+    {% for message in messages %}{% empty %}{% endfor %}
+{% endif %}
 {% block head_title %}
     {% trans "Account Connections" %}
 {% endblock %}
