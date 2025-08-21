@@ -101,7 +101,11 @@
         {% endfor %}
     </div>
     <!-- Infinite scroll loading indicator -->
-    <div id="loading" class="text-center py-3" style="display:none;">Loading…</div>
+    <div id="loading" class="text-center py-3" style="display:none;">
+        <div class="spinner-border text-dark" role="status">
+            <span class="visually-hidden">Loading more tracks...</span>
+        </div>
+    </div>
     <!-- Intersection observer sentinel for infinite scroll -->
     <div id="feed-sentinel" class="py-2"></div>
     <!-- Accessibility: Screen-reader announcements -->
@@ -158,7 +162,7 @@
                         {% endif %}
                         <!-- Audio File Upload Section -->
                         <div class="mb-3">
-                            <label class="form-label">Audio File *</label>
+                            <label for="audioFileInput" class="form-label">Audio File *</label>
                             {% if upload_form.audio_file.errors %}
                                 <div class="text-danger small mb-2">
                                     {% for error in upload_form.audio_file.errors %}
@@ -220,7 +224,7 @@
                         </div>
                         <!-- Track Image Upload Section -->
                         <div class="mb-3">
-                            <label class="form-label">Track Artwork (Optional)</label>
+                            <label for="imageFileInput" class="form-label">Track Artwork (Optional)</label>
                             {% if upload_form.track_image.errors %}
                                 <div class="text-danger small mb-2">
                                     {% for error in upload_form.track_image.errors %}
