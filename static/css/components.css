@@ -330,6 +330,33 @@
     flex: 1 1 0;
 }
 
+/* --------------- Footer styling  ------------------*/
+footer.main-footer {
+    background: white;
+}
+
+footer.main-footer .footer-link {
+    color: #d63384; /* Deep pinkish colour on brand */
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+footer.main-footer .footer-link:hover {
+    color: #b02a5b; /* Darker shade on hover */
+    text-decoration: none;
+}
+
+/* Social icons */
+footer.main-footer .social-link {
+    color: #6c757d;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+footer.main-footer .social-link:hover {
+    color: #d63384; 
+}
+
 /* -----------------------------------------------------------------------*/
 /* --------------------------------- Media Queries -----------------------*/
 /* -----------------------------------------------------------------------*/

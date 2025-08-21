@@ -82,10 +82,40 @@
             {% block content %}{% endblock %}
         </main>
         {% block footer %}
-            <footer class="text-center py-4 mt-5"
-                    style="background: transparent"
-                    role="contentinfo">
-                <small>&copy; {{ year|default:2025 }} modmixx &middot; <a href="{% url 'core:about' %}">About</a></small>
+            <footer class="py-4 mt-5 border-top main-footer" role="contentinfo">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <!-- Left side - Copyright and links -->
+                        <div class="col-md-8 text-center text-md-start">
+                            <small class="text-muted">
+                                &copy; {{ year|default:2025 }} modmixx &middot;
+                                <a href="{% url 'core:about' %}" class="footer-link">About</a> &middot;
+                                <a href="{% url 'contact' %}" class="footer-link">Contact</a> &middot;
+                                <a href="{% url 'core:about' %}#community-guidelines" class="footer-link">Community Guidelines</a>
+                            </small>
+                        </div>
+            
+                        <!-- Right side - Social and professional links -->
+                        <div class="col-md-4 text-center text-md-end mt-2 mt-md-0">
+                            <a href="https://github.com/Seren-Hughes/modmixx" target="_blank" rel="noopener noreferrer"
+                                class="social-link me-3" aria-label="Developer's GitHub">
+                                <i class="fab fa-github fa-lg"></i>
+                            </a>
+                            <a href="https://linkedin.com/in/seren-hughes/" target="_blank" rel="noopener noreferrer"
+                                class="social-link me-3" aria-label="Developer's LinkedIn">
+                                <i class="fab fa-linkedin fa-lg"></i>
+                            </a>
+                            <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" class="social-link me-3"
+                                aria-label="Follow modmixx on Instagram">
+                                <i class="fab fa-instagram fa-lg"></i>
+                            </a>
+                            <a href="https://youtube.com/" target="_blank" rel="noopener noreferrer" class="social-link"
+                                aria-label="Subscribe to modmixx on YouTube">
+                                <i class="fab fa-youtube fa-lg"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </footer>
         {% endblock %}
         <!-- Toast notifications -->
