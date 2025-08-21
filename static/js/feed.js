@@ -124,7 +124,7 @@ function buildCard(t) {
               ${t.description ? truncateWords(escapeHtml(t.description), 10) : ''}
             </p>
             <div class="track-audio-section">
-              <audio controls preload="metadata" controlsList="nodownload noplaybackrate" class="w-100"
+              <audio controls preload="metadata" class="w-100"
                      data-track-slug="${t.slug}"
                      aria-label="Play ${escapeHtml(t.title)} by ${escapeHtml(t.profile.display_name)}">
                 <source src="${t.audio_url}" type="audio/mpeg">

@@ -73,7 +73,6 @@
                             <div class="track-audio-section">
                                 <audio controls
                                        preload="metadata"
-                                       controlsList="nodownload noplaybackrate"
                                        class="w-100"
                                        data-track-slug="{{ track.slug }}"
                                        aria-label="Play {{ track.title }} by {{ track.user.profile.display_name }}">
@@ -254,11 +253,14 @@
                                 {% endif %}
                             </div>
                             <!-- Preview Area (hidden by default) -->
+                            <!-- src invisible placeholder to pass validation - reference https://stackoverflow.com/questions/9126105/blank-image-encoded-as-data-uri-->
                             <div id="imagePreview" class="border rounded p-3" style="display: none;">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center">
                                         <img id="previewImg"
                                              class="rounded me-3"
+                                             src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                                             alt="Track artwork preview"
                                              style="width: 60px;
                                                     height: 60px;
                                                     object-fit: cover">

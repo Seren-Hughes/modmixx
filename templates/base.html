@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8" />
+        <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         {% load static %}
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-              rel="stylesheet" />
+              rel="stylesheet">
         <!-- FontAwesome  -->
         <script src="https://kit.fontawesome.com/6455293cfc.js"
                 crossorigin="anonymous"></script>
@@ -28,7 +28,6 @@
         <!-- Accessibility skip link -->
         <a class="visually-hidden-focusable" href="#main-content">Skip to main content</a>
         <nav class="navbar navbar-expand-lg navbar-light sticky-top"
-             role="navigation"
              aria-label="Main navigation">
             <div class="container-fluid">
                 <!-- Brand/logo -->
@@ -55,11 +54,17 @@
                         {% if user.is_authenticated %}
                             <a class="nav-link"
                                href="/"
-                               aria-current="{% if request.resolver_match.url_name == 'home' %}page{% endif %}">Discover</a>
+                               {% if request.resolver_match.url_name == 'track_feed' %}aria-current="page"{% endif %}>
+                                Discover
+                            </a>
                             <a class="nav-link" href="/?share=1">Share Track</a>
                             <a class="nav-link" href="{% url 'core:about' %}#community-guidelines">Community Guidelines</a>
                             {% if user.is_authenticated and user.profile.username %}
-                                <a class="nav-link" href="{% url 'profile' user.profile.username %}">Profile</a>
+                                <a class="nav-link"
+                                   href="{% url 'profile' user.profile.username %}"
+                                   {% if request.resolver_match.url_name == 'profile' %}aria-current="page"{% endif %}>
+                                    Profile
+                                </a>
                             {% endif %}
                             <form method="post" action="{% url 'account_logout' %}" class="d-inline">
                                 {% csrf_token %}
@@ -69,9 +74,21 @@
                                         aria-label="Log out of your account">Logout</button>
                             </form>
                         {% else %}
-                            <a class="nav-link" href="/login/">Login</a>
-                            <a class="nav-link" href="/signup/">Join</a>
-                            <a class="nav-link" href="/about/">About</a>
+                            <a class="nav-link"
+                               href="/login/"
+                               {% if request.resolver_match.url_name == 'account_login' %}aria-current="page"{% endif %}>
+                                Login
+                            </a>
+                            <a class="nav-link"
+                               href="/signup/"
+                               {% if request.resolver_match.url_name == 'account_signup' %}aria-current="page"{% endif %}>
+                                Join
+                            </a>
+                            <a class="nav-link"
+                               href="/about/"
+                               {% if request.resolver_match.url_name == 'about' %}aria-current="page"{% endif %}>
+                                About
+                            </a>
                         {% endif %}
                     </div>
                 </div>
@@ -82,7 +99,7 @@
             {% block content %}{% endblock %}
         </main>
         {% block footer %}
-            <footer class="py-4 mt-5 border-top main-footer" role="contentinfo">
+            <footer class="py-4 mt-5 border-top main-footer">
                 <div class="container">
                     <div class="row align-items-center">
                         <!-- Left side - Copyright and links -->
@@ -91,26 +108,38 @@
                                 &copy; {{ year|default:2025 }} modmixx &middot;
                                 <a href="{% url 'core:about' %}" class="footer-link">About</a> &middot;
                                 <a href="{% url 'contact' %}" class="footer-link">Contact</a> &middot;
-                                <a href="{% url 'core:about' %}#community-guidelines" class="footer-link">Community Guidelines</a>
+                                <a href="{% url 'core:about' %}#community-guidelines"
+                                   class="footer-link">Community Guidelines</a>
                             </small>
                         </div>
-            
                         <!-- Right side - Social and professional links -->
                         <div class="col-md-4 text-center text-md-end mt-2 mt-md-0">
-                            <a href="https://github.com/Seren-Hughes/modmixx" target="_blank" rel="noopener noreferrer"
-                                class="social-link me-3" aria-label="Developer's GitHub">
+                            <a href="https://github.com/Seren-Hughes/modmixx"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="social-link me-3"
+                               aria-label="Developer's GitHub">
                                 <i class="fab fa-github fa-lg"></i>
                             </a>
-                            <a href="https://linkedin.com/in/seren-hughes/" target="_blank" rel="noopener noreferrer"
-                                class="social-link me-3" aria-label="Developer's LinkedIn">
+                            <a href="https://linkedin.com/in/seren-hughes/"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="social-link me-3"
+                               aria-label="Developer's LinkedIn">
                                 <i class="fab fa-linkedin fa-lg"></i>
                             </a>
-                            <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" class="social-link me-3"
-                                aria-label="Follow modmixx on Instagram">
+                            <a href="https://instagram.com/"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="social-link me-3"
+                               aria-label="Follow modmixx on Instagram">
                                 <i class="fab fa-instagram fa-lg"></i>
                             </a>
-                            <a href="https://youtube.com/" target="_blank" rel="noopener noreferrer" class="social-link"
-                                aria-label="Subscribe to modmixx on YouTube">
+                            <a href="https://youtube.com/"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="social-link"
+                               aria-label="Subscribe to modmixx on YouTube">
                                 <i class="fab fa-youtube fa-lg"></i>
                             </a>
                         </div>
