@@ -8,3 +8,11 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     }
   });
 });
+
+// Toast notifications
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize any toasts that exist
+    document.querySelectorAll('.toast').forEach(function(toastNode) {
+        new bootstrap.Toast(toastNode, { delay: 4000 }).show();
+    });
+});
