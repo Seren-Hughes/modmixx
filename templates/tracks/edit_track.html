@@ -21,6 +21,9 @@
                             <div class="mt-2">
                                 <label for="{{ form.audio_file.id_for_label }}" class="form-label">Replace Audio File (optional)</label>
                                 {{ form.audio_file }}
+                                {% if form.audio_file.help_text %}
+                                    <div id="id_audio_file_helptext" class="form-text">{{ form.audio_file.help_text }}</div>
+                                {% endif %}
                             </div>
                             {% if form.audio_file.errors %}<div class="text-danger">{{ form.audio_file.errors }}</div>{% endif %}
                         </div>
@@ -38,7 +41,7 @@
                                     <img src="{{ track.track_image.url }}"
                                          alt="Current artwork"
                                          class="img-fluid rounded"
-                                         style="max-height: 150px" />
+                                         style="max-height: 150px">
                                 </div>
                             </div>
                         {% endif %}
@@ -53,6 +56,9 @@
                                 {% endif %}
                             </label>
                             {{ form.track_image }}
+                            {% if form.track_image.help_text %}
+                                <div id="id_track_image_helptext" class="form-text">{{ form.track_image.help_text }}</div>
+                            {% endif %}
                             {% if form.track_image.errors %}<div class="text-danger">{{ form.track_image.errors }}</div>{% endif %}
                         </div>
                         <!-- Description -->
