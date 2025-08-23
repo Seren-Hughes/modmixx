@@ -52,3 +52,9 @@ All CSS files validated - no errors found.
 | tracks.css | ✅ |  |
 | variables.css | ✅ |  |
 
+## JavaScript Validation
+
+
+| File | Status | JSHint Screenshot | ESLint Screenshot | Notes |
+|-----|--------|-------|-------|-------|
+| comments.js | ✅ | ![comments jshint](docs/images/test-screenshots/comments-jshint.png) | ![comments eslint](docs/images/test-screenshots/comments-eslint-terminal-no-errors.png) | Resolved all warnings: ![eslint terminal warnings](docs/images/test-screenshots/comments-eslint-terminal-warnings.png) ![eslint terminal error](docs/images/test-screenshots/comments-eslint-terminal-warnings-quotes.png) |
