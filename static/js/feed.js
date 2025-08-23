@@ -1,3 +1,4 @@
+/* jshint esversion: 11, esnext: false */
 /*
   Track Feed Infinite Scroll & Audio Management
 
@@ -54,7 +55,7 @@ const seenSlugs = new Set();
  * Escape HTML to prevent XSS attacks when showing user-generated content
  */
 function escapeHtml(s) {
-  return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', '\'': '&#39;' }[c]));
 }
 
 
@@ -88,17 +89,11 @@ function truncateWords(text, wordCount = 10) {
  */
 function buildCard(t) {
   const avatar = buildAvatarHTML(t.profile);
-  const image = t.image_url
-    ? `<img src="${t.image_url}" class="track-artwork" alt="Cover art for ${escapeHtml(t.title)}">`
-    : `<div class="track-artwork-placeholder"><i class="fas fa-music"></i></div>`;
+  const image = t.image_url ? `<img src="${t.image_url}" class="track-artwork" alt="Cover art for ${escapeHtml(t.title)}">` : `<div class="track-artwork-placeholder"><i class="fas fa-music"></i></div>`;
 
   // t.comment_count (from API) not t.visible_comment_count!
   const commentCount = t.comment_count || 0;
-  const commentText = commentCount === 0
-    ? 'No comments yet'
-    : commentCount === 1
-      ? '1 comment'
-      : `${commentCount} comments`;
+  const commentText = (commentCount === 0) ? 'No comments yet' : (commentCount === 1) ? '1 comment' : `${commentCount} comments`;
 
   return `
     <div class="card mb-3" data-track-slug="${t.slug}">
