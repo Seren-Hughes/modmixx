@@ -1,15 +1,14 @@
+from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser,
-    PermissionsMixin,
     BaseUserManager,
+    PermissionsMixin,
 )
 from django.core.files.uploadedfile import (
     InMemoryUploadedFile,
     TemporaryUploadedFile,
 )
 from django.db import models
-from django.conf import settings
-from django.utils import timezone
 
 # Create your models here.
 
@@ -40,17 +39,29 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     """
     Custom User model that uses email as the unique identifier.
 
+    Replaces Django's default username-based authentication with
+    email-based authentication for better user experience.
+
     Fields:
-        email: Unique email address for the user.
-        first_name: User's first name.
-        last_name: User's last name.
-        is_active: Indicates if the user account is active.
-        is_staff: Indicates if the user can access the admin site.
+        email: Unique email address for authentication and identification
+        is_active: Boolean indicating if the user account is active
+        is_staff: Boolean indicating if the user can access admin site
+
+    Related Models:
+        Profile: OneToOneField relationship (user.profile)
+            - created automatically via signals
+        Track: ForeignKey relationship via Profile (user.profile.tracks)
+
+    Manager:
+        CustomUserManager: Handles email-based user creation and normalization
+
+    Authentication:
+        Uses email instead of username for login
+        USERNAME_FIELD = "email"
+        No required fields beyond email and password
     """
 
     email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=30, blank=True)
-    last_name = models.CharField(max_length=30, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
@@ -65,15 +76,46 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class Profile(models.Model):
     """
-    Stores information for a user profile.
+    User profile information with content moderation capabilities.
+
+    Each CustomUser automatically gets one Profile created via post_save
+    signals upon registration. Contains public profile information and
+    handles profile picture moderation through AWS Rekognition.
 
     Fields:
-        user: Link to the Django User model.
-        username: Optional unique username for the profile.
-        display_name: Optional custom name for the profile.
-        bio: Optional user biography.
-        pronouns: User-selected pronouns (dropdown choices).
-        profile_picture: Optional profile image.
+        user: OneToOneField to CustomUser (primary relationship)
+        username: Unique slug for profile URLs (/profile/{username}/)
+        display_name: Optional public display name shown to other users
+        bio: Optional biography text (max 500 chars, XSS protected in forms)
+        pronouns: User's preferred pronouns (free text, max 50 chars)
+        profile_picture: Optional profile image (uploaded to S3, moderated)
+        moderation_status: PENDING/APPROVED/REJECTED status for profile images
+        moderation_labels: AWS Rekognition labels if image rejected
+        moderated_at: Timestamp of last moderation check
+
+    Related Models:
+        CustomUser: OneToOneField (profile.user)
+        Track: ForeignKey relationship via user (user.tracks.all())
+
+    URL Pattern:
+        Accessible at /profile/{username}/
+
+    Content Moderation:
+        - New profile images automatically scanned via AWS Rekognition
+        - NSFW/inappropriate content automatically rejected
+        - Manual re-scanning available in Django admin
+        - Toxicity checking on text fields via Perspective API
+
+    File Management:
+        - Automatic cleanup of old profile pictures on replacement
+        - ULID-based unique filenames for storage security
+        - S3 storage with automatic deletion of unused files
+        - Custom save() method handles file cleanup
+
+    Security Features:
+        - XSS protection in form validation
+        - HTML tag stripping in text fields
+        - Dangerous pattern detection (javascript:, onclick=, etc.)
     """
 
     user = models.OneToOneField(
@@ -117,10 +159,12 @@ class Profile(models.Model):
         """
         Custom save method to handle profile picture cleanup.
 
-        - If the profile picture is replaced or cleared, delete the old file from storage (S3).
+        - If the profile picture is replaced or cleared,
+          delete the old file from storage (S3).
         - Only deletes the old file if:
             * The clear checkbox was checked (profile_picture is now None)
-            * A new file was uploaded (profile_picture is a new InMemoryUploadedFile or TemporaryUploadedFile)
+            * A new file was uploaded (profile_picture is
+            * a new InMemoryUploadedFile or TemporaryUploadedFile)
         """
         try:
             old = Profile.objects.get(pk=self.pk)

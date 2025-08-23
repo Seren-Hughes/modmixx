@@ -1,4 +1,3 @@
-from django.dispatch import receiver
 from allauth.account.signals import user_signed_up
 from allauth.socialaccount.models import SocialAccount
 from allauth.socialaccount.signals import (
@@ -6,6 +5,7 @@ from allauth.socialaccount.signals import (
     social_account_removed,
 )
 from django.core.mail import send_mail
+from django.dispatch import receiver
 
 
 @receiver(user_signed_up)
@@ -19,7 +19,7 @@ def send_welcome_email_on_social_signup(sender, request, user, **kwargs):
     """
     try:
         # Check if this was a Google signup by looking for social account
-        social_account = SocialAccount.objects.get(
+        social_account = SocialAccount.objects.get(  # noqa: F841
             user=user, provider="google"
         )
         user_email = user.email
@@ -29,8 +29,8 @@ def send_welcome_email_on_social_signup(sender, request, user, **kwargs):
                 subject="Welcome to modmixx 🎉",
                 message=(
                     "Thanks for signing up to modmixx with Google!\n\n"
-                    "We're thrilled to have you in our collaborative music community. "
-                    "Dive in, explore, and start creating!"
+                    "We're thrilled to have you in our collaborative "
+                    "music community. Dive in, explore, and start creating!"
                 ),
                 from_email="modmixx <modmixx.platform@gmail.com>",
                 recipient_list=[user_email],
@@ -48,12 +48,14 @@ def send_connection_confirmation_email(sender, request, sociallogin, **kwargs):
     """
     Sends confirmation email when existing users connect their Gmail account.
 
-    Important: Email goes to the newly connected Gmail address, not the original
-    account email, since they might be different. This way the person who owns
-    the Gmail gets notified if someone connects their account to modmixx.
+    Important: Email goes to the newly connected Gmail address,
+    not the original account email, since they might be different.
+    This way the person who owns the Gmail gets notified if someone
+    connects their account to modmixx.
 
-    Had to use sociallogin.user.email instead of .username because my CustomUser
-    model doesn't have a username field - it uses email as the identifier.
+    Had to use sociallogin.user.email instead of .username because
+    my CustomUser model doesn't have a username field - it uses email
+    as the identifier.
     """
     user = sociallogin.user
     provider = sociallogin.account.provider
@@ -79,8 +81,9 @@ def send_connection_confirmation_email(sender, request, sociallogin, **kwargs):
                     subject="Gmail Connected to modmixx",
                     message=(
                         f"Hey {display_name}!\n\n"
-                        f"Your Gmail account ({connected_gmail}) has been successfully "
-                        f"connected to your modmixx account ({user.email}).\n\n"
+                        f"Your Gmail account ({connected_gmail}) "
+                        f"has been successfully connected "
+                        f"to your modmixx account ({user.email}).\n\n"
                         "You can now sign in using either email address.\n\n"
                         "Keep creating!\n"
                         "- The modmixx team"
@@ -101,9 +104,9 @@ def send_disconnection_email(sender, request, socialaccount, **kwargs):
     """
     Sends confirmation email when users disconnect their Gmail account.
 
-    This is important for security - if someone unauthorized disconnects a Gmail
-    account, the owner of that Gmail address gets notified. Same principle as
-    the connection email but in reverse.
+    This is important for security - if someone unauthorized disconnects
+    a Gmail account, the owner of that Gmail address gets notified. Same
+    principle as the connection email but in reverse.
 
     Note: Using socialaccount parameter (not sociallogin like in connection)
     because the disconnection signal passes the account object directly.
@@ -118,7 +121,8 @@ def send_disconnection_email(sender, request, socialaccount, **kwargs):
                 send_mail(
                     subject="Gmail Account Disconnected from modmixx",
                     message=(
-                        "Your Gmail account has been disconnected from modmixx.\n\n"
+                        "Your Gmail account has been disconnected "
+                        "from modmixx.\n\n"
                         "- The modmixx team"
                     ),
                     from_email="modmixx <modmixx.platform@gmail.com>",

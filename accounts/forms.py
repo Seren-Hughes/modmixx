@@ -1,18 +1,20 @@
-from django import forms
-from django.utils import timezone
-from .models import Profile
-from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser
-import re
 import os
+import re
+
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import (
     InMemoryUploadedFile,
     TemporaryUploadedFile,
 )
-from core.utils import get_toxicity_score
+from django.utils import timezone
 from ulid import ULID
+
+from core.utils import get_toxicity_score
 from tracks.services.moderation import scan_image_bytes
+
+from .models import CustomUser, Profile
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -48,16 +50,19 @@ class ProfileForm(forms.ModelForm):
         # Different help text for new vs existing profiles
         if self.instance.pk:  # Editing existing profile
             self.fields["username"].help_text = (
-                "Warning! Changing this will break any existing URL links to your profile."
+                "Warning! Changing this will break any existing URL links "
+                "to your profile."
             )
         else:  # Creating new profile
             self.fields["username"].help_text = (
-                "Choose your unique profile URL (letters, numbers, hyphens, underscores only)"
+                "Choose your unique profile URL (letters, numbers, hyphens, "
+                "underscores only)"
             )
 
         # Set error message for both cases
         self.fields["username"].error_messages = {
-            "invalid": "Username can only contain letters, numbers, hyphens, and underscores"
+            "invalid": "Username can only contain letters, numbers, hyphens,"
+            " and underscores"
         }
 
     def clean_display_name(self):
@@ -85,14 +90,16 @@ class ProfileForm(forms.ModelForm):
             for pattern in dangerous_patterns:
                 if pattern in display_name_lower:
                     raise ValidationError(
-                        f"Display name contains potentially harmful content: '{pattern}'."
+                        f"Display name contains potentially harmful content: "
+                        f"'{pattern}'."
                     )
             # Perspective API moderation
             try:
                 toxicity = get_toxicity_score(display_name)
                 if toxicity > 0.7:
                     raise ValidationError(
-                        "Your display name may contain inappropriate language. Please revise."
+                        "Your display name may contain inappropriate "
+                        "language. Please revise."
                     )
             except ValidationError:
                 raise
@@ -127,14 +134,16 @@ class ProfileForm(forms.ModelForm):
             for pattern in dangerous_patterns:
                 if pattern in bio_lower:
                     raise ValidationError(
-                        f"Bio contains potentially harmful content: '{pattern}'."
+                        f"Bio contains potentially harmful content: "
+                        f"'{pattern}'."
                     )
             # Perspective API moderation
             try:
                 toxicity = get_toxicity_score(bio)
                 if toxicity > 0.7:
                     raise ValidationError(
-                        "Your bio may contain inappropriate language. Please revise."
+                        "Your bio may contain inappropriate language. "
+                        "Please revise."
                     )
             except ValidationError:
                 raise
@@ -167,14 +176,16 @@ class ProfileForm(forms.ModelForm):
             for pattern in dangerous_patterns:
                 if pattern in pronouns_lower:
                     raise ValidationError(
-                        f"Pronouns contain potentially harmful content: '{pattern}'."
+                        f"Pronouns contain potentially harmful content: "
+                        f"'{pattern}'."
                     )
             # Perspective API moderation
             try:
                 toxicity = get_toxicity_score(pronouns)
                 if toxicity > 0.7:
                     raise ValidationError(
-                        "Your pronouns may contain inappropriate language. Please revise."
+                        "Your pronouns may contain inappropriate language. "
+                        "Please revise."
                     )
             except ValidationError:
                 raise
@@ -209,7 +220,8 @@ class ProfileForm(forms.ModelForm):
         for pattern in dangerous_patterns:
             if pattern in username_lower:
                 raise ValidationError(
-                    f"Username contains potentially harmful content: '{pattern}'."
+                    f"Username contains potentially harmful content: "
+                    f"'{pattern}'."
                 )
         return username.lower()
 
@@ -243,7 +255,8 @@ class ProfileForm(forms.ModelForm):
             ext = filename.split(".")[-1].lower() if "." in filename else ""
             if ext not in allowed_extensions:
                 raise ValidationError(
-                    "Invalid file type. Only JPG, PNG, and WebP files are allowed."
+                    "Invalid file type. Only JPG, PNG, and WebP files "
+                    "are allowed."
                 )
 
             # MIME type validation
@@ -253,7 +266,8 @@ class ProfileForm(forms.ModelForm):
                 and image.content_type not in allowed_types
             ):
                 raise ValidationError(
-                    "Invalid image format. Only JPG, PNG, and WebP are allowed."
+                    "Invalid image format. Only JPG, PNG, and WebP "
+                    "are allowed."
                 )
 
             # Basic filename sanitization
