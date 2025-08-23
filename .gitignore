@@ -33,3 +33,7 @@ core.python*
 
 # GitHub
 .github/
+
+# ESLint cache
+.eslintcache
+node_modules/
