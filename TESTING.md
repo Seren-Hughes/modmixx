@@ -30,11 +30,12 @@ All pages tested using [W3C Markup Validator](https://validator.w3.org/).
 | 500 Error Page | `/test-500/` | ✅ | ![500 error screenshot](docs/images/test-screenshots/500-error-html-validation.png) | url not in production | Temporary test URL for 500 Server error - url not in production |
 
 ### Summary
-- **Total Pages Tested:** 0
-- **Pages Passed:** 
+- **Total Pages Tested:** 17
+- **Pages Passed:** 17
 - **Pages with Errors:** 0
 - **Pages with Warnings:** 0
 
 ## CSS Validation
 
 Testing with [W3C CSS Validator](https://jigsaw.w3.org/css-validator/).
+
