@@ -135,11 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                             parentComment.remove();
                                         }
                                     });
-                                    showToast(
-                                        data.parent_cleanup.length === 1
-                                            ? 'Empty parent comment cleaned up'
-                                            : `${data.parent_cleanup.length} empty parent comments cleaned up`
-                                    );
+                                    showToast(data.parent_cleanup.length === 1 ? 'Empty parent comment cleaned up' : `${data.parent_cleanup.length} empty parent comments cleaned up`);
                                 }
                                 showToast('Comment deleted successfully!');
                             }
@@ -269,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Toast notifications using Bootstrap classes - success messages in bottom right
 function showToast(message) {
-    let toast = document.createElement('div');
+    const toast = document.createElement('div');
     toast.className = 'toast align-items-center text-bg-success border-0 show position-fixed bottom-0 end-0 m-3';
     toast.setAttribute('role', 'alert');
     toast.setAttribute('aria-live', 'assertive');
@@ -302,7 +298,7 @@ function getCookie(name) {
 function updateCommentCount(delta) {
     const countElem = document.getElementById('comment-count');
     if (countElem) {
-        let count = parseInt(countElem.textContent, 10) || 0;
+        const count = parseInt(countElem.textContent, 10) || 0;
         countElem.textContent = count + delta;
     }
 }
