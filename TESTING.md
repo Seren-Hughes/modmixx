@@ -57,4 +57,5 @@ All CSS files validated - no errors found.
 
 | File | Status | JSHint Screenshot | ESLint Screenshot | Notes |
 |-----|--------|-------|-------|-------|
-| comments.js | ✅ | ![comments jshint](docs/images/test-screenshots/comments-jshint.png) | ![comments eslint](docs/images/test-screenshots/comments-eslint-terminal-no-errors.png) | Resolved all warnings: ![eslint terminal warnings](docs/images/test-screenshots/comments-eslint-terminal-warnings.png) ![eslint terminal error](docs/images/test-screenshots/comments-eslint-terminal-warnings-quotes.png) |
+| comments.js | ✅ | ![comments jshint](docs/images/test-screenshots/comments-jshint.png) | ![comments eslint](docs/images/test-screenshots/comments-eslint-terminal-no-errors.png) | Resolved all warnings & errors: ![eslint terminal warnings](docs/images/test-screenshots/comments-eslint-terminal-warnings.png) ![eslint terminal error](docs/images/test-screenshots/comments-eslint-terminal-warnings-quotes.png) |
+| feed.js | ✅ | ![feed jshint](docs/images/test-screenshots/feed-jshint.png) | ![feed eslint](docs/images/test-screenshots/feed-eslint-terminal-no-errors.png) | Resolved all warnings & errors: ![eslint terminal warnings](docs/images/test-screenshots/feed-eslint-teminal-warnings-quotes.png) |
