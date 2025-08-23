@@ -3,7 +3,8 @@
 ### Contents
 1. [HTML Validation](#html-validation)
 2. [CSS Validation](#css-validation)
-3. [JavaScript Linting](#javascript-linting)
+3. [JavaScript Validation](#javascript-validation)
+4. [Python Code Quality](#python-code-quality)
 
 ## HTML Validation
 
@@ -65,3 +66,45 @@ Testing with [JSHint](https://jshint.com/) and [ESLint](https://eslint.org/). Us
 | profile.js | ✅ | ![profile jshint](docs/images/test-screenshots/profile-jshint.png) | ![profile eslint](docs/images/test-screenshots/profile-eslint.png) | No warnings or errors found. |
 | upload.js | ✅ | ![upload jshint](docs/images/test-screenshots/upload-jshint.png) | ![upload eslint](docs/images/test-screenshots/upload-eslint.png) | Resolved all warnings & errors: Added `/* global bootstrap, DataTransfer */` for jshint to recognize these globals provided by browser/bootstrap. |
 | utilities.js | ✅ | ![utilities jshint](docs/images/test-screenshots/utilities-jshint.png) | ![utilities eslint](docs/images/test-screenshots/utilities-eslint.png) | No warnings or errors found. |
+
+## Python Code Quality
+
+All Python files validated using multiple tools to ensure comprehensive code quality and PEP8 compliance.
+
+### Validation Tools
+- **[Flake8](https://flake8.pycqa.org/)**: PEP8 compliance and error detection
+- **[Black](https://black.readthedocs.io/)**: Code formatting with 79-character line length  
+- **[isort](https://pycqa.github.io/isort/)**: Import organization following Django conventions
+- **[Code Institute PEP8 Linter](https://pep8ci.herokuapp.com/)**: Final validation check
+
+### Configuration
+- **Line length**: 79 characters
+- **Import organization**: Django imports → third-party → local imports
+- **Configuration files**: `.flake8`, `pyproject.toml`
+
+| App | Files Checked | Flake8 Status | Screenshot | Notes |
+|-----|---------------|---------------|------------|-------|
+| accounts | 8 files | ✅ | ![accounts flake8](docs/images/test-screenshots/all-accounts-files-flake8.png) | Fixed E501 (line length), F401 (unused imports) |
+| comments | 7 files | ✅ | ![comments flake8](docs/images/test-screenshots/all-comments-app-flake8.png) | Resolved F401 issues, applied formatting |
+| contact | 7 files | ✅ | ![contact flake8](docs/images/test-screenshots/all-contact-app-flake8.png) | Removed unused imports, fixed line lengths |
+| core | 7 files | ✅ | ![core flake8](docs/images/test-screenshots/all-core-app-flake8.png) | No models - utility app structure |
+| tracks | 8 files | ✅ | ![tracks flake8](docs/images/test-screenshots/all-tracks-app-flake8.png) | Fixed E501, F401, F841 issues |
+| modmixx | 4 files | ✅ | ![modmixx flake8](docs/images/test-screenshots/all-modmixx-app-flake8.png) | Settings file line length fixes |
+
+### Summary
+- **Total Python files**: 41
+- **Apps with violations**: 0
+- **PEP8 compliant**: ✅ All files pass
+- **Last validated**: [23/08/2025]
+
+### Key Improvements Applied
+- Fixed line length violations (E501) across all apps
+- Removed unused imports (F401) from views, models, and forms
+- Organized imports with isort following Django conventions:
+  - Django imports grouped first
+  - Third-party imports second  
+  - Local application imports last
+  - Alphabetical ordering within groups
+- Eliminated unused variables (F841) in exception handling
+- Applied consistent code formatting via Black
+- Enhanced docstrings throughout all applications
