@@ -304,19 +304,7 @@ html {
     .hero-img {
         max-width: 60%;
         height: 100vh;
-        /* Gradient mask for smooth fade */
-        mask: linear-gradient(90deg, 
-            rgba(0,0,0,1) 0%, 
-            rgba(0,0,0,1) 40%, 
-            rgba(0,0,0,0.7) 99%, 
-            rgba(0,0,0,0) 100%
-        );
-        -webkit-mask: linear-gradient(90deg, 
-            rgba(0,0,0,1) 0%, 
-            rgba(0,0,0,1) 40%, 
-            rgba(0,0,0,0.7) 99%, 
-            rgba(0,0,0,0) 100%
-        );
+        opacity: 0.90; /* Slightly more opaque on extra large screens */
     }
     .hero-gradient-overlay {
         background: linear-gradient(135deg, rgba(248,33,112,0.7) 0%, rgba(243,104,44,0.5) 100%);
