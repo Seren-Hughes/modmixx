@@ -54,8 +54,14 @@ All CSS files validated - no errors found.
 
 ## JavaScript Validation
 
+Testing with [JSHint](https://jshint.com/) and [ESLint](https://eslint.org/). Used both tools to ensure code quality and adherence to best practices.
 
 | File | Status | JSHint Screenshot | ESLint Screenshot | Notes |
 |-----|--------|-------|-------|-------|
 | comments.js | ✅ | ![comments jshint](docs/images/test-screenshots/comments-jshint.png) | ![comments eslint](docs/images/test-screenshots/comments-eslint-terminal-no-errors.png) | Resolved all warnings & errors: ![eslint terminal warnings](docs/images/test-screenshots/comments-eslint-terminal-warnings.png) ![eslint terminal error](docs/images/test-screenshots/comments-eslint-terminal-warnings-quotes.png) |
 | feed.js | ✅ | ![feed jshint](docs/images/test-screenshots/feed-jshint.png) | ![feed eslint](docs/images/test-screenshots/feed-eslint-terminal-no-errors.png) | Resolved all warnings & errors: ![eslint terminal warnings](docs/images/test-screenshots/feed-eslint-teminal-warnings-quotes.png) |
+| popup-utils.js | ✅ | ![popup-utils jshint](docs/images/test-screenshots/popup-utils-jshint.png) | ![popup-utils-eslint](docs/images/test-screenshots/popup-utils-eslint.png) | No warnings or errors found. |
+| profile-edit.js | ✅ | ![profile-edit jshint](docs/images/test-screenshots/profile-edit-jshint.png) | ![profile-edit eslint](docs/images/test-screenshots/profile-edit-eslint.png) | Resolved all warnings & errors: Fixed unused function warning with `/* exported connectGoogle */` ESLint directive - function is called from HTML "Connect Google" handler. ![eslint terminal warnings](docs/images/test-screenshots/profile-edit-eslint-warning.png) ![eslint terminal error](docs/images/test-screenshots/profile-edit-eslint-error.png) | 
+| profile.js | ✅ | ![profile jshint](docs/images/test-screenshots/profile-jshint.png) | ![profile eslint](docs/images/test-screenshots/profile-eslint.png) | No warnings or errors found. |
+| upload.js | ✅ | ![upload jshint](docs/images/test-screenshots/upload-jshint.png) | ![upload eslint](docs/images/test-screenshots/upload-eslint.png) | Resolved all warnings & errors: Added `/* global bootstrap, DataTransfer */` for jshint to recognize these globals provided by browser/bootstrap. |
+| utilities.js | ✅ | ![utilities jshint](docs/images/test-screenshots/utilities-jshint.png) | ![utilities eslint](docs/images/test-screenshots/utilities-eslint.png) | No warnings or errors found. |
