@@ -13,7 +13,16 @@ from .models import Profile
 
 # Create your views here.
 def signup(request):
-    """Handle user registration with email and password."""
+    """
+    Handle user registration with email and password.
+
+    Creates new CustomUser and associated Profile via signals.
+    Sends welcome email and logs user in automatically on success.
+
+    Returns:
+        - GET: Renders signup form
+        - POST: Redirects to profile_setup on success
+    """
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
@@ -85,7 +94,16 @@ def profile_setup(request):
 
 @login_required
 def profile_edit(request):
-    """Handle profile editing for existing users."""
+    """
+    Handle profile editing for existing users.
+
+    Includes profile picture moderation status handling and
+    automatic cleanup of old profile images when replaced.
+
+    Returns:
+        - GET: Renders edit form with current profile data
+        - POST: Saves changes and redirects to profile view
+    """
     if request.method == "POST":
         # Store reference to old profile image before form processing
         old_profile_image = (

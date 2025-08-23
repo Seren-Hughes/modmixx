@@ -1,9 +1,16 @@
 from django.contrib import admin
-from .models import Profile, CustomUser
 from django.contrib.auth.admin import UserAdmin
+
+from .models import CustomUser, Profile
 
 
 class CustomUserAdmin(UserAdmin):
+    """
+    Admin interface for CustomUser model.
+
+    Customized to work with email-based authentication instead of username.
+    """
+
     model = CustomUser
     list_display = ("email", "is_staff", "is_active")
     list_filter = ("is_staff", "is_active")
@@ -44,6 +51,12 @@ class CustomUserAdmin(UserAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
+    """
+    Admin interface for Profile model with moderation capabilities.
+
+    Includes bulk re-scanning action for profile picture moderation.
+    """
+
     list_display = ("user", "username", "display_name", "moderation_status")
     list_filter = ("moderation_status",)
     search_fields = ("user__username", "username", "display_name")
@@ -53,6 +66,7 @@ class ProfileAdmin(admin.ModelAdmin):
     @admin.action(description="Re-scan profile picture moderation")
     def rescan_moderation(self, request, queryset):
         from django.utils import timezone
+
         from tracks.services.moderation import scan_image_bytes
 
         updated = 0
