@@ -1,3 +1,3 @@
-from django.db import models
-
+# No models to register in core app
+# provides utilities and routing only
 # Create your models here.
