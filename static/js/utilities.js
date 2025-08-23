@@ -1,3 +1,4 @@
+/* global bootstrap */ // for jshint: globals provided by bootstrap
 // Smooth scroll for anchor links (down arrow icon)
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function(e) {

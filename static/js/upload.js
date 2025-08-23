@@ -1,3 +1,4 @@
+/* global bootstrap, DataTransfer */ // for jshint: globals objects provided by browser/bootstrap
 /**
  * Track Upload Modal Management
  * 
