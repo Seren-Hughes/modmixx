@@ -11,6 +11,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 # Create your views here.
 @login_required
 @require_POST
@@ -25,30 +26,35 @@ def comment_edit(request, comment_id):
         request: HttpRequest object
         comment_id: ID of the comment to edit
     Returns:
-        HttpResponse: JSON response for AJAX, or redirect 
+        HttpResponse: JSON response for AJAX, or redirect
     Raises:
-        Http404: If comment does not exist or user does not own the comment 
+        Http404: If comment does not exist or user does not own the comment
     References:
         - https://docs.djangoproject.com/en/5.2/topics/http/shortcuts/#get-object-or-404
         - https://docs.djangoproject.com/en/5.2/ref/request-response/#jsonresponse-objects
     """
     comment = get_object_or_404(Comment, id=comment_id, user=request.user)
-    
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
         # AJAX: Return JSON data, no page refresh - won't interrupt audio playback
         form = CommentForm(request.POST, instance=comment)
         if form.is_valid():
             form.save()
-            return JsonResponse({
-                'success': True,
-                'content': comment.content,
-                'updated_at': comment.updated_at.strftime('%b %d, %Y %I:%M %p') # Format date for display - can be tweaked = https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
-            })
+            return JsonResponse(
+                {
+                    "success": True,
+                    "content": comment.content,
+                    "updated_at": comment.updated_at.strftime(
+                        "%b %d, %Y %I:%M %p"
+                    ),  # Format date for display - can be tweaked = https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
+                }
+            )
         else:
-            return JsonResponse({'success': False, 'errors': form.errors})
+            return JsonResponse({"success": False, "errors": form.errors})
 
-    # fallback: redirect/reload page 
-    return redirect('track_detail', slug=comment.track.slug)
+    # fallback: redirect/reload page
+    return redirect("track_detail", slug=comment.track.slug)
+
 
 @login_required
 @require_POST
@@ -59,26 +65,26 @@ def comment_delete(request, comment_id):
     """
     comment = get_object_or_404(Comment, id=comment_id, user=request.user)
     track_slug = comment.track.slug
-    
+
     # Check if this comment has replies
     has_replies = comment.replies.exists()
-    
+
     if has_replies:
         # Soft delete: mark as deleted but keep replies visible
         comment.deleted = True
         comment.save()
-        delete_type = 'soft'
+        delete_type = "soft"
         parent_cleanup = None
     else:
         # Hard delete: remove completely if no replies
         parent_comment = comment.parent
         comment.delete()
-        delete_type = 'hard'
-        
+        delete_type = "hard"
+
         # Recursive cleanup of soft-deleted parents
         parent_cleanup = []
         current_parent = parent_comment
-        
+
         while current_parent and current_parent.deleted:
             # If parent is soft-deleted and has no more replies, remove it too
             if not current_parent.replies.exists():
@@ -90,44 +96,54 @@ def comment_delete(request, comment_id):
             else:
                 # Parent still has other replies, stop cleanup
                 break
-    
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        return JsonResponse({
-            'success': True, 
-            'delete_type': delete_type,
-            'parent_cleanup': parent_cleanup  # Now a list of IDs to remove
-        })
-    
-    return redirect('track_detail', slug=track_slug)
+
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return JsonResponse(
+            {
+                "success": True,
+                "delete_type": delete_type,
+                "parent_cleanup": parent_cleanup,  # Now a list of IDs to remove
+            }
+        )
+
+    return redirect("track_detail", slug=track_slug)
+
 
 @login_required
 @require_POST
 def post_comment(request):
     form = CommentForm(request.POST)
     if form.is_valid():
-        track_id = request.POST.get('track')
+        track_id = request.POST.get("track")
         track = get_object_or_404(Track, id=track_id)
         comment = form.save(commit=False)
         comment.track = track
         comment.user = request.user
         comment.save()
-        
-        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+
+        if request.headers.get("X-Requested-With") == "XMLHttpRequest":
             html = render_to_string(
                 "comments/_comment.html",
-                {"comment": comment, "level": 0, "user": request.user, "track": track},
-                request=request
+                {
+                    "comment": comment,
+                    "level": 0,
+                    "user": request.user,
+                    "track": track,
+                },
+                request=request,
             )
             return JsonResponse({"success": True, "comment_html": html})
-        
-        return redirect('track_detail', slug=track.slug)
-    
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        return JsonResponse({"success": False, "errors": form.errors}, status=400)
-    
+
+        return redirect("track_detail", slug=track.slug)
+
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return JsonResponse(
+            {"success": False, "errors": form.errors}, status=400
+        )
+
     # Fallback redirect
-    track_id = request.POST.get('track')
+    track_id = request.POST.get("track")
     if track_id:
         track = get_object_or_404(Track, id=track_id)
-        return redirect('track_detail', slug=track.slug)
-    return redirect('/')
+        return redirect("track_detail", slug=track.slug)
+    return redirect("/")

@@ -3,6 +3,7 @@ from django.utils import timezone
 from .models import Track
 from .services.moderation import scan_image_bytes
 
+
 # Register your models here.
 @admin.register(Track)
 class TrackAdmin(admin.ModelAdmin):
@@ -23,7 +24,7 @@ class TrackAdmin(admin.ModelAdmin):
         for track in queryset:
             if not track.track_image:
                 continue
-            
+
             f = track.track_image.open("rb")
             try:
                 allowed, labels, failed = scan_image_bytes(f.read())
@@ -36,13 +37,21 @@ class TrackAdmin(admin.ModelAdmin):
                     track.moderation_status = "PENDING"
                     track.moderation_labels = None
                 else:
-                    track.moderation_status = "APPROVED" if allowed else "REJECTED"
+                    track.moderation_status = (
+                        "APPROVED" if allowed else "REJECTED"
+                    )
                     track.moderation_labels = labels
             finally:
                 f.close()
-            
+
             track.moderated_at = timezone.now()
-            track.save(update_fields=["moderation_status", "moderation_labels", "moderated_at"])
+            track.save(
+                update_fields=[
+                    "moderation_status",
+                    "moderation_labels",
+                    "moderated_at",
+                ]
+            )
             updated += 1
-        
+
         self.message_user(request, f"Re-scanned {updated} track(s).")

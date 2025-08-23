@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load environment variables from env.py if it exists
 # This allows for sensitive information to be kept out of version control
-if os.path.exists(os.path.join(BASE_DIR, 'env.py')):
+if os.path.exists(os.path.join(BASE_DIR, "env.py")):
     import env
 
 
@@ -32,57 +32,62 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG") == "True"
 
-ALLOWED_HOSTS = ['https://modmixx-427f89e87a1b.herokuapp.com/', '.herokuapp.com', 'localhost', '127.0.0.1',]
+ALLOWED_HOSTS = [
+    "https://modmixx-427f89e87a1b.herokuapp.com/",
+    ".herokuapp.com",
+    "localhost",
+    "127.0.0.1",
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django.contrib.sites',  # Required for django-allauth
-    'allauth',  # Django Allauth for authentication
-    'allauth.account',  # Django Allauth for account management
-    'allauth.socialaccount',  # Django Allauth for social accounts
-    'allauth.socialaccount.providers.google',  # Google provider for Allauth
-    'accounts',  # Custom app for user accounts
-    'core', # Core app for generic views like home page, etc.
-    'tracks',  # App for managing tracks
-    'crispy_forms',  # For crispy forms
-    'crispy_bootstrap5',  # For Bootstrap 5 styling with crispy forms
-    'comments',  # App for managing comments
-    'contact',  # App for managing contact forms
-    'storages',  # For AWS S3 storage
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "django.contrib.sites",  # Required for django-allauth
+    "allauth",  # Django Allauth for authentication
+    "allauth.account",  # Django Allauth for account management
+    "allauth.socialaccount",  # Django Allauth for social accounts
+    "allauth.socialaccount.providers.google",  # Google provider for Allauth
+    "accounts",  # Custom app for user accounts
+    "core",  # Core app for generic views like home page, etc.
+    "tracks",  # App for managing tracks
+    "crispy_forms",  # For crispy forms
+    "crispy_bootstrap5",  # For Bootstrap 5 styling with crispy forms
+    "comments",  # App for managing comments
+    "contact",  # App for managing contact forms
+    "storages",  # For AWS S3 storage
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # For serving static files in production
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # For serving static files in production
 ]
 
-ROOT_URLCONF = 'modmixx.urls'
+ROOT_URLCONF = "modmixx.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
@@ -91,14 +96,13 @@ TEMPLATES = [
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-WSGI_APPLICATION = 'modmixx.wsgi.application'
+WSGI_APPLICATION = "modmixx.wsgi.application"
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
-    'django.contrib.auth.backends.ModelBackend',
-
+    "django.contrib.auth.backends.ModelBackend",
     # `allauth` specific authentication methods, such as login by email
-    'allauth.account.auth_backends.AuthenticationBackend',
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 # Database
@@ -109,39 +113,37 @@ AUTHENTICATION_BACKENDS = [
 #        'ENGINE': 'django.db.backends.sqlite3',
 #        'NAME': BASE_DIR / 'db.sqlite3',
 #    }
-#}
+# }
 
-DATABASES = {
-    'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
-}
+DATABASES = {"default": dj_database_url.parse(os.environ.get("DATABASE_URL"))}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
 # Custom User Model
-AUTH_USER_MODEL = 'accounts.CustomUser'
+AUTH_USER_MODEL = "accounts.CustomUser"
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -151,31 +153,33 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 
 # Default primary static files directory
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+    BASE_DIR / "static",
 ]
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # For production static files collection
+STATIC_ROOT = (
+    BASE_DIR / "staticfiles"
+)  # For production static files collection
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
+    "google": {
+        "SCOPE": [
+            "profile",
+            "email",
         ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-            'prompt': 'select_account consent',  # Forces both account picker and consent
+        "AUTH_PARAMS": {
+            "access_type": "online",
+            "prompt": "select_account consent",  # Forces both account picker and consent
         },
-        'VERIFIED_EMAIL': True,
+        "VERIFIED_EMAIL": True,
     }
 }
 
@@ -185,41 +189,43 @@ SOCIALACCOUNT_PROVIDERS = {
 # Environment-specific SITE_ID
 if DEBUG:
     # Local development
-    SITE_ID = 2  
+    SITE_ID = 2
 else:
     # Production site ID for Heroku
-    SITE_ID = 1  
+    SITE_ID = 1
 
 # Current Allauth 65+ settings format
-ACCOUNT_LOGIN_METHODS = {'email'}
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
-ACCOUNT_EMAIL_VERIFICATION = 'none' # Disabled for development
+ACCOUNT_LOGIN_METHODS = {"email"}
+ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
+ACCOUNT_EMAIL_VERIFICATION = "none"  # Disabled for development
 ACCOUNT_ALLOW_REGISTRATION = True
 SOCIALACCOUNT_AUTO_SIGNUP = True
-SOCIALACCOUNT_QUERY_EMAIL = True 
+SOCIALACCOUNT_QUERY_EMAIL = True
 
 # allauth-specific logout settings:
-ACCOUNT_LOGOUT_REDIRECT_URL = '/'  # For allauth logout
+ACCOUNT_LOGOUT_REDIRECT_URL = "/"  # For allauth logout
 ACCOUNT_LOGOUT_ON_GET = True  # Allow GET logout from allauth pages
-ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = False  # Don't auto-logout on password change
+ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = (
+    False  # Don't auto-logout on password change
+)
 
 # Custom user model compatibility
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None # Use email as the unique identifier
-ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # Use email as the unique identifier
+ACCOUNT_USER_MODEL_EMAIL_FIELD = "email"
 
 # Redirect configuration for sheltered community
-LOGIN_REDIRECT_URL = '/login-redirect/' # Authenticated users see track feed
-LOGOUT_REDIRECT_URL = '/' 
-LOGIN_URL = '/login/' # Redirect to login page for unauthenticated users
+LOGIN_REDIRECT_URL = "/login-redirect/"  # Authenticated users see track feed
+LOGOUT_REDIRECT_URL = "/"
+LOGIN_URL = "/login/"  # Redirect to login page for unauthenticated users
 
-SOCIALACCOUNT_STORE_TOKENS = False 
+SOCIALACCOUNT_STORE_TOKENS = False
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
@@ -227,8 +233,10 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = "modmixx-media"
-AWS_S3_REGION_NAME = "eu-west-2" 
-AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+AWS_S3_REGION_NAME = "eu-west-2"
+AWS_S3_CUSTOM_DOMAIN = (
+    f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+)
 
 # AWS S3 settings
 AWS_DEFAULT_ACL = ""
@@ -250,12 +258,14 @@ STORAGES = {
     },
 }
 
-# Perspective API 
+# Perspective API
 PERSPECTIVE_API_KEY = os.environ.get("PERSPECTIVE_API_KEY")
 
 # Rekognition config
 AWS_REGION = os.environ.get("AWS_REGION", "eu-west-1")
-IMAGE_MODERATION_ENABLED = os.environ.get("IMAGE_MODERATION_ENABLED", "true").lower() == "true"
+IMAGE_MODERATION_ENABLED = (
+    os.environ.get("IMAGE_MODERATION_ENABLED", "true").lower() == "true"
+)
 REKOG_MIN_CONFIDENCE = int(os.environ.get("REKOG_MIN_CONFIDENCE", "80"))
 
 # Rekognition credentials

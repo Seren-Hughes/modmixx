@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 class ContactMessage(models.Model):
     name = models.CharField(max_length=100)
@@ -7,9 +8,9 @@ class ContactMessage(models.Model):
     subject = models.CharField(max_length=200)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    responded = models.BooleanField(default=False)  
-    responded_at = models.DateTimeField(null=True, blank=True)  
-    response_notes = models.TextField(blank=True) 
+    responded = models.BooleanField(default=False)
+    responded_at = models.DateTimeField(null=True, blank=True)
+    response_notes = models.TextField(blank=True)
 
     def __str__(self):
         return f"{self.subject} from {self.name} ({self.email})"

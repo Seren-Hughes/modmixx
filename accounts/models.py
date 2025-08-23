@@ -1,19 +1,28 @@
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
-from django.core.files.uploadedfile import InMemoryUploadedFile, TemporaryUploadedFile
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    PermissionsMixin,
+    BaseUserManager,
+)
+from django.core.files.uploadedfile import (
+    InMemoryUploadedFile,
+    TemporaryUploadedFile,
+)
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
 
 # Create your models here.
 
+
 class CustomUserManager(BaseUserManager):
     """
     Custom manager for the User model.
     Handles user creation and normalization.
     """
+
     def create_user(self, email, password=None, **extra_fields):
         if not email:
-            raise ValueError('The Email field must be set')
+            raise ValueError("The Email field must be set")
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -21,16 +30,16 @@ class CustomUserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
 
         return self.create_user(email, password, **extra_fields)
-    
+
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     """
     Custom User model that uses email as the unique identifier.
-    
+
     Fields:
         email: Unique email address for the user.
         first_name: User's first name.
@@ -38,6 +47,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         is_active: Indicates if the user account is active.
         is_staff: Indicates if the user can access the admin site.
     """
+
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
@@ -46,7 +56,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
     def __str__(self):
@@ -65,32 +75,41 @@ class Profile(models.Model):
         pronouns: User-selected pronouns (dropdown choices).
         profile_picture: Optional profile image.
     """
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="profile",
+    )
     username = models.SlugField(
-        max_length=30, 
-        unique=True, 
-        help_text="Your unique profile URL (no spaces, letters/numbers only)"
+        max_length=30,
+        unique=True,
+        help_text="Your unique profile URL (no spaces, letters/numbers only)",
     )
     display_name = models.CharField(
         max_length=50,
         blank=True,
-        null=True, 
-        help_text="Your name as shown to others (can have spaces)"
+        null=True,
+        help_text="Your name as shown to others (can have spaces)",
     )
     bio = models.TextField(blank=True, null=True)
     pronouns = models.CharField(
-        max_length=50, 
-        blank=True, 
-        help_text="e.g., she/her, they/them, he/they, xe/xir"
+        max_length=50,
+        blank=True,
+        help_text="e.g., she/her, they/them, he/they, xe/xir",
     )
-    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
+    profile_picture = models.ImageField(
+        upload_to="profile_pictures/", blank=True, null=True
+    )
 
     MOD_STATUS = (
         ("PENDING", "Pending"),
         ("APPROVED", "Approved"),
         ("REJECTED", "Rejected"),
     )
-    moderation_status = models.CharField(max_length=9, choices=MOD_STATUS, default="PENDING")
+    moderation_status = models.CharField(
+        max_length=9, choices=MOD_STATUS, default="PENDING"
+    )
     moderation_labels = models.JSONField(blank=True, null=True)
     moderated_at = models.DateTimeField(blank=True, null=True)
 
@@ -111,11 +130,18 @@ class Profile(models.Model):
         super().save(*args, **kwargs)
 
         # Delete the old profile picture if it was replaced or cleared
-        if old and old.profile_picture and old.profile_picture != self.profile_picture:
+        if (
+            old
+            and old.profile_picture
+            and old.profile_picture != self.profile_picture
+        ):
             if not self.profile_picture:
                 # User cleared the image via the clear checkbox
                 old.profile_picture.delete(save=False)
-            elif isinstance(self.profile_picture.file, (InMemoryUploadedFile, TemporaryUploadedFile)):
+            elif isinstance(
+                self.profile_picture.file,
+                (InMemoryUploadedFile, TemporaryUploadedFile),
+            ):
                 # User uploaded a new image, so remove the old file
                 old.profile_picture.delete(save=False)
 

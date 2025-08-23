@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from django.core.files.uploadedfile import UploadedFile
 import os
 
+
 # Create your models here.
 class Track(models.Model):
     """
@@ -24,37 +25,52 @@ class Track(models.Model):
         save(): Auto-generates a slug from the title if not provided.
 
     """
+
     # Basic track information
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, blank=True, null=True)
     description = models.TextField(max_length=1000, blank=True, null=True)
 
     # File and image fields
-    audio_file = models.FileField(upload_to='tracks/', blank=True)
-    track_image = models.ImageField(upload_to='track_images/', blank=True, null=True)
+    audio_file = models.FileField(upload_to="tracks/", blank=True)
+    track_image = models.ImageField(
+        upload_to="track_images/", blank=True, null=True
+    )
 
     # User who uploaded the track
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='tracks')
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="tracks",
+    )
 
-     # Timestamps
+    # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     # Moderation fields
-    MOD_STATUS = (("PENDING","Pending"), ("APPROVED","Approved"), ("REJECTED","Rejected"))
-    moderation_status = models.CharField(max_length=9, choices=MOD_STATUS, default="PENDING")
+    MOD_STATUS = (
+        ("PENDING", "Pending"),
+        ("APPROVED", "Approved"),
+        ("REJECTED", "Rejected"),
+    )
+    moderation_status = models.CharField(
+        max_length=9, choices=MOD_STATUS, default="PENDING"
+    )
     moderation_labels = models.JSONField(blank=True, null=True)
     moderated_at = models.DateTimeField(blank=True, null=True)
 
     # Track duration
-    duration = models.PositiveIntegerField(null=True, blank=True, help_text="Duration in seconds")
+    duration = models.PositiveIntegerField(
+        null=True, blank=True, help_text="Duration in seconds"
+    )
 
     class Meta:
-        ordering = ['-created_at'] # Newest tracks first
+        ordering = ["-created_at"]  # Newest tracks first
 
     def __str__(self):
         return f"{self.title} by {self.user.profile.display_name or self.user.profile.username}"
-    
+
     def save(self, *args, **kwargs):
         # Generate slug from title if not provided OR if title has changed
         if not self.slug or (self.pk and self.title):
@@ -67,7 +83,11 @@ class Track(models.Model):
                         base_slug = slugify(self.title)
                         slug = base_slug
                         counter = 1
-                        while Track.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                        while (
+                            Track.objects.filter(slug=slug)
+                            .exclude(pk=self.pk)
+                            .exists()
+                        ):
                             slug = f"{base_slug}-{counter}"
                             counter += 1
                         self.slug = slug
@@ -82,33 +102,31 @@ class Track(models.Model):
                     slug = f"{base_slug}-{counter}"
                     counter += 1
                 self.slug = slug
-        super().save(*args, **kwargs) 
-
+        super().save(*args, **kwargs)
 
     def get_audio_filename(self):
         """Return just the filename without path."""
         if self.audio_file:
             return os.path.basename(self.audio_file.name)
         return "No file"
-    
+
     def get_image_filename(self):
         """Return just the image filename without path."""
         if self.track_image:
             return os.path.basename(self.track_image.name)
         return "No image"
-    
+
     def get_duration_display(self):
         """Return duration in MM:SS format"""
         if not self.duration:
             return "Unknown"
-        
+
         minutes = self.duration // 60
         seconds = self.duration % 60
         return f"{minutes}:{seconds:02d}"
-    
-    
-    
-# Signal handler to delete files from S3 when a Track is deleted    
+
+
+# Signal handler to delete files from S3 when a Track is deleted
 @receiver(post_delete, sender=Track)
 def delete_files_on_track_delete(sender, instance, **kwargs):
     """Delete audio and image files from S3 when a Track instance is deleted.
