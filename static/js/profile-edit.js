@@ -1,5 +1,7 @@
+/* global connectGoogle */ // for eslint: function called when user clicks html "Connect Google" button
+/* exported connectGoogle */ // for eslint: function used by external code
 function connectGoogle() {
-      const url = "/3rdparty/";
+      const url = '/3rdparty/';
       const popup = window.open(
         url, 
         'google_connect', 
