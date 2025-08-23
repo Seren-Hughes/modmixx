@@ -1,10 +1,10 @@
-from django.db import models
+import os
+
 from django.conf import settings
-from django.utils.text import slugify
+from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
-from django.core.files.uploadedfile import UploadedFile
-import os
+from django.utils.text import slugify
 
 
 # Create your models here.
@@ -69,7 +69,9 @@ class Track(models.Model):
         ordering = ["-created_at"]  # Newest tracks first
 
     def __str__(self):
-        return f"{self.title} by {self.user.profile.display_name or self.user.profile.username}"
+        display_name = self.user.profile.display_name
+        username = self.user.profile.username
+        return f"{self.title} by {display_name or username}"
 
     def save(self, *args, **kwargs):
         # Generate slug from title if not provided OR if title has changed

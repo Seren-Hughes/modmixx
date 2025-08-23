@@ -1,16 +1,16 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.http import JsonResponse
+from django.db.models import Prefetch
+from django.http import Http404, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.utils.timesince import timesince
-from django.contrib import messages
-from django.http import Http404
-from django.db.models import Count, Q, Prefetch
-from .models import Track
-from .forms import TrackUploadForm
-from comments.models import Comment
+
 from comments.forms import CommentForm
+from comments.models import Comment
+
+from .forms import TrackUploadForm
+from .models import Track
 
 
 # Create your views here.
@@ -61,9 +61,10 @@ def track_detail(request, slug):
     """
     Display individual track page with full details and comment functionality.
 
-    This view provides comprehensive track information including audio playback,
-    user comments, and interaction capabilities. Handles both GET requests for
-    viewing and POST requests for comment submission with automated content moderation.
+    This view provides comprehensive track information including audio
+    playback, user comments, and interaction capabilities. Handles
+    both GET requests for viewing and POST requests for comment submission
+    with automated content moderation.
 
     Features:
         - Full track metadata display with audio player
@@ -87,10 +88,12 @@ def track_detail(request, slug):
         slug (str): Unique URL slug identifier for the track
 
     Returns:
-        HttpResponse: Rendered track detail template with track data and comments
+        HttpResponse: Rendered track detail template with track data
+        and comments
 
     Raises:
-        Http404: If track with specified slug does not exist or user lacks access
+        Http404: If track with specified slug does not exist
+        or user lacks access
 
     Template: tracks/track_detail.html
     Context:
@@ -146,11 +149,13 @@ def track_detail(request, slug):
 @login_required
 def track_upload(request):
     """
-    Handle track upload with comprehensive form validation and security measures.
+    Handle track upload with comprehensive form validation and security
+    measures.
 
-    This view processes track uploads through a modal form interface, implementing
-    multiple layers of validation for security and data integrity. On validation
-    errors, maintains modal state and provides detailed user feedback.
+    This view processes track uploads through a modal form interface,
+    implementing multiple layers of validation for security and data
+    integrity. On validation errors, maintains modal state and provides
+    detailed user feedback.
 
     Security Features:
         - XSS prevention through input validation
@@ -168,10 +173,12 @@ def track_upload(request):
         - User notification for pending moderation status
 
     Args:
-        request (HttpRequest): The HTTP request object with form data and files
+        request (HttpRequest): The HTTP request object with form data
+        and files
 
     Returns:
-        HttpResponse: Redirect to track detail on success, or rendered feed with errors
+        HttpResponse: Redirect to track detail on success,
+        or rendered feed with errors
 
     Template: tracks/feed.html (on validation errors)
     Context (on errors):
@@ -192,12 +199,15 @@ def track_upload(request):
             if track.moderation_status == "PENDING":
                 messages.warning(
                     request,
-                    f'Track "{track.title}" uploaded successfully! Your artwork is pending moderation and will be reviewed shortly.',
+                    f'Track "{track.title}" uploaded successfully! '
+                    "Your artwork is pending moderation "
+                    "and will be reviewed shortly.",
                 )
             elif track.moderation_status == "REJECTED":
                 messages.error(
                     request,
-                    f'Track "{track.title}" was uploaded but the artwork was flagged during moderation.',
+                    f'Track "{track.title}" was uploaded but the artwork '
+                    "was flagged during moderation.",
                 )
             else:
                 messages.success(
@@ -208,8 +218,10 @@ def track_upload(request):
         else:
             # Handle validation errors with user-friendly messaging
             error_messages = {
-                "audio_file": "Please upload a valid audio file (MP3, WAV, FLAC, M4A, AAC, or OGG)",
-                "track_image": "Please upload a valid image file (JPG, PNG, or WebP)",
+                "audio_file": "Please upload a valid audio file "
+                "(MP3, WAV, FLAC, M4A, AAC, or OGG)",
+                "track_image": "Please upload a valid image file "
+                "(JPG, PNG, or WebP)",
                 "title": "Please check your track title",
                 "description": "Please check your track description",
             }
@@ -243,9 +255,9 @@ def track_edit(request, slug):
     """
     Handle track editing with file preservation and validation.
 
-    This view allows track owners to modify their track metadata and optionally
-    replace audio or image files. Implements ownership verification and preserves
-    existing files when not replaced during editing.
+    This view allows track owners to modify their track metadata and
+    optionally replace audio or image files. Implements ownership verification
+    and preserves existing files when not replaced during editing.
 
     Features:
         - Track ownership verification for security
@@ -265,7 +277,8 @@ def track_edit(request, slug):
         slug (str): Unique URL slug identifier for the track to edit
 
     Returns:
-        HttpResponse: Rendered edit form on GET, redirect to track detail on success
+        HttpResponse: Rendered edit form on GET,
+        redirect to track detail on success
 
     Raises:
         Http404: If track does not exist or user is not the owner
@@ -349,7 +362,8 @@ def track_delete(request, slug):
         slug (str): Unique URL slug identifier for the track to delete
 
     Returns:
-        HttpResponse: Redirect to feed on successful deletion, track detail on invalid request
+        HttpResponse: Redirect to feed on successful deletion,
+        track detail on invalid request
 
     Raises:
         Http404: If track does not exist or user is not the owner

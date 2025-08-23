@@ -1,23 +1,28 @@
-from django import forms
-from django.core.validators import FileExtensionValidator
-from django.core.exceptions import ValidationError
-from django.utils import timezone
-from core.utils import get_toxicity_score
-from .services.moderation import scan_image_bytes
-from .models import Track
 import os
 import re
-from ulid import ULID
+
+from django import forms
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
+from django.utils import timezone
 from mutagen import File as MutagenFile
+from ulid import ULID
+
+from core.utils import get_toxicity_score
+
+from .models import Track
+from .services.moderation import scan_image_bytes
 
 
 class TrackUploadForm(forms.ModelForm):
     """
-    Form for uploading and editing tracks with comprehensive validation and security measures.
+    Form for uploading and editing tracks with comprehensive validation
+    and security measures.
 
-    This form handles track creation and editing while preserving existing files when
-    only metadata is updated. Implements multiple security validations following
-    OWASP guidelines for file upload security and XSS prevention.
+    This form handles track creation and editing while preserving existing
+    files when only metadata is updated. Implements multiple security
+    validations following OWASP guidelines for file upload security and XSS
+    prevention.
 
     Security Features:
         - File size limits (100MB for audio, 10MB for images)
@@ -29,11 +34,12 @@ class TrackUploadForm(forms.ModelForm):
     Fields:
         title (str): The title of the track (max 200 characters).
         description (str): A description of the track (max 2000 characters).
-        audio_file (File): The audio file - MP3, WAV, FLAC, M4A, AAC, or OGG format.
+        audio_file (File): The audio file - MP3, WAV, FLAC, M4A, AAC, or OGG.
         track_image (File): Optional cover image - JPG, PNG, or WebP format.
 
     Validation:
-        - Audio files: Content-type verification, size limits, filename sanitization
+        - Audio files: Content-type verification, size limits,
+          filename sanitization
         - Images: Format validation, size limits, dimension checks
         - Text fields: XSS prevention, HTML tag filtering, length limits
         - Edit mode: Preserves existing files when not replaced
@@ -50,7 +56,9 @@ class TrackUploadForm(forms.ModelForm):
                 allowed_extensions=["mp3", "wav", "flac", "m4a", "aac", "ogg"]
             ),
         ],
-        help_text="Supported formats: MP3, WAV, FLAC, M4A, AAC, OGG (max 100MB)",
+        help_text=(
+            "Supported formats: MP3, WAV, FLAC, M4A, AAC, OGG (max 100MB)",
+        ),
         widget=forms.FileInput(
             attrs={"accept": "audio/*", "class": "form-control"}
         ),
@@ -110,8 +118,9 @@ class TrackUploadForm(forms.ModelForm):
         """
         Validate uploaded audio files for security and format compliance.
 
-        Implements comprehensive validation following OWASP File Upload Guidelines
-        to prevent malicious uploads and ensure proper file handling.
+        Implements comprehensive validation following OWASP File Upload
+        Guidelines to prevent malicious uploads and ensure proper file
+        handling.
 
         Security measures:
             - File size validation (100MB limit)
@@ -120,17 +129,22 @@ class TrackUploadForm(forms.ModelForm):
             - Extension validation (handled by FileExtensionValidator)
 
         Returns:
-            File: Validated and sanitized audio file, or existing file for edits
+            File: Validated and sanitized audio file, or existing file
+            for edits
 
         Raises:
             ValidationError: If file fails security or format validation
 
         References:
-        - https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload
-        - https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html
-        - https://docs.djangoproject.com/en/5.2/ref/validators/ = djangos native validators
-        - https://docs.djangoproject.com/en/5.2/topics/security/#user-uploaded-content-security
-        - https://cwe.mitre.org/data/definitions/22.html
+            - https://owasp.org/www-community/vulnerabilities/
+              Unrestricted_File_Upload
+            - https://cheatsheetseries.owasp.org/cheatsheets/
+              Content_Security_Policy_Cheat_Sheet.html
+            - https://docs.djangoproject.com/en/5.2/ref/validators/
+              (Django's native validators)
+            - https://docs.djangoproject.com/en/5.2/topics/security/
+              #user-uploaded-content-security
+            - https://cwe.mitre.org/data/definitions/22.html
         """
         audio_file = self.cleaned_data.get("audio_file")
 
@@ -204,7 +218,8 @@ class TrackUploadForm(forms.ModelForm):
             - AWS Rekognition content moderation (fail-open)
 
         Returns:
-            ImageFile: Validated and sanitized image file, or existing file for edits
+            ImageFile: Validated and sanitized image file, or existing file
+            for edits
 
         Raises:
             ValidationError: If image fails security or format validation
@@ -245,7 +260,8 @@ class TrackUploadForm(forms.ModelForm):
             ):
                 if track_image.content_type not in allowed_image_types:
                     raise forms.ValidationError(
-                        "Invalid image type. Please upload JPG, PNG, or WebP files."
+                        "Invalid image type. Please upload JPG, PNG, "
+                        "or WebP files."
                     )
 
             # Image dimension validation - prevent resource exhaustion
@@ -277,7 +293,7 @@ class TrackUploadForm(forms.ModelForm):
                     )
             except forms.ValidationError:
                 raise
-            except Exception as e:
+            except Exception:
                 # This shouldn't happen but keep as backup *
                 self._moderation_failed = True
 
@@ -301,7 +317,8 @@ class TrackUploadForm(forms.ModelForm):
 
     def clean_title(self):
         """
-        Validate track title for security, format compliance and content moderation using Perspective API.
+        Validate track title for security, format compliance and
+        content moderation using Perspective API.
 
         Implements comprehensive input validation following OWASP guidelines
         to prevent Cross-Site Scripting (XSS) and injection attacks.
@@ -321,8 +338,10 @@ class TrackUploadForm(forms.ModelForm):
             ValidationError: If title contains malicious content or is invalid
 
         References:
-            - OWASP XSS Prevention: https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
-            - OWASP Input Validation: https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html
+            - OWASP XSS Prevention:
+              https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+            - OWASP Input Validation:
+              https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html
         """
         title = self.cleaned_data.get("title")
 
@@ -334,7 +353,8 @@ class TrackUploadForm(forms.ModelForm):
                 toxicity = get_toxicity_score(title)
                 if toxicity > 0.7:
                     raise ValidationError(
-                        "Your track title may contain inappropriate language. Please revise."
+                        "Your track title may contain inappropriate language."
+                        " Please revise."
                     )
             except ValidationError:
                 raise  # Re-raise validation errors
@@ -372,7 +392,8 @@ class TrackUploadForm(forms.ModelForm):
             for pattern in dangerous_patterns:
                 if pattern in title_lower:
                     raise forms.ValidationError(
-                        f"Title contains potentially harmful content: '{pattern}'. "
+                        f"Title contains potentially harmful content: "
+                        f"'{pattern}'. "
                         "Please remove any scripts or suspicious content."
                     )
 
@@ -380,10 +401,12 @@ class TrackUploadForm(forms.ModelForm):
 
     def clean_description(self):
         """
-        Validate track description for security, content compliance and moderation using Perspective API.
+        Validate track description for security, content compliance
+        and moderation using Perspective API.
 
-        Implements comprehensive content filtering to prevent Cross-Site Scripting (XSS)
-        and other injection attacks while maintaining usability for legitimate content.
+        Implements comprehensive content filtering to prevent Cross-Site
+        Scripting (XSS) and other injection attacks while maintaining
+        usability for legitimate content.
         Blocks descriptions with toxicity score above 0.7 threshold.
 
         Security measures:
@@ -394,15 +417,18 @@ class TrackUploadForm(forms.ModelForm):
             - Whitespace normalization
 
         Returns:
-            str: Validated and sanitized description with normalized whitespace
+            str: Validated and sanitized description with
+            normalized whitespace
 
         Raises:
             ValidationError: If description contains malicious content
 
         References:
-            - OWASP XSS Prevention: https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
-            - OWASP Input Validation: https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html
-            - CWE-79 XSS: https://cwe.mitre.org/data/definitions/79.html
+        - OWASP XSS Prevention:
+        https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+        - OWASP Input Validation:
+        https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html
+        - CWE-79 XSS: https://cwe.mitre.org/data/definitions/79.html
         """
         description = self.cleaned_data.get("description")
 
@@ -414,7 +440,8 @@ class TrackUploadForm(forms.ModelForm):
                 toxicity = get_toxicity_score(description)
                 if toxicity > 0.7:
                     raise ValidationError(
-                        "Your track description may contain inappropriate language. Please revise."
+                        "Your track description may contain "
+                        "inappropriate language. Please revise."
                     )
             except ValidationError:
                 raise  # Re-raise validation errors
@@ -446,7 +473,8 @@ class TrackUploadForm(forms.ModelForm):
             for pattern in dangerous_patterns:
                 if pattern in description_lower:
                     raise forms.ValidationError(
-                        f"Description contains potentially harmful content: '{pattern}'. "
+                        f"Description contains potentially harmful content: "
+                        f"'{pattern}'. "
                         "Please remove any scripts or suspicious content."
                     )
 

@@ -1,4 +1,5 @@
 import logging
+
 import boto3
 from django.conf import settings
 
@@ -40,7 +41,25 @@ def _client():
 
 def scan_image_bytes(image_bytes: bytes):
     """
-    Returns: (allowed: bool, labels: list, failed: bool)
+    Scan image content using AWS Rekognition for moderation.
+
+    Analyzes image bytes for inappropriate content including nudity,
+    violence, hate symbols, and drug-related content. Implements
+    confidence-based thresholds for different content types.
+
+    Args:
+        image_bytes (bytes): Raw image data to analyze
+
+    Returns:
+        tuple: (allowed: bool, labels: list, failed: bool)
+            - allowed: Whether image passes moderation
+            - labels: List of detected moderation labels with confidence
+            - failed: Whether the scan process failed (fail-open policy)
+
+    Confidence Thresholds:
+        - Drug content: 99% (avoid false positives)
+        - Explicit/violent content: 85% (stricter enforcement)
+        - Other inappropriate content: 80% (default minimum)
     """
     if not getattr(settings, "IMAGE_MODERATION_ENABLED", True):
         return True, [], False

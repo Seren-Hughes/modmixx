@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils import timezone
+
 from .models import Track
 from .services.moderation import scan_image_bytes
 
@@ -7,6 +8,20 @@ from .services.moderation import scan_image_bytes
 # Register your models here.
 @admin.register(Track)
 class TrackAdmin(admin.ModelAdmin):
+    """
+    Admin interface for Track model with moderation capabilities.
+
+    Provides track management and bulk moderation actions for
+    community content review. Includes AWS Rekognition re-scanning
+    functionality for manual content review workflow.
+
+    Features:
+        - List view with moderation status filtering
+        - Search across track metadata and user information
+        - Bulk re-scanning action for image moderation
+        - Read-only moderation fields to preserve audit trail
+    """
+
     list_display = ["title", "user", "created_at", "moderation_status"]
     list_filter = ["moderation_status", "created_at"]
     search_fields = ["title", "description", "user__username"]

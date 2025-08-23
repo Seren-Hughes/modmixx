@@ -1,4 +1,5 @@
 from django.urls import path
+
 from . import views
 
 # URL patterns for the tracks app
