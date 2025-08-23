@@ -39,3 +39,16 @@ All pages tested using [W3C Markup Validator](https://validator.w3.org/).
 
 Testing with [W3C CSS Validator](https://jigsaw.w3.org/css-validator/).
 
+All CSS files validated - no errors found.
+
+![css validation screenshot](docs/images/test-screenshots/css-validation-results.png)
+
+| File | Status | Notes |
+|-----|--------|-------|
+| base.css | ✅ |  |
+| components.css | ✅ |  |
+| layout.css | ✅ | The CSS mask property on the hero image with linear-gradient was flagging validation errors despite working correctly in all modern browsers. Alternative attempts included CSS gradient overlays with mix-blend-mode, pseudo-element approaches with various blend modes & SVG mask definitions. Fix: removed the CSS mask property entirely and achieved a similar soft fade effect by applying a gradient mask with Gaussian blur directly to the hero image in Photoshop. I considered leaving the error in place to avoid disrupting the existing design, but ultimately decided on a small visual compromise for ensured compatibility. |
+| profile.css | ✅ |  |
+| tracks.css | ✅ |  |
+| variables.css | ✅ |  |
+
