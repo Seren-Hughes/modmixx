@@ -13,7 +13,7 @@ from django.core.wsgi import get_wsgi_application
 
 # Only import env.py if it exists (local development)
 if os.path.exists("env.py"):
-    import env
+    import env  # noqa: F401
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "modmixx.settings")
 

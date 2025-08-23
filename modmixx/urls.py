@@ -20,14 +20,21 @@ from django.urls import path, include
 
 
 urlpatterns = [
+    # Django admin interface
     path("admin/", admin.site.urls),
+    # Core app - home, about, login redirects
     path("", include("core.urls")),
+    # User authentication and profiles
     path("", include("accounts.urls")),
+    # Django Allauth authentication (login, signup, social auth)
     path("", include("allauth.urls")),
+    # Music track management and discovery
     path("tracks/", include("tracks.urls")),
+    # Comment system with threading support
     path(
         "comments/",
         include(("comments.urls", "comments"), namespace="comments"),
     ),
+    # Contact form and admin communication
     path("contact/", include("contact.urls")),
 ]
