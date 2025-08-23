@@ -6,6 +6,13 @@ admin.site.register(Comment)
 
 
 class CommentAdmin(admin.ModelAdmin):
+    """
+    Admin interface for Comment model with moderation capabilities.
+
+    Provides filtering and search functionality for comment management.
+    Supports bulk moderation actions for content review workflow.
+    """
+
     list_display = (
         "user",
         "track",

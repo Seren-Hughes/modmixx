@@ -42,7 +42,8 @@ class CommentForm(forms.ModelForm):
                 toxicity = get_toxicity_score(content)
                 if toxicity > 0.7:
                     raise ValidationError(
-                        "Your comment may contain toxic language. Please revise."
+                        "Your comment may contain toxic language. "
+                        "Please revise."
                     )
             except ValidationError:
                 # Re-raise validation errors (don't suppress toxicity blocks)

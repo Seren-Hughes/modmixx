@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
@@ -30,13 +30,13 @@ def comment_edit(request, comment_id):
     Raises:
         Http404: If comment does not exist or user does not own the comment
     References:
-        - https://docs.djangoproject.com/en/5.2/topics/http/shortcuts/#get-object-or-404
-        - https://docs.djangoproject.com/en/5.2/ref/request-response/#jsonresponse-objects
+        Django get_object_or_404 and JsonResponse documentation
     """
     comment = get_object_or_404(Comment, id=comment_id, user=request.user)
 
     if request.headers.get("X-Requested-With") == "XMLHttpRequest":
-        # AJAX: Return JSON data, no page refresh - won't interrupt audio playback
+        # AJAX: Return JSON data, no page refresh
+        # - so it won't interrupt audio playback
         form = CommentForm(request.POST, instance=comment)
         if form.is_valid():
             form.save()
@@ -44,9 +44,11 @@ def comment_edit(request, comment_id):
                 {
                     "success": True,
                     "content": comment.content,
+                    # Format date for display
+                    # Reference: Python strftime documentation
                     "updated_at": comment.updated_at.strftime(
                         "%b %d, %Y %I:%M %p"
-                    ),  # Format date for display - can be tweaked = https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
+                    ),
                 }
             )
         else:
@@ -102,7 +104,8 @@ def comment_delete(request, comment_id):
             {
                 "success": True,
                 "delete_type": delete_type,
-                "parent_cleanup": parent_cleanup,  # Now a list of IDs to remove
+                # Include parent comment ID list to remove
+                "parent_cleanup": parent_cleanup,
             }
         )
 
@@ -112,6 +115,29 @@ def comment_delete(request, comment_id):
 @login_required
 @require_POST
 def post_comment(request):
+    """
+    Create a new comment or reply to an existing comment.
+
+    Handles both top-level comments and threaded replies with AJAX support.
+    Validates content via Perspective API before saving.
+
+    Args:
+        request: HttpRequest containing comment form data
+
+    POST Parameters:
+        track: Track ID to comment on
+        content: Comment text content
+        parent: Optional parent comment ID for replies
+
+    Returns:
+        JsonResponse: For AJAX requests with rendered comment HTML
+        HttpResponseRedirect: For regular form submissions
+
+    Content Moderation:
+        - Automatic toxicity detection via Perspective API
+        - Comments blocked if toxicity score > 0.7
+        - Graceful fallback if moderation service unavailable
+    """
     form = CommentForm(request.POST)
     if form.is_valid():
         track_id = request.POST.get("track")
