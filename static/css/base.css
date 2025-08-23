@@ -1,9 +1,11 @@
-/* Global styles and typography */
+/* =========== Global styles and typography ==========*/
+/* Base layout */
 html, body {
     height: 100%;
     min-height: 100%;
 }
 
+/* Gradient background */
 body {
     background: linear-gradient(90deg,
         var(--color-accent-1) 0%,
@@ -17,6 +19,8 @@ body {
     min-height: 100vh;
 }
 
+/* ===== TYPOGRAPHY ===== */
+/* Main headings with brand styling */
 h1, h2 {
     font-family: var(--font-accent);
     font-weight: 700;
@@ -28,6 +32,7 @@ p {
     color: var(--color-text);
 }
 
+/* Title with gradient text effect */
 .color-title {
     font-family: var(--font-accent);
     font-weight: 700;
@@ -49,7 +54,7 @@ p {
 
 /* ============ MEDIA QUERIES ============ */
 
-
+/* Large tablet and below */
 @media (max-width: 992px) {
     .color-title {
         font-size: 2.1rem;
@@ -60,6 +65,7 @@ p {
     }
 }
 
+/* Tablet size devices */
 @media (max-width: 768px) {
     .color-title {
         font-size: 1.7rem;
@@ -76,6 +82,7 @@ p {
     }
 }
 
+/* Mobile devices */
 @media (max-width: 480px) {
     .color-title {
         font-size: 1.3rem;
@@ -92,6 +99,7 @@ p {
     }
 }
 
+/* Small mobile devices */
 @media (max-width: 375px) {
     .color-title {
         font-size: 1.1rem;
