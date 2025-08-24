@@ -253,6 +253,8 @@ All pages tested across multiple devices and browsers to ensure consistent user 
 |--------|------------------|--------|-------|----------|
 | ![Create Post Desktop](docs/images/test-screenshots/responsiveness/create-modal-desktop.png)| ![Create Post Tablet](docs/images/test-screenshots/responsiveness/tablet/create-post-ipad.png) | ![Create Post Tablet Portrait](docs/images/test-screenshots/responsiveness/tablet/create-post-ipad-portrait.png) | ![Create Post Mobile](docs/images/test-screenshots/responsiveness/mobile/create-post-modal-iphone.png) | ![Create Post Mobile Landscape](docs/images/test-screenshots/responsiveness/mobile/create-post-modal-pixel-landscape.png) |
 
+**Notes:** Mobile UX improvement identified - drag and drop instructions shown on mobile devices where this functionality isn't supported. Future enhancement: JavaScript detection to show "Tap to select file" on touch devices instead of "Drag & drop" instructions.
+
 ## Track Detail Page Responsiveness
 
 | Desktop | Tablet | Tablet Portrait | Mobile | Mobile Landscape |
@@ -271,3 +273,33 @@ All pages tested across multiple devices and browsers to ensure consistent user 
 |--------|------------------|--------|-------|----------|
 | ![Error Desktop](docs/images/test-screenshots/responsiveness/404-desktop.png)| ![Error Tablet](docs/images/test-screenshots/responsiveness/tablet/404-ipad.png) | ![Error Tablet Portrait](docs/images/test-screenshots/responsiveness/tablet/404-ipad-portrait.png) | ![404 Mobile](docs/images/test-screenshots/responsiveness/mobile/404-iphone.png) | ![404 Mobile Landscape](docs/images/test-screenshots/responsiveness/mobile/404-iphone-landscape.png) |
 
+
+### Responsive Design Summary
+
+**Testing Results:**
+- **All Core Functionality**: Responsive and accessible across devices
+- **Navigation**: Adapts perfectly from desktop to mobile hamburger menu
+- **Forms**: Touch-friendly inputs and proper validation on all screen sizes
+- **Modal Windows**: Scale appropriately for device constraints
+- **Audio Player**: Fully functional across all tested devices and browsers
+
+**Cross-Browser Compatibility:**
+- **Chrome**: Perfect rendering and functionality
+- **Firefox**: Full compatibility with minor native audio player styling differences
+- **Safari (iOS/macOS)**: Complete functionality with native iOS audio controls
+- **Edge**: Consistent behaviour and appearance
+
+**Known Design Considerations (Future Scope):**
+- **Audio Player Styling**: Native browser audio controls vary across platforms (iOS Safari, Firefox) but maintain full functionality. A custom audio player with consistent design and waveform visualization is planned for future versions using Web Audio API.
+- **File Upload UX**: Mobile devices show drag-and-drop instructions where only tap-to-select is supported. JavaScript enhancement planned to detect touch devices and update instructions accordingly.
+- **Minor Visual Polish**: Some spacing and alignment refinements identified for future iterations, though all functionality remains intact across devices.
+
+**Technical Notes:**
+- All responsive breakpoints function correctly
+- No functional issues identified across any tested device/browser combination
+- Complex features (file uploads, modals, infinite scroll) work consistently
+
+### Conclusion
+While aesthetic and branding improvements are planned for future versions, the current implementation successfully delivers a fully functional and accessible user experience on all platforms tested.
+
+**Last Updated: [24/08/2025]**
