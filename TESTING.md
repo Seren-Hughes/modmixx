@@ -5,6 +5,7 @@
 2. [CSS Validation](#css-validation)
 3. [JavaScript Validation](#javascript-validation)
 4. [Python Code Quality](#python-code-quality)
+5. [Lighthouse Performance Testing](#lighthouse-performance-testing)
 
 ## HTML Validation
 
@@ -108,3 +109,27 @@ All Python files validated using multiple tools to ensure comprehensive code qua
 - Eliminated unused variables (F841) in exception handling
 - Applied consistent code formatting via Black
 - Enhanced docstrings throughout all applications
+
+
+## Lighthouse Performance Testing
+
+All pages tested using [Google Lighthouse](https://developers.google.com/web/tools/lighthouse) for performance, accessibility, best practices, and SEO optimization. Testing conducted on both desktop and mobile devices to ensure responsive performance.
+
+### Performance Results
+
+| Page | Desktop Results | Mobile Results | Notes |
+|------|----------------|----------------|-------|
+| Home | ![Home Desktop](docs/images/test-screenshots/lighthouse/home-lighthouse-desktop.png) | ![Home Mobile](docs/images/test-screenshots/lighthouse/home-lighthouse-mobile.png) |  |
+| About | ![About Desktop](docs/images/test-screenshots/lighthouse/about-lighthouse-desktop.png) | ![About Mobile](docs/images/test-screenshots/lighthouse/about-lighthouse-mobile.png) |  |
+| Contact | ![Contact Desktop](docs/images/test-screenshots/lighthouse/contact-lighthouse-desktop.png) | ![Contact Mobile](docs/images/test-screenshots/lighthouse/contact-lighthouse-mobile.png) |  |
+| Sign Up | ![Signup Desktop](docs/images/test-screenshots/lighthouse/signup-lighthouse-desktop.png) | ![Signup Mobile](docs/images/test-screenshots/lighthouse/signup-lighthouse-mobile.png) |  |
+| Login | ![Login Desktop](docs/images/test-screenshots/lighthouse/login-lighthouse-desktop.png) | ![Login Mobile](docs/images/test-screenshots/lighthouse/login-lighthouse-mobile.png) | Google button contrast improved |
+| Track Feed | ![Feed Desktop](docs/images/test-screenshots/lighthouse/feed-lighthouse-desktop.png) | ![Feed Mobile](docs/images/test-screenshots/lighthouse/feed-lighthouse-mobile.png) |  |
+| Track Detail | ![Track Desktop](docs/images/test-screenshots/lighthouse/track-detail-lighthouse-desktop.png) | ![Track Mobile](docs/images/test-screenshots/lighthouse/track-detail-lighthouse-mobile.png) |  |
+| Profile View | ![Profile Desktop](docs/images/test-screenshots/lighthouse/profile-lighthouse-desktop.png) | ![Profile Mobile](docs/images/test-screenshots/lighthouse/profile-lighthouse-mobile.png) |  |
+| Profile Edit | ![Edit Desktop](docs/images/test-screenshots/lighthouse/profile-edit-lighthouse-desktop.png) | ![Edit Mobile](docs/images/test-screenshots/lighthouse/profile-edit-lighthouse-mobile.png) |  |
+| Delete Account | ![Delete Desktop](docs/images/test-screenshots/lighthouse/delete-account-lighthouse-desktop.png) | ![Delete Mobile](docs/images/test-screenshots/lighthouse/delete-account-lighthouse-mobile.png) |  |
+| Edit Track | ![Edit Track Desktop](docs/images/test-screenshots/lighthouse/edit-track-lighthouse-desktop.png) | ![Edit Track Mobile](docs/images/test-screenshots/lighthouse/edit-track-lighthouse-mobile.png) |  |
+| Third Party Connections | ![Third Party Desktop](docs/images/test-screenshots/lighthouse/thirdparty-lighthouse-desktop.png) | ![Third Party Mobile](docs/images/test-screenshots/lighthouse/thirdparty-lighthouse-mobile.png) |  |
+
+
