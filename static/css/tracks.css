@@ -107,11 +107,13 @@
     line-height: 1.2;
     text-align: left;
     width: 100%;
+    text-transform: none;
 }
 
 .track-title a {
     color: #333;
     transition: color 0.2s ease;
+    font-weight: 600;
 }
 
 .track-title a:hover {

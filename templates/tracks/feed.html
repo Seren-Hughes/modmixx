@@ -61,10 +61,10 @@
                                 </div>
                             </div>
                             <!-- Track title -->
-                            <h5 class="track-title">
+                            <h2 class="track-title h5">
                                 <a href="{% url 'track_detail' track.slug %}"
-                                   class="text-decoration-none">{{ track.title }}</a>
-                            </h5>
+                                   class="text-decoration-none h5">{{ track.title }}</a>
+                            </h2>
                             <!-- Description -->
                             <p class="track-description">
                                 {% if track.description %}{{ track.description|truncatewords:10 }}{% endif %}
@@ -132,7 +132,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="uploadModalLabel">Create post</h5>
+                    <h3 class="modal-title h5" id="uploadModalLabel">Create post</h3>
                     <button type="button"
                             class="btn-close"
                             data-bs-dismiss="modal"
