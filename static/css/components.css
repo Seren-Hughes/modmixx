@@ -159,7 +159,7 @@
 }
 
 .auth-links a {
-    color: var(--color-primary-orange);
+    color:  rgb(184, 49, 0);
     text-decoration: none;
     font-weight: 500;
 }
@@ -170,9 +170,9 @@
 
 /* Google sign in/up button */
 .google-btn {
-    background: #4285f4;
+    background: #3541a6;
     color: #fff;
-    border: 1px solid #4285f4;
+    border: 1px solid #5A6AF4;
     border-radius: var(--border-radius-sm);
     padding: 12px 24px;
     font-size: 1rem;
@@ -192,8 +192,8 @@
 
 .google-btn:hover,
 .google-btn:focus {
-    background: #357ae8;
-    border-color: #357ae8;
+    background: #5A6AF4;
+    border-color: #5A6AF4;
     color: #fff;
     text-decoration: none;
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
@@ -273,7 +273,7 @@
 
 /* Menu links for auth and social pages */
 .menu-link {
-    color: var(--color-primary-orange);
+    color:  rgb(166, 26, 94);
     text-decoration: none;
     font-size: 1.05em;
     font-family: var(--font-main);
