@@ -188,14 +188,86 @@ All pages tested across multiple devices and browsers to ensure consistent user 
 ---
 
 ## Home Page Responsiveness
+| Desktop | Tablet | Tablet Portrait | Mobile | Mobile Landscape |
+|--------|------------------|--------|-------|----------|
+| ![Home Desktop](docs/images/test-screenshots/responsiveness/home-desktop.png)| ![Home Tablet](docs/images/test-screenshots/responsiveness/tablet/home-ipad.png) | ![Home Tablet Portrait](docs/images/test-screenshots/responsiveness/tablet/home-ipad-portrait.png) | ![Home Mobile](docs/images/test-screenshots/responsiveness/mobile/home-iphone.png) | ![Home Mobile Landscape](docs/images/test-screenshots/responsiveness/mobile/home-iphone-landscape.png) |
 
-| Mobile | Mobile Landscape | Tablet | Desktop |
-|--------|------------------|--------|-------|
-| ![home mobile](docs/images/test-screenshots/responsive/home-mobile.png) | ![home mobile landscape](docs/images/test-screenshots/responsive/home-mobile-landscape.png) | ![home tablet](docs/images/test-screenshots/responsive/home-tablet.png) | ![home desktop](docs/images/test-screenshots/responsive/home-desktop.png) |
+## Sign In Page Responsiveness
+
+| Desktop | Tablet | Tablet Portrait | Mobile | Mobile Landscape |
+|--------|------------------|--------|-------|----------|
+| ![Sign In Desktop](docs/images/test-screenshots/responsiveness/sign-in-desktop.png)| ![Sign In Tablet](docs/images/test-screenshots/responsiveness/tablet/sign-in-ipad.png) | ![Sign In Tablet Portrait](docs/images/test-screenshots/responsiveness/tablet/sign-in-ipad-portrait.png) | ![Sign In Mobile](docs/images/test-screenshots/responsiveness/mobile/signin-iphone.png) | ![Sign In Mobile Landscape](docs/images/test-screenshots/responsiveness/mobile/signin-pixel-landscape.png) |
+
+## Sign Up Page Responsiveness
+
+| Desktop | Tablet | Tablet Portrait | Mobile | Mobile Landscape |
+|--------|------------------|--------|-------|----------|
+| ![Sign Up Desktop](docs/images/test-screenshots/responsiveness/signup-desktop.png)| ![Sign Up Tablet](docs/images/test-screenshots/responsiveness/tablet/signup-ipad.png) | ![Sign Up Tablet Portrait](docs/images/test-screenshots/responsiveness/tablet/signup-ipad-portrait.png) | ![Sign Up Mobile](docs/images/test-screenshots/responsiveness/mobile/signup-iphone.png) | ![Sign Up Mobile Landscape](docs/images/test-screenshots/responsiveness/mobile/signup-pixel-landscape.png) |
 
 
-### Summary
-- **Total Pages Tested**: 
-- **Devices Covered**: 
-- **Key Features Verified**: Navigation, forms, modals, media players, touch interactions
-- **Cross-browser Compatibility**: 
+## Password Reset Page Responsiveness
+
+| Desktop | Tablet | Tablet Portrait | Mobile | Mobile Landscape |
+|--------|------------------|--------|-------|----------|
+| ![Password Reset Desktop](docs/images/test-screenshots/responsiveness/password-reset.png)| ![Password Reset Tablet](docs/images/test-screenshots/responsiveness/tablet/reset-password-ipad.png) | ![Password Reset Tablet Portrait](docs/images/test-screenshots/responsiveness/tablet/reset-password-ipad-portrait.png) | ![Password Reset Mobile](docs/images/test-screenshots/responsiveness/mobile/reset-password-iphone.png) | ![Password Reset Mobile Landscape](docs/images/test-screenshots/responsiveness/mobile/reset-password-pixel-landscape.png) |
+
+## About Page Responsiveness
+
+| Desktop | Tablet | Tablet Portrait | Mobile | Mobile Landscape |
+|--------|------------------|--------|-------|----------|
+| ![About Desktop](docs/images/test-screenshots/responsiveness/about-desktop.png)| ![About Tablet](docs/images/test-screenshots/responsiveness/tablet/about-ipad.png) | ![About Tablet Portrait](docs/images/test-screenshots/responsiveness/tablet/about-ipad-portrait.png) | ![About Mobile](docs/images/test-screenshots/responsiveness/mobile/about-iphone.png) | ![About Mobile Landscape](docs/images/test-screenshots/responsiveness/mobile/about-iphone-landscape.png) |
+
+## Contact Page Responsiveness
+
+| Desktop | Tablet | Tablet Portrait | Mobile | Mobile Landscape |
+|--------|------------------|--------|-------|----------|
+| ![Contact Desktop](docs/images/test-screenshots/responsiveness/contact-desktop.png)| ![Contact Tablet](docs/images/test-screenshots/responsiveness/tablet/contact-ipad.png) | ![Contact Tablet Portrait](docs/images/test-screenshots/responsiveness/tablet/contact-samsung-portrait.png) | ![Contact Mobile](docs/images/test-screenshots/responsiveness/mobile/contact-iphone.png) | ![Contact Mobile Landscape](docs/images/test-screenshots/responsiveness/mobile/contact-pixel-landscape.png) |
+
+## Profile Page Responsiveness
+
+| Desktop | Tablet | Tablet Portrait | Mobile | Mobile Landscape |
+|--------|------------------|--------|-------|----------|
+| ![Profile Desktop](docs/images/test-screenshots/responsiveness/profile-firefox-desktop.png)| ![Profile Tablet](docs/images/test-screenshots/responsiveness/tablet/profile-ipad.png) | ![Profile Tablet Portrait](docs/images/test-screenshots/responsiveness/tablet/profile-ipad-portrait.png) | ![Profile Mobile](docs/images/test-screenshots/responsiveness/mobile/profile-iphone.png) | ![Profile Mobile Landscape](docs/images/test-screenshots/responsiveness/mobile/profile-iphone-landscape.png) |
+
+## Edit Profile Page Responsiveness
+
+| Desktop | Tablet | Tablet Portrait | Mobile | Mobile Landscape |
+|--------|------------------|--------|-------|----------|
+| ![Edit Profile Desktop](docs/images/test-screenshots/responsiveness/edit-profile-desktop.png)| ![Edit Profile Tablet](docs/images/test-screenshots/responsiveness/tablet/edit-profile-ipad.png) | ![Edit Profile Tablet Portrait](docs/images/test-screenshots/responsiveness/tablet/edit-profile-samsung-portrait.png) | ![Edit Profile Mobile](docs/images/test-screenshots/responsiveness/mobile/edit-profile-iphone.png) | ![Edit Profile Mobile Landscape](docs/images/test-screenshots/responsiveness/mobile/edit-profile-pixel-landscape.png) | 
+
+##  Connections Page Responsiveness
+
+| Desktop | Tablet | Tablet Portrait | Mobile | Mobile Landscape |
+|--------|------------------|--------|-------|----------|
+| ![Connections Desktop](docs/images/test-screenshots/responsiveness/connections-desktop.png)| ![Connections Tablet](docs/images/test-screenshots/responsiveness/tablet/connections-ipad.png) | ![Connections Tablet Portrait](docs/images/test-screenshots/responsiveness/tablet/connections-ipad-portrait.png) | ![Connections Mobile](docs/images/test-screenshots/responsiveness/mobile/connections-iphone.png) | ![Connections Mobile Landscape](docs/images/test-screenshots/responsiveness/mobile/connections-pixel-landscape.png) |
+
+## Feed Page Responsiveness
+
+| Desktop | Tablet | Tablet Portrait | Mobile | Mobile Landscape |
+|--------|------------------|--------|-------|----------|
+| ![Feed Desktop](docs/images/test-screenshots/responsiveness/feed-desktop.png)| ![Feed Tablet](docs/images/test-screenshots/responsiveness/tablet/feed-ipad.png) | ![Feed Tablet Portrait](docs/images/test-screenshots/responsiveness/tablet/feed-ipad-portrait.png) | ![Feed Mobile](docs/images/test-screenshots/responsiveness/mobile/feed-iphone.png) | ![Feed Mobile Landscape](docs/images/test-screenshots/responsiveness/mobile/feed-card-iphone-landscape.png) |
+
+## Create Post Modal Responsiveness
+
+| Desktop | Tablet | Tablet Portrait | Mobile | Mobile Landscape |
+|--------|------------------|--------|-------|----------|
+| ![Create Post Desktop](docs/images/test-screenshots/responsiveness/create-modal-desktop.png)| ![Create Post Tablet](docs/images/test-screenshots/responsiveness/tablet/create-post-ipad.png) | ![Create Post Tablet Portrait](docs/images/test-screenshots/responsiveness/tablet/create-post-ipad-portrait.png) | ![Create Post Mobile](docs/images/test-screenshots/responsiveness/mobile/create-post-modal-iphone.png) | ![Create Post Mobile Landscape](docs/images/test-screenshots/responsiveness/mobile/create-post-modal-pixel-landscape.png) |
+
+## Track Detail Page Responsiveness
+
+| Desktop | Tablet | Tablet Portrait | Mobile | Mobile Landscape |
+|--------|------------------|--------|-------|----------|
+| ![Track Detail Desktop](docs/images/test-screenshots/responsiveness/track-detail-desktop.png)| ![Track Detail Tablet](docs/images/test-screenshots/responsiveness/tablet/track-detail-ipad.png) | ![Track Detail Tablet Portrait](docs/images/test-screenshots/responsiveness/tablet/track-detail-ipad-portrait.png) | ![Track Detail Mobile](docs/images/test-screenshots/responsiveness/mobile/track-detail-iphone.png) | ![Track Detail Mobile Landscape](docs/images/test-screenshots/responsiveness/mobile/track-detail-pixel-landscape.png) |
+
+## Edit Track Page Responsiveness
+
+| Desktop | Tablet | Tablet Portrait | Mobile | Mobile Landscape |
+|--------|------------------|--------|-------|----------|
+| ![Edit Track Desktop](docs/images/test-screenshots/responsiveness/edit-track-desktop.png)| ![Edit Track Tablet](docs/images/test-screenshots/responsiveness/tablet/edit-track-ipad.png) | ![Edit Track Tablet Portrait](docs/images/test-screenshots/responsiveness/tablet/edit-track-ipad-portrait.png) | ![Edit Track Mobile](docs/images/test-screenshots/responsiveness/mobile/edit-track-iphone.png) | ![Edit Track Mobile Landscape](docs/images/test-screenshots/responsiveness/mobile/edit-track-pixel-landscape.png) |
+
+## Error Page Responsiveness
+
+| Desktop | Tablet | Tablet Portrait | Mobile | Mobile Landscape |
+|--------|------------------|--------|-------|----------|
+| ![Error Desktop](docs/images/test-screenshots/responsiveness/404-desktop.png)| ![Error Tablet](docs/images/test-screenshots/responsiveness/tablet/404-ipad.png) | ![Error Tablet Portrait](docs/images/test-screenshots/responsiveness/tablet/404-ipad-portrait.png) | ![404 Mobile](docs/images/test-screenshots/responsiveness/mobile/404-iphone.png) | ![404 Mobile Landscape](docs/images/test-screenshots/responsiveness/mobile/404-iphone-landscape.png) |
+
