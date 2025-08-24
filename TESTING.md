@@ -164,7 +164,7 @@ Although current performance scores are good, future versions will address addit
 - **Content Moderation UX** - Loading states and fallback handling for third-party API delays.
 
 **Technical Infrastructure:**
-- **CDN Integration** - Implement CloudFront for global asset delivery
+- **CDN Integration** - Implement [CloudFront](https://devcenter.heroku.com/articles/using-amazon-cloudfront-cdn) for global asset delivery
 - **Database Query Optimization** - Reduce render-blocking database calls
 - **Third-party Resource Optimization** - Minimize external dependency impact
 
@@ -173,3 +173,29 @@ Although current performance scores are good, future versions will address addit
 All pages achieve excellent accessibility, SEO, and best practices scores with solid performance across devices. The site handles complex features like file uploads, audio streaming, and real-time interactions while maintaining good performance. Future updates will focus on advanced optimization techniques and throttle testing to improve speeds for users on slower connections.
 
 **Lighthouse Audit Last Updated: [24/08/25]**
+
+## Responsive Design Testing
+
+All pages tested across multiple devices and browsers to ensure consistent user experience. Testing conducted using real devices and BrowserStack for comprehensive coverage.
+
+### Testing Methodology
+- **Real Device Testing**: iPhone XR, iPad, Desktop Windows
+- **Browser Testing**: Chrome, Firefox, Safari & Edge
+- **BrowserStack Testing**: Android devices and additional browser combinations
+- **Breakpoints Tested**: Mobile (375px), Tablet (768px), Desktop (1024px+)
+- **Orientations**: Portrait and landscape for mobile/tablet devices
+
+---
+
+## Home Page Responsiveness
+
+| Mobile | Mobile Landscape | Tablet | Desktop |
+|--------|------------------|--------|-------|
+| ![home mobile](docs/images/test-screenshots/responsive/home-mobile.png) | ![home mobile landscape](docs/images/test-screenshots/responsive/home-mobile-landscape.png) | ![home tablet](docs/images/test-screenshots/responsive/home-tablet.png) | ![home desktop](docs/images/test-screenshots/responsive/home-desktop.png) |
+
+
+### Summary
+- **Total Pages Tested**: 
+- **Devices Covered**: 
+- **Key Features Verified**: Navigation, forms, modals, media players, touch interactions
+- **Cross-browser Compatibility**: 
