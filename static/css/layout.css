@@ -397,6 +397,85 @@ html {
     }
 }
 
+/* Landscape on mobile devices*/
+@media (max-width: 896px) and (orientation: landscape) and (max-height: 500px) {
+    .hero {
+        min-height: 100vh;
+        max-height: 100vh; /* Prevent overflow */
+    }
+    
+    .hero-img {
+        height: 100vh;
+        max-height: 500px; /* Cap the image height */
+        object-fit: cover;
+        object-position: center;
+    }
+    
+    .hero-text {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+    
+    .hero-text .color-title {
+        font-size: 2.2rem;
+        margin-bottom: 0.5rem;
+        line-height: 1;
+    }
+    
+    .hero-text .tagline {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+    }
+    
+    .hero-cta-btn {
+        font-size: 1.1rem;
+        padding: 0.4rem 1.5rem;
+    }
+    
+    .cta-gradient {
+        font-size: 1.3rem;
+    }
+    
+    /* reduce the down arrow on landscape mobile */
+    .hero-down-arrow {
+        bottom: 2rem;
+        font-size: 1.2rem;
+    }
+}
+
+/* small landscape phones */
+@media (max-width: 668px) and (orientation: landscape) and (max-height: 376px) {
+    .hero {
+        max-height: 275px;
+        justify-content: center;
+    }
+    
+    .hero-text .color-title {
+        font-size: 1.8rem;
+        margin-bottom: 0.3rem;
+    }
+    
+    .hero-text .tagline {
+        font-size: 1rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .hero-cta-btn {
+        font-size: 1rem;
+        padding: 0.3rem 1.2rem;
+    }
+    
+    .cta-gradient {
+        font-size: 1.1rem;
+    }
+    
+    .hero-down-arrow {
+        bottom: 1rem;
+        font-size: 1rem;
+    }
+}
+
 /* Desktop and larger */
 @media (min-width: 992px) {
     nav.navbar .navbar-brand img {
