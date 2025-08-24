@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}{{ track.title|escape }} - modmixx{% endblock %}
+{% block title %}{{ track.title|escape }} | modmixx{% endblock %}
 {% block content %}
     <!-- Pending Moderation Alert -->
     {% if track.moderation_status == "PENDING" and track.user == user %}
