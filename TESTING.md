@@ -127,9 +127,49 @@ All pages tested using [Google Lighthouse](https://developers.google.com/web/too
 | Track Feed | ![Feed Desktop](docs/images/test-screenshots/lighthouse/feed-lighthouse-desktop.png) | ![Feed Mobile](docs/images/test-screenshots/lighthouse/feed-lighthouse-mobile.png) |  |
 | Track Detail | ![Track Desktop](docs/images/test-screenshots/lighthouse/track-detail-lighthouse-desktop.png) | ![Track Mobile](docs/images/test-screenshots/lighthouse/track-detail-lighthouse-mobile.png) |  |
 | Profile View | ![Profile Desktop](docs/images/test-screenshots/lighthouse/profile-lighthouse-desktop.png) | ![Profile Mobile](docs/images/test-screenshots/lighthouse/profile-lighthouse-mobile.png) |  |
-| Profile Edit | ![Edit Desktop](docs/images/test-screenshots/lighthouse/profile-edit-lighthouse-desktop.png) | ![Edit Mobile](docs/images/test-screenshots/lighthouse/profile-edit-lighthouse-mobile.png) |  |
+| Profile Edit | ![Edit Desktop](docs/images/test-screenshots/lighthouse/profile-edit-lighthouse-desktop.png) | ![Edit Mobile](docs/images/test-screenshots/lighthouse/profile-edit-lighthouse-mobile.png) | On mobile an accessibility improvement opportunity was identified: ![Edit Mobile](docs/images/test-screenshots/lighthouse/profile-edit-lighthouse-mobile-accessability.png) Fixed touch area/spacing/size: ![Edit Mobile](docs/images/test-screenshots/lighthouse/checkbox-accessability-fixed.png) |
 | Delete Account | ![Delete Desktop](docs/images/test-screenshots/lighthouse/delete-account-lighthouse-desktop.png) | ![Delete Mobile](docs/images/test-screenshots/lighthouse/delete-account-lighthouse-mobile.png) |  |
 | Edit Track | ![Edit Track Desktop](docs/images/test-screenshots/lighthouse/edit-track-lighthouse-desktop.png) | ![Edit Track Mobile](docs/images/test-screenshots/lighthouse/edit-track-lighthouse-mobile.png) |  |
 | Third Party Connections | ![Third Party Desktop](docs/images/test-screenshots/lighthouse/thirdparty-lighthouse-desktop.png) | ![Third Party Mobile](docs/images/test-screenshots/lighthouse/thirdparty-lighthouse-mobile.png) |  |
 
 
+### Performance Analysis
+
+**Excellent Results Achieved:**
+- ✅ **100% Accessibility** across all pages - Perfect implementation with WCAG compliance
+- ✅ **100% SEO** across all pages - Comprehensive optimization with meta descriptions and semantic markup
+- ✅ **100% Best Practices** across all pages - Security headers, HTTPS enforcement, and modern standards
+- ✅ **Strong Performance Scores** - Consistently good across desktop and mobile.
+
+**Current Performance Context:**
+- **Desktop scores 85-98** - Excellent performance on desktop devices
+- **Mobile scores 70-85** - Good performance range for feature-rich application
+- **Complex functionality successfully optimized**: File uploads, audio streaming, infinite scroll lazy loading, real-time validation
+
+### Future Optimization Roadmap
+
+Although current performance scores are good, future versions will address additional optimization opportunities identified in Lighthouse audits:
+
+**Planned Performance Improvements:**
+- **Django Compressor Integration** - Implement CSS/JS minification and compression
+- **Image Optimization Pipeline** - Automated WebP conversion and responsive image sizing
+- **Static Asset Caching** - Configure efficient cache policies for images and CSS files  
+- **Critical CSS Inlining** - Extract and inline above-the-fold CSS for faster rendering
+- **Text Compression** - Enable gzip/brotli compression for HTML, CSS, and JS delivery
+
+**User Experience Enhancements:**
+- **Low-speed Internet Optimization** - Throttle testing and progressive loading strategies
+- **Layout Shift Reduction** - Explicit width/height attributes for images and media
+- **Legacy Browser Support** - Modern ES6+ deployment without unnecessary polyfills
+- **Content Moderation UX** - Loading states and fallback handling for third-party API delays.
+
+**Technical Infrastructure:**
+- **CDN Integration** - Implement CloudFront for global asset delivery
+- **Database Query Optimization** - Reduce render-blocking database calls
+- **Third-party Resource Optimization** - Minimize external dependency impact
+
+### Summary
+
+All pages achieve excellent accessibility, SEO, and best practices scores with solid performance across devices. The site handles complex features like file uploads, audio streaming, and real-time interactions while maintaining good performance. Future updates will focus on advanced optimization techniques and throttle testing to improve speeds for users on slower connections.
+
+**Lighthouse Audit Last Updated: [24/08/25]**
