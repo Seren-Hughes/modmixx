@@ -370,6 +370,31 @@ html {
     .section-pb {
         padding-bottom: 0.5rem;
     }
+
+    /* Profile Picture Clear Checkbox Accessibility Adjustments for smaller screens */
+    form[enctype="multipart/form-data"] input[name="profile_picture-clear"] {
+        width: 20px;
+        height: 20px;
+        margin-right: 8px;
+        margin-left: 12px;
+    }
+
+    /* Larger touch target for checkbox */
+    form[enctype="multipart/form-data"] .form-check:has(input[name="profile_picture-clear"]) {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        padding: 8px 0;
+    }
+
+    /* Larger clickable area for label */
+    form[enctype="multipart/form-data"] label[for*="profile_picture-clear"] {
+        padding: 12px 8px;
+        cursor: pointer;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
 }
 
 /* Desktop and larger */
