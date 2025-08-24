@@ -34,7 +34,7 @@
             <!-- Bio Section - Full Width Below on Mobile -->
             {% if profile.bio %}
                 <div class="profile-bio">
-                    <h5>About</h5>
+                    <h3 class="h5">About</h3>
                     <div>{{ profile.bio|linebreaks }}</div>
                 </div>
             {% endif %}
@@ -68,7 +68,7 @@
         <div class="col-md-8">
             <!-- User's Tracks Section -->
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5>Tracks ({{ user_tracks.count }})</h5>
+                <h4 class="h5">Tracks ({{ user_tracks.count }})</h4>
                 {% if is_owner %}
                     <a href="{% url 'track_upload' %}" class="btn btn-primary btn-sm">
                         <i class="fa fa-plus me-1"></i> Share Track
@@ -97,10 +97,10 @@
                                 </div>
                                 <!-- Track Info -->
                                 <div class="col-md-6">
-                                    <h6 class="card-title">
+                                    <h5 class="card-title h6">
                                         <a href="{% url 'track_detail' track.slug %}"
                                            class="text-decoration-none">{{ track.title }}</a>
-                                    </h6>
+                                    </h5>
                                     <p class="text-muted small mb-2">{{ track.created_at|timesince }} ago</p>
                                     {% if track.description %}<p class="card-text small">{{ track.description|truncatewords:15 }}</p>{% endif %}
                                 </div>
