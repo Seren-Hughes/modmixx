@@ -303,7 +303,6 @@ class AudioManager {
     currentAudio = audioElement;
     currentTrackSlug = trackSlug;
     this.updatePlayButtonState(trackSlug, 'playing');
-    this.showStickyPlayer(trackSlug, audioElement);
   }
 
   static handlePause(trackSlug, audioElement) {
@@ -319,7 +318,6 @@ class AudioManager {
     if (el) el.textContent = state === 'playing' ? 'Pause' : 'Play';
   }
 }
-// TODO: implement sticky player at bottom of screen (unlikely for this mvp version)
 
 // Make AudioManager available globally so the event handlers can find it
 window.AudioManager = AudioManager;
