@@ -223,6 +223,19 @@ class ProfileForm(forms.ModelForm):
                     f"Username contains potentially harmful content: "
                     f"'{pattern}'."
                 )
+
+        try:
+            toxicity = get_toxicity_score(username)
+            if toxicity > 0.7:
+                raise ValidationError(
+                    "Your username may contain inappropriate language. "
+                    "Please revise."
+                )
+        except ValidationError:
+            raise
+        except Exception:
+            pass  # Allow if API fails
+
         return username.lower()
 
     def clean_profile_picture(self):
