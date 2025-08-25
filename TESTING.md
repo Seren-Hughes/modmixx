@@ -303,3 +303,113 @@ All pages tested across multiple devices and browsers to ensure consistent user 
 While aesthetic and branding improvements are planned for future versions, the current implementation successfully delivers a fully functional and accessible user experience on all platforms tested.
 
 **Last Updated: [24/08/2025]**
+
+
+## User Story Testing
+
+Testing all user stories implemented in the current MVP to ensure acceptance criteria are met and functionality works as expected.
+
+**MVP Scope Note:** Some user stories (Monthly Challenges, Track Tagging) were removed from MVP scope due to timeline constraints and are planned for future releases.
+
+### **Theme 1: Onboarding & Identity**
+
+| Story ID | User Story | GitHub Issue | Acceptance Criteria | Expected Result | Actual Result | Status | Evidence/Notes |
+|----------|------------|-------------------|-----------------|---------------|--------|--------------|----------------|
+| **1.1.1** |As a new visitor, I want to see a welcoming message and clear call to action, so that I understand what the site is for and feel encouraged to join. | [Issue #1](https://github.com/Seren-Hughes/modmixx/issues/1) |• Visitor sees a friendly welcome message on the homepage<br>• Clear call to action button/link to sign up or learn more is visible<br>• Message is styled and easy to read on all devices | ✅ Hero section displays welcome text, prominent CTA button leads to signup, responsive across all breakpoints | Hero section displays welcome text, 'Join the mixx' CTA redirects to signup, tested on mobile/tablet/desktop | ✅ **PASS** | ![Homepage screenshot](docs/images/test-screenshots/responsiveness/mobile/home-iphone.png) |
+| **1.1.2** |As a returning user, I want to be able to log in quickly from the homepage, so that I can get back to the community. | [Issue #2](https://github.com/Seren-Hughes/modmixx/issues/2) |• Homepage displays a visible login link/button for returning users<br>• Login accessible from header navigation<br>• Link only shows when user is not logged in | Login button visible in header navigation, consistent styling | ✅ Login button visible in header navigation, consistent styling | ✅ **PASS** | Login accessible from all pages |
+
+#### **Epic 1.2: Navigation**
+
+| Story ID | User Story | GitHub Issue | Acceptance Criteria | Expected Result | Actual Result | Status | Evidence/Notes |
+|----------|------------|--------------|-------------------|-----------------|---------------|--------|----------------|
+| **1.2.1** | As a logged-out user, I want clear links to log in, sign up, and learn more, so that I can easily navigate the site | [Issue #3](https://github.com/Seren-Hughes/modmixx/issues/3) |•NavBar contains Login, Sign Up, and About/Info links<br>• NavBar is visible on every page for logged‑out users.<br>• Links are styled consistently and keyboard accessible | Clear navigation with login, signup, about options | ✅ Header shows Login, Sign Up, About, Contact | ✅ **PASS** | All nav links function correctly |
+| **1.2.2** | As a logged‑in user, I want navigation to change dynamically, so I can access relevant parts of the site like feed and profile. | [Issue #4](https://github.com/Seren-Hughes/modmixx/issues/4) | • Nav updates after login<br>• User-specific options appear<br>• Feed, profile, logout accessible | Navigation shows Feed, Profile, Create Post, Logout | ✅ Logged-in nav shows user-specific options | ✅ **PASS** | Dynamic navigation working correctly |
+
+#### **Epic 1.3: User Accounts**
+
+| Story ID | User Story | GitHub Issue | Acceptance Criteria | Expected Result | Actual Result | Status | Evidence/Notes |
+|----------|------------|--------------|-------------------|-----------------|---------------|--------|----------------|
+| **1.3.1** | As a new user, I want to register with a unique username and secure password, so that I can create an account safely | [Issue #5](https://github.com/Seren-Hughes/modmixx/issues/5) | • Registration form requires email, and password<br>• Password meets security rules<br>• Successful registration redirects or logs in the user | Account created, email validation required, redirect to profile setup | ✅ Registration form validates unique email, password strength enforced, redirects to profile completion | ✅ **PASS** |  |
+| **1.3.2** | As a returning user, I want to log in with my credentials, so that I can access my profile and uploads | [Issue #6](https://github.com/Seren-Hughes/modmixx/issues/6) | • Login form accepts credentials<br>• Authentication successful<br>• Redirect to feed page | Successful login with redirect to feed | ✅ Login authentication works, redirects to feed page | ✅ **PASS** | Both email and Google login options work |
+| **1.3.3** | As a logged-in user, I want to log out securely, so that my session ends safely | [Issue #7](https://github.com/Seren-Hughes/modmixx/issues/7) | • Logout link accessible<br>• Session ends safely<br>• Redirect to homepage | Session terminated, redirect to home | ✅ Logout clears session, redirects to homepage | ✅ **PASS** | Secure session termination verified |
+
+### **Theme 2: Music Sharing & Discovery**
+
+#### **Epic 2.1: Track Uploads**
+
+| Story ID | User Story | GitHub Issue | Acceptance Criteria | Expected Result | Actual Result | Status | Evidence/Notes |
+|----------|------------|--------------|-------------------|-----------------|---------------|--------|----------------|
+| **2.1.1** | As a user, I want to upload a music track with a title, DAW used, description, and image, so that others can understand my creative process | [Issue #8](https://github.com/Seren-Hughes/modmixx/issues/8) |• Upload form fields: title* , audio_file* , DAW (opt), description (opt), image (opt)<br>• Acceptable audio types: .mp3, .wav, size limit enforced<br>• Track saved and appears in feed post‑upload<br>• Validation errors shown clearly | Track uploads to S3, metadata saves to database, appears in feed | ✅ Audio file uploads to S3 bucket, all form fields save, track appears at top of feed immediately | ✅ **PASS** | File validation accepts .mp3/.wav up to 100MB, image optimization applied, AWS S3 integration working |
+| **2.1.2** | ~~As a user, I want to tag my upload with 'feedback wanted' so that others know I am looking for constructive feedback~~ | [Issue #9](https://github.com/Seren-Hughes/modmixx/issues/9) | *Removed from MVP scope* | *Future release* | N/A - Not implemented in MVP | 🔄 **FUTURE** | **Rescoped:** Lower value for initial MVP - tagging more valuable with larger content volume |
+| **2.1.3** | As a user, I want to edit or delete my uploaded track post, so that I can update or remove content if needed | [Issue #35](https://github.com/Seren-Hughes/modmixx/issues/35) | • User can edit a previously uploaded track’s title, description, DAW, or image/audio<br>• Edit form is only accessible by the original uploader<br>• User can delete a track with confirmation<br>• Deleted tracks are removed from feed and profile<br>• Successful edits are reflected on the detail, feed, and profile pages | Changes saved or track deleted | ✅ Edit saves correctly, delete removes from system | ✅ **PASS** | Both edit and delete functions work with owner verification |
+
+#### **Epic 2.2: Track Feed**
+
+| Story ID | User Story | GitHub Issue | Acceptance Criteria | Expected Result | Actual Result | Status | Evidence/Notes |
+|----------|------------|--------------|-------------------|-----------------|---------------|--------|----------------|
+| **2.2.1** | As a user, I want to scroll through a feed of recent uploads, so that I can discover and listen to other users' music | [Issue #10](https://github.com/Seren-Hughes/modmixx/issues/10) | • Feed lists recent tracks with title, uploader, thumbnail, audio player<br>• Only one track plays at a time (JS pause others)<br>• Pagination or infinite scroll implemented (Infinite scroll with back to top) | Feed loads 10 tracks, infinite scroll triggers, audio players pause others when new one plays | ✅ Initial load shows 10 tracks, scroll triggers at 80% viewport, JavaScript ensures single audio playback | ✅ **PASS** | JavaScript audio controller prevents multiple simultaneous playback, infinite scroll loads 5 more tracks per trigger |
+| **2.2.2** | As a user, I want to open a track post to see more details and comments, so that I can learn and engage more deeply | [Issue #11](https://github.com/Seren-Hughes/modmixx/issues/11) | • Track detail page shows full description, image, DAW info and comments<br>• Comment list displays username and timestamp<br>• Comment submission form and confirmation | Full track details with comments section | ✅ Track detail shows all info, comments display and function | ✅ **PASS** | Track detail page fully functional |
+
+#### **Epic 2.3: Comments**
+
+| Story ID | User Story | GitHub Issue | Acceptance Criteria | Expected Result | Actual Result | Status | Evidence/Notes |
+|----------|------------|--------------|-------------------|-----------------|---------------|--------|----------------|
+| **2.3.1** | As a user, I want to leave thoughtful comments on tracks, so that I can encourage and engage with others | [Issue #12](https://github.com/Seren-Hughes/modmixx/issues/12) | • Logged‑in users can submit comments on track pages<br>• Comments post successfully<br>• Comments are saved and displayed in order<br>• Comment user confirmation for post, edit, delete | Comment posts instantly, Perspective API moderates, toxic content blocked | ✅ Comments appear immediately after submission, content moderation active via Google Perspective API | ✅ **PASS** | Real-time content moderation implemented with user feedback for blocked content |
+| **2.3.2** | As a user, I want to edit or delete my own comments, so that I can correct or remove what I wrote | [Issue #13](https://github.com/Seren-Hughes/modmixx/issues/13) | • Edit/delete controls visible only to comment author<br>• Edits update comment content and add 'edited' tag<br>• Delete prompts confirmation and removes comment | Own comments editable and deletable | ✅ Edit and delete work for comment owners only | ✅ **PASS** | Proper ownership validation in place |
+
+### **Theme 3: Belonging & Connection**
+
+#### **Epic 3.1: User Profiles**
+
+| Story ID | User Story | GitHub Issue | Acceptance Criteria | Expected Result | Actual Result | Status | Evidence/Notes |
+|----------|------------|--------------|-------------------|-----------------|---------------|--------|----------------|
+| **3.1.1** | As a user, I want to view and edit my profile (bio, pronouns, image), so that others can understand who I am | [Issue #14](https://github.com/Seren-Hughes/modmixx/issues/14) | • Profile page shows bio, pronouns, avatar<br>• Edit profile form updates these fields<br>• Changes save correctly<br>• Changes are saved, confirmed and displayed | Profile updates with new information | ✅ All profile fields update correctly | ✅ **PASS** | ![Profile edit screenshot](docs/images/test-screenshots/responsiveness/mobile/edit-profile-iphone.png) |
+| **3.1.2** | As a user, I want to see all my uploaded tracks in one place, so that I can track my creative progress | [Issue #15](https://github.com/Seren-Hughes/modmixx/issues/15) | • Dashboard/profile lists user’s tracks with single track link for details/comments<br>• Only owner sees edit/delete actions | All user's tracks visible on profile | ✅ Profile displays all uploaded tracks with correct count | ✅ **PASS** | Track listing and display working correctly |
+
+#### **Epic 3.2: Monthly Challenges** *(Removed from MVP Scope)*
+
+| Story ID | User Story | GitHub Issue | Acceptance Criteria | Expected Result | Actual Result | Status | Evidence/Notes |
+|----------|------------|--------------|-------------------|-----------------|---------------|--------|----------------|
+| **3.2.1** | ~~As a user, I want to view the current monthly challenge, so that I can be inspired and participate~~ | [Issue #16](https://github.com/Seren-Hughes/modmixx/issues/16) | *Removed from MVP scope* | *Future release* | N/A - Not implemented in MVP | 🔄 **FUTURE** | **Rescoped:** Strategic deferral - challenges more impactful with larger user base |
+| **3.2.2** | ~~As a user, I want to see other user submissions for the challenge, so that I feel part of a community effort~~ | [Issue #17](https://github.com/Seren-Hughes/modmixx/issues/17) | *Removed from MVP scope* | *Future release* | N/A - Not implemented in MVP | 🔄 **FUTURE** | **Rescoped:** Community features prioritized after core functionality established |
+| **3.2.3** | ~~As a user, I want to upload my monthly challenge, so that my track is grouped with other submissions~~ | [Issue #22](https://github.com/Seren-Hughes/modmixx/issues/22) | *Removed from MVP scope* | *Future release* | N/A - Not implemented in MVP | 🔄 **FUTURE** | **Rescoped:** Challenge infrastructure requires larger community for meaningful participation |
+
+### **Theme 4: Trust & Support**
+
+#### **Epic 4.1: Static Information Pages**
+
+| Story ID | User Story | GitHub Issue | Acceptance Criteria | Expected Result | Actual Result | Status | Evidence/Notes |
+|----------|------------|--------------|-------------------|-----------------|---------------|--------|----------------|
+| **4.1.1** | As a visitor, I want to read about the community and its values, so I know if it's right for me | [Issue #18](https://github.com/Seren-Hughes/modmixx/issues/18) | • Static About page with mission & values<br>• Accessible via NavBar/footer<br>• Styled consistently with site | About page explains community values | ✅ About page clearly explains platform purpose and values | ✅ **PASS** | Content is clear and welcoming |
+| **4.1.2** | As a user, I want clear community guidelines, so that I understand what's expected and what's not allowed | [Issue #19](https://github.com/Seren-Hughes/modmixx/issues/19) | • Guidelines lists rules clearly<br>• Content easy to read<br>• Expectations defined | Community guidelines are clear | ✅ Guidelines included in About page content | ✅ **PASS** | Guidelines integrated into About content |
+| **4.1.3** | As a user, I want to see a helpful 404/500 error page if something is missing, so I'm not confused | [Issue #20](https://github.com/Seren-Hughes/modmixx/issues/20) | • Custom 404 page for missing content<br>• Custom 500 page for server errors<br>• Navigation options available | Custom error pages with helpful messaging | ✅ Custom 404 and 500 pages with navigation back to site | ✅ **PASS** | ![404 screenshot](docs/images/test-screenshots/responsiveness/mobile/404-iphone.png) |
+
+#### **Epic 4.2: Contact & Support**
+
+| Story ID | User Story | GitHub Issue | Acceptance Criteria | Expected Result | Actual Result | Status | Evidence/Notes |
+|----------|------------|--------------|-------------------|-----------------|---------------|--------|----------------|
+| **4.2.1** | As a visitor or user, I want to contact the site owner for help or feedback, so that I feel heard and supported | [Issue #21](https://github.com/Seren-Hughes/modmixx/issues/21) | • Contact form fields: name, email, message (all required)<br>• Email address validated<br>• Form sends message to site owner/admin | Contact form works and sends email | ✅ Contact form submits and sends email notification | ✅ **PASS** | ![Contact screenshot](docs/images/test-screenshots/responsiveness/mobile/contact-iphone.png) |
+| **4.2.2** | As a user, I want to receive a confirmation message when I submit the form, so I know it went through | [Issue #23](https://github.com/Seren-Hughes/modmixx/issues/23) | • Success message displayed<br>• User feedback confirmation | Confirmation message after submission | ✅ Success message displays, form resets after submission | ✅ **PASS** | User feedback implementation working |
+
+### **User Story Testing Summary**
+
+**Key Metrics:**
+- ✅ **All implemented user stories pass acceptance criteria**
+- 🔄 **4 stories deferred to future releases** (Monthly Challenges + Track Tagging)
+- ✅ **100% pass rate for MVP scope**
+- ✅ **No critical functionality failures identified**
+
+**Testing Approach:**
+- Manual testing of all user workflows
+- Real device testing across multiple browsers
+- Acceptance criteria verification for each story
+- Evidence captured via screenshots where applicable
+
+**Scope Management Note:** The decision to remove monthly challenges and track tagging from MVP scope was made based on timeline constraints and strategic feature prioritization. These features were identified as lower value for the initial MVP version, as they would provide greater benefit once the platform has grown:
+
+- **Track Tagging/Filtering**: More valuable when there's sufficient content volume to justify sophisticated filtering and discovery features
+- **Monthly Challenges**: More impactful with a larger user base to create meaningful community engagement and participation
+
+These features remain in the product backlog for future development phases when user adoption and content volume will maximize their value proposition.
+
+**Last Updated: [24/08/2025]**

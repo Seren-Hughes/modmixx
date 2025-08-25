@@ -337,7 +337,7 @@ The project was organized into themes, epics, and user stories to ensure a user-
 |Story Number       |  User Story |  Story Point |
 |-------|---|---|
 |**1.2.1** |  _As a logged-out user, I want clear links to log in, sign up, and learn more, so that I can easily navigate the site._ |  3 |
-|**1.2.2** |  _As a logged-in user, I want navigation to change dynamically, so I can access relevant parts of the site like feed, profile, and challenges._ |  5 |
+|**1.2.2** |  _As a logged‑in user, I want navigation to change dynamically, so I can access relevant parts of the site like feed and profile._ |  5 |
 
 ### **Epic 1.3: User Accounts**
 
@@ -354,12 +354,14 @@ The project was organized into themes, epics, and user stories to ensure a user-
 
 ### **Epic 2.1: Track Uploads**
 
+**Note:** Track tagging functionality was deferred to future releases due to MVP timeline constraints.
+
 ### User Stories:
 
 |Story Number | User Story                                                                                                                                     | Story Point |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
 | **2.1.1**    | *As a user, I want to upload a music track with a title, DAW used, description, and image, so that others can understand my creative process.* | 8          |
-| **2.1.2**    | *As a user, I want to tag my upload with 'feedback wanted' so that others know I am looking for constructive feedback.*                        | 5           |
+| **2.1.2**    | *As a user, I want to tag my upload with 'feedback wanted' so that others know I am looking for constructive feedback.* _**(Future Release)**_                        | 5           |
 | **2.1.3**    | *As a user, I want to edit or delete my uploaded track post, so that I can update or remove content if needed.*                                   | 5           |
 
 ### **Epic 2.2: Track Feed**
@@ -393,15 +395,17 @@ The project was organized into themes, epics, and user stories to ensure a user-
 | **3.1.2**    | *As a user, I want to see all my uploaded tracks in one place, so that I can track my creative progress.*       | 3          |
 
 
-### **Epic 3.2: Monthly Challenges**
+### **Epic 3.2: Monthly Challenges** *(Removed from MVP Scope)*
+
+**Note:** Monthly challenges were initially planned but removed from the current MVP scope due to project timeline constraints. This feature is planned for future development phases.
 
 ### User Stories:
 
 | Story Number | User Story                                                                                                      | Story Point |
 | ------------ | --------------------------------------------------------------------------------------------------------------- | ----------- |
-| **3.2.1**    | *As a user, I want to view the current monthly challenge, so that I can be inspired and participate.*           | 3           |
-| **3.2.2**    | *As a user, I want to see other user submissions for the challenge, so that I feel part of a community effort.* | 2           |
-| **3.2.3**    | *As a user, I want to upload my monthly challenge, so that my track is grouped with other submissions.*   | 2           |
+| **3.2.1**    | *As a user, I want to view the current monthly challenge, so that I can be inspired and participate.* _**(Future Release)**_          | 3           |
+| **3.2.2**    | *As a user, I want to see other user submissions for the challenge, so that I feel part of a community effort.* _**(Future Release)**_ | 2           |
+| **3.2.3**    | *As a user, I want to upload my monthly challenge, so that my track is grouped with other submissions.*  _**(Future Release)**_ | 2           |
 
 
 ## **Theme 4: Trust & Support**
