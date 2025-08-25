@@ -6,6 +6,19 @@
 3. [JavaScript Validation](#javascript-validation)
 4. [Python Code Quality](#python-code-quality)
 5. [Lighthouse Performance Testing](#lighthouse-performance-testing)
+6. [Responsiveness Design Testing](#responsiveness-design-testing)
+7. [User Story Testing](#user-story-testing)
+8. [Manual Testing](#manual-testing)
+   - [Navigation Testing](#navigation-testing)
+   - [Form Testing](#form-testing)
+   - [Audio Player Testing](#audio-player-testing)
+9. [Defensive Programming Testing](#defensive-programming-testing)
+   - [Authentication Security](#authentication-security)
+   - [Content Moderation](#content-moderation)
+   - [Input Validation](#input-validation--xss-protection)
+10. [AWS S3 Storage Testing](#aws-s3-storage-testing)
+11. [Fixed Issues](#fixed-issues)
+12. [Bug Reporting](#bug-reporting)
 
 ## HTML Validation
 
@@ -164,7 +177,7 @@ Although current performance scores are good, future versions will address addit
 - **Content Moderation UX** - Loading states and fallback handling for third-party API delays.
 
 **Technical Infrastructure:**
-- **CDN Integration** - Implement [CloudFront](https://devcenter.heroku.com/articles/using-amazon-cloudfront-cdn) for global asset delivery
+- **CDN Integration** - Implement [CloudFront](https://devcenter.heroku.com/articles/using-amazon-cloudfront-cdn) for global asset delivery _(for a larger user base)_
 - **Database Query Optimization** - Reduce render-blocking database calls
 - **Third-party Resource Optimization** - Minimize external dependency impact
 
@@ -302,14 +315,19 @@ All pages tested across multiple devices and browsers to ensure consistent user 
 ### Conclusion
 While aesthetic and branding improvements are planned for future versions, the current implementation successfully delivers a fully functional and accessible user experience on all platforms tested.
 
-**Last Updated: [24/08/2025]**
+**Responsiveness Testing Last Updated: [24/08/2025]**
 
 
 ## User Story Testing
 
 Testing all user stories implemented in the current MVP to ensure acceptance criteria are met and functionality works as expected.
 
-**MVP Scope Note:** Some user stories (Monthly Challenges, Track Tagging) were removed from MVP scope due to timeline constraints and are planned for future releases.
+**MVP Scope Note:** Some user stories (Monthly Challenges, Track Tagging) were removed from MVP scope due to strategic feature prioritization and timeline constraints. These features were identified as lower value for the initial MVP version, as they would provide greater benefit once the platform has grown:
+
+- **Track Tagging/Filtering**: More valuable when there's sufficient content volume to justify sophisticated filtering and discovery features
+- **Monthly Challenges**: More impactful with a larger user base to create meaningful community engagement and participation
+
+These features remain in the product backlog for future development phases when user adoption and content volume will maximize their value proposition.
 
 ### **Theme 1: Onboarding & Identity**
 
@@ -412,4 +430,188 @@ Testing all user stories implemented in the current MVP to ensure acceptance cri
 
 These features remain in the product backlog for future development phases when user adoption and content volume will maximize their value proposition.
 
-**Last Updated: [24/08/2025]**
+**User Story Testing Last Updated: [24/08/2025]**
+
+## Manual Testing
+
+Comprehensive manual testing of all functionality across different user scenarios.
+
+### Navigation Testing
+
+| Feature | Test Case | Steps | Expected | Actual | Status |
+|---------|-----------|-------|----------|--------|--------|
+| Main Navigation | All nav links work | Click each nav item | Correct page loads | ✅ Works | ✅ Pass |
+| Mobile Menu | Hamburger menu functions | Click hamburger, test links | Menu opens, links work | ✅ Works | ✅ Pass |
+| Breadcrumbs | Track navigation works | Navigate deep into site | Breadcrumbs show correct path | ✅ Works | ✅ Pass |
+
+### Form Testing
+
+| Form | Test Case | Steps | Expected | Actual | Status |
+|------|-----------|-------|----------|--------|--------|
+| Contact Form | Valid submission | Fill all fields, submit | Success message, email sent | ✅ Works | ✅ Pass |
+| Upload Form | File validation | Try invalid file types | Error message shown | ✅ Works | ✅ Pass |
+| Profile Edit | Image upload | Upload profile picture | Image saves and displays | ✅ Works | ✅ Pass |
+
+### Audio Player Testing
+
+| Feature | Test Case | Steps | Expected | Actual | Status | Evidence |
+|---------|-----------|-------|----------|--------|--------|----------|
+| Audio Playback | Track plays correctly | Click play button | Audio plays from S3 | ✅ Works | ✅ Pass |
+| Audio Controls | All controls function | Test play/pause/seek | Controls respond correctly | ✅ Works | ✅ Pass |
+| Multiple Players | Only one plays at time | Start second track while first playing | First pauses, second plays | ✅ Works | ✅ Pass |
+| Infinite Scroll | Lazy loading on slow connections | Throttle network to "Slow 3G" in dev tools, scroll to bottom of feed | Loading indicator appears, next batch loads smoothly | ✅ Loading spinner displays, 5 additional tracks load correctly | ✅ Pass | ![Infinite Scroll GIF](docs/images/test-screenshots/gifs/low-speed-throttle-lazy-load.gif) |
+
+## Defensive Programming Testing
+
+Testing error handling, edge cases, and security measures.
+
+### Authentication Security
+
+| Test Case | Steps | Expected Behaviour | Result | Status |
+|-----------|-------|-------------------|--------|--------|
+| Unauthorized Access | Try to access profile edit without login | Redirect to login page | ✅ Redirected | ✅ Pass |
+| CSRF Protection | Remove CSRF token from contact form using browser dev tools, attempt submission | 403 Forbidden error displayed | ✅ Django blocks submission with standard "CSRF verification failed" message | ✅ Pass |
+| Session Management | Try to access after logout | No access to protected pages | ✅ Secured | ✅ Pass |
+
+### File Upload Security
+
+| Test Case | Steps | Expected Behaviour | Result | Status |
+|-----------|-------|-------------------|--------|--------|
+| File Type Validation | Upload non-audio file | Rejection with error message | ✅ Rejected | ✅ Pass |
+| File Size Limits | Upload >100MB file | Rejection with size error | ✅ Rejected | ✅ Pass |
+| Malicious Files | Upload .exe file renamed as malicious-song.mp3.exe | File rejected due to executable extension | ✅ Upload blocked - dangerous extension detected | ✅ Pass |
+| Invalid Audio Content | Upload text file renamed as fake-song.mp3 | File accepted based on extension (content validation planned for future enhancement) | ✅ Extension validation working, file accepted | ✅ Pass |
+
+### Input Validation & XSS Protection
+
+| Test Case | Input Attempted | Expected Behaviour | Result | Status | Evidence |
+|-----------|-----------------|-------------------|--------|--------|----------|
+| HTML Injection | `<script>alert('XSS')</script>` in profile bio field | HTML tags blocked, error message displayed | ✅ "No HTML tags are allowed" message shown | ✅ Pass | ![HTML validation screenshot](docs/images/test-screenshots/security-validation.png) |
+
+### ProfileForm Security Testing - Content Moderation
+
+| Test Case | Input | Field | Expected Behaviour | Result | Status | Evidence |
+|-----------|-------|-------|-------------------|--------|--------|----------|
+| **Mild Offensive Content** | Moderately inappropriate language | Display Name | May not trigger if below 0.7 threshold | ✅ Toxicity score below threshold, allowed | ✅ Pass |  |
+| **Highly Toxic Content** |  Offensive language | Display Name | "Your display name may contain inappropriate language" error | ✅ Blocked with Perspective API error | ✅ Pass | ![Highly Toxic Content Evidence](docs/images/test-screenshots/profile-display-name-moderation.png) |
+| **Bio Content Moderation** | Same highly toxic content | Bio | "Your bio may contain inappropriate language" error | ✅ Perspective API working on bio field | ✅ Pass | ![Bio Content Moderation Evidence](docs/images/test-screenshots/bio-moderation.png) |
+| **Pronouns Moderation** | Offensive language | Pronouns | "Your pronouns may contain inappropriate language" error | ✅ All fields have consistent moderation | ✅ Pass | ![Pronouns Moderation Evidence](docs/images/test-screenshots/pronouns-moderation.png) | 
+| **Username Moderation - Before Fix** | Inappropriate language | Username | Should be blocked by Perspective API | ❌ **Gap Identified** - Username missing content moderation | ❌ Fail  | **FIXED** see next row 
+| **Username Moderation - After Fix** | Same inappropriate content | Username | "Your username may contain inappropriate language" error | ✅ Perspective API now covers username field | ✅ Pass | ![Username Moderation Evidence](docs/images/test-screenshots/username-moderation.png) |
+
+**Testing Note:** Perspective API uses a 0.7 toxicity threshold - mild inappropriate content may be allowed while severely toxic content is blocked. This demonstrates the API's nuanced content analysis capabilities.
+
+**Moderation Gap Identified and Resolved:**
+- **Issue**: Username field missing Perspective API content moderation while other fields had it
+- **Root Cause**: Inconsistent validation implementation across form fields  
+- **Fix Applied**: Added Perspective API moderation block to `clean_username()` method:
+  ```python
+  try:
+      toxicity = get_toxicity_score(username)
+      if toxicity > 0.7:
+          raise ValidationError(
+              "Your username may contain inappropriate language. "
+              "Please revise."
+          )
+  except ValidationError:
+      raise
+  except Exception:
+      pass  # Allow if API fails
+  ```
+
+### Content Moderation
+
+| Test Case | Steps | Expected Behaviour | Result | Status | Evidence |
+|-----------|-------|-------------------|--------|--------|--------------------------|
+| Toxic Comment | Submit comment with offensive content | Perspective API blocks toxic content | ✅ Blocked | ✅ Pass | ![Toxic Comment Evidence](docs/images/test-screenshots/gifs/toxic-comment.gif)  |
+| Track Title and Description | Submit track with offensive title/description | Perspective API blocks toxic content | ✅ Blocked | ✅ Pass | ![Track Title and Description Evidence](docs/images/test-screenshots/upload-content-form.png)  |
+| Inappropriate Image - High Confidence | Upload inappropriate profile image (moderation settings are currently configured to flag images of smoking 🚬 for testing this feature. Future moderation settings will be more comprehensive and lenient.) | Rekognition flags content | ✅ Flagged | ✅ Pass | ![Moderation Flag](docs/images/test-screenshots/gifs/smoking-moderation.gif) |
+| Borderline Image Content - Low Confidence | Upload ambiguous content (cheese plant image - Rekognition confidence settings deliberately lowered for testing to demonstrate admin review workflow - (it thinks it's a different type of plant)) | Image flagged for admin review, user sees "pending moderation" message, content hidden until admin approval | ✅ Flagged for review, user notified of pending status | ✅ Pass | ![Cheese Plant Moderation](docs/images/test-screenshots/gifs/cheese-plant-pending-moderation.gif) |
+
+### Error Handling
+
+| Test Case | Steps | Expected Behaviour | Result | Status |
+|-----------|-------|-------------------|--------|--------|
+| 404 Errors | Visit non-existent URL | Custom 404 page shown | ✅ Custom page | ✅ Pass |
+| 500 Errors | Create temporary view with `raise Exception("Test error")` | Custom error page shown | ✅ Custom page | ✅ Pass |
+
+## AWS S3 Storage Testing
+
+Testing file upload, storage, and cleanup functionality to ensure efficient cloud storage management.
+
+### S3 Integration Testing
+
+| Feature | Test Case | Expected Result | Actual Result | Status |
+|---------|-----------|-----------------|---------------|--------|
+| Audio Upload | Upload new track | File stored in S3 bucket | ✅ File uploaded successfully | ✅ Pass |
+| Profile Image Upload | Upload profile picture | Image stored in S3 bucket | ✅ Image uploaded successfully | ✅ Pass |
+| File Replacement | Replace existing audio file | Old file deleted, new file stored | ✅ Old file removed, new file added | ✅ Pass |
+| Profile Image Replacement | Update profile picture | Previous image deleted from S3 | ✅ Previous image cleaned up | ✅ Pass |
+| Track Deletion | Delete user's track | Audio file removed from S3 | ✅ File deleted from storage | ✅ Pass |
+| Account Deletion | Delete user account | All user files removed from S3 | ✅ All associated files cleaned up | ✅ Pass |
+
+### Storage Management Testing
+
+| Test Case | Steps | Expected Behaviour | Result | Status |
+|-----------|-------|-------------------|--------|--------|
+| No Storage Bloat | Upload → Replace → Delete cycle | Only current files remain in S3 | ✅ No orphaned files | ✅ Pass |
+| File Naming | Upload multiple files | Unique filenames generated | ✅ UUID-based naming prevents conflicts | ✅ Pass |
+| Folder Structure | Upload various file types | Files organized in appropriate folders | ✅ `/tracks/` and `/images/` folders maintained | ✅ Pass |
+| File Size Validation | Upload oversized files | Rejected before S3 upload | ✅ Server-side validation prevents waste | ✅ Pass |
+| File Type Validation | Upload invalid file types | Rejected before S3 upload | ✅ Only allowed formats reach S3 | ✅ Pass |
+
+
+### Storage Efficiency
+
+**Key Achievements:**
+- ✅ **Zero Storage Bloat**: File replacement and deletion logic properly removes old files
+- ✅ **Efficient Organization**: Files stored in logical folder structure (`/tracks/`, `/images/`)
+- ✅ **Unique Naming**: UUID-based filenames prevent conflicts and overwrites
+- ✅ **Validation Before Upload**: Server-side checks prevent invalid files reaching S3
+- ✅ **Clean Cascade Deletion**: Account deletion removes all associated files
+
+**Storage Management Logic:**
+- **File Replacement**: Old files automatically deleted when users upload new versions
+- **Account Deletion**: Cascading deletion removes all user-associated S3 objects
+- **Folder Structure**: Organized storage with separate paths for different file types
+
+### Summary
+AWS S3 integration demonstrates proper cloud storage management with efficient file lifecycle handling. No storage bloat detected - the delete/replace logic ensures only current, active files remain in the bucket, optimizing both storage costs and organization.
+
+**S3 Testing Last Updated: [24/08/2025]**
+
+
+### Fixed Issues
+**Bug Found During Final Testing:**
+- **Issue**: JavaScript error in audio player - missing showStickyPlayer method
+- **Fix Applied**: Removed feature call, preventing error and ran eslint again to ensure no new issues
+- **Future Enhancement**: Sticky player functionality planned for next release
+- **Impact**: Audio playback works correctly, no user-facing impact
+
+## Future Testing Scope
+
+**Planned Testing Improvements:**
+- **Automated Regression Testing**: Django unit tests, integration tests, and JavaScript test suites to catch breaking changes during development
+
+**Lessons Learned:**
+Regression testing would have been incredibly valuable during development. Occasionally features broke when adding new functionality, and without automated tests, these issues weren't discovered until several commits later, making troubleshooting significantly more time-consuming. Future versions will implement comprehensive test coverage from the start of development.
+
+**Testing Summary:**
+- **Manual Testing**: All core functionality verified across devices
+- **User Stories**: All acceptance criteria met  
+- **Defensive Programming**: Security measures and error handling verified
+- **Cross-browser**: Consistent functionality across all tested browsers
+- **Future Enhancement**: Automated regression testing pipeline planned
+
+**Last Updated: [25/08/2025]**
+
+## Bug Reporting
+
+While every effort has been made to test thoroughly across all devices and scenarios, **if you encounter any issues or have suggestions for improvement, feedback is welcomed and appreciated.**
+
+Bug reports can be submitted via:
+- **GitHub Issues**: [https://github.com/Seren-Hughes/modmixx/issues](https://github.com/Seren-Hughes/modmixx/issues)
+
+All feedback contributes to the ongoing development and refinement of the modmixx platform.
+
+**Final Testing Review Completed: [25/08/2025]**
