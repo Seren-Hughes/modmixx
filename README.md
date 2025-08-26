@@ -1,37 +1,90 @@
 # modmixx
+![modmixx am i responsive screenshot](docs/images/screenshots/modmixx-mockup-devices-screenshot.png)
 
-![modmixx logo](docs/images/design/modmixx-name-logo.jpg)
-
-## Project Overview
-
-**modmixx** is a web-based platform designed to foster creativity and collaboration among music makers of all skill levels. It provides a safe, inclusive space where users can share unfinished ideas, learn from others, and build meaningful connections. The platform prioritizes creativity over perfection and community over competition, offering an alternative to traditional self-promotion-focused platforms.
-
----
+## Tech Stack
+![Python](https://img.shields.io/badge/Python-3.13-blue?style=flat&logo=python&logoColor=white)
+![Django](https://img.shields.io/badge/Django-5.2.4-092E20?style=flat&logo=django&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=flat&logo=javascript&logoColor=black)
+![AWS](https://img.shields.io/badge/AWS-S3%20%7C%20Rekognition-FF9900?style=flat&logo=amazon-aws&logoColor=white)
+![Google OAuth](https://img.shields.io/badge/OAuth-Google-4285F4?style=flat&logoColor=white)
+![Perspective API](https://img.shields.io/badge/Google%20|%20Jigsaw-Perspective%20API-4285F4?style=flat&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=flat&logo=postgresql&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?style=flat&logo=bootstrap&logoColor=white)
+![Heroku](https://img.shields.io/badge/Heroku-430098?style=flat&logo=heroku&logoColor=white)
 
 # Table of Contents
 
 1. [Project Overview](#project-overview)
-2. [Purpose and Objectives](#purpose-and-objectives)
+2. [Purpose, Industry Context and Objectives](#purpose-industry-context-and-objectives)
 3. [Concept Goals](#concept-goals)
- 
+4. [Core Features](#core-features)
+5. [Future Features](#future-features)
+6. [Planning](#planning)
+   - [Wireframes](#wireframes)
+   - [Colour Palette - MVP Implementation](#colour-palette---mvp-implementation)
+7. [Accessibility](#accessibility)
+   - [Colour Contrast & Visual Design](#colour-contrast--visual-design)
+8. [Typography](#typography)
+9. [Design Process & Documentation](#design-process--documentation)
+10. [Site Map](#site-map)
+11. [User Flow Diagrams](#user-flow-diagrams)
+12. [ERD](#erd)
+13. [Agile Project Management](#agile-project-management)
+14. [Themes, Epics, and User Stories](#themes-epics-and-user-stories)
+    - [Theme 1: Onboarding & Identity](#theme-1-onboarding--identity)
+      - [Epic 1.1: Homepage Welcome](#epic-11-homepage-welcome)
+      - [Epic 1.2: Navigation](#epic-12-navigation)
+      - [Epic 1.3: User Accounts](#epic-13-user-accounts)
+    - [Theme 2: Music Sharing & Discovery](#theme-2-music-sharing--discovery)
+      - [Epic 2.1: Track Uploads](#epic-21-track-uploads)
+      - [Epic 2.2: Track Feed](#epic-22-track-feed)
+      - [Epic 2.3: Comments](#epic-23-comments)
+    - [Theme 3: Belonging & Connection](#theme-3-belonging--connection)
+      - [Epic 3.1: User Profiles](#epic-31-user-profiles)
+      - [Epic 3.2: Monthly Challenges](#epic-32-monthly-challenges)
+    - [Theme 4: Trust & Support](#theme-4-trust--support)
+      - [Epic 4.1: Static Information Pages](#epic-41-static-information-pages)
+      - [Epic 4.2: Contact & Support](#epic-42-contact--support)
+    - [User Stories for Future Features](#user-stories-for-future-features)
+    - [Fibonacci Effort vs Risk Matrix](#fibonacci-effort-vs-risk-matrix)
+15. [Technologies Used](#technologies-used)
+    - [Languages & Frameworks](#languages--frameworks)
+    - [Frontend Technologies & UI](#frontend-technologies--ui)
+    - [JavaScript APIs & Browser Features](#javascript-apis--browser-features)
+    - [Backend & Database](#backend--database)
+    - [Authentication & Security](#authentication--security)
+    - [Cloud Services & APIs](#cloud-services--apis)
+    - [File Processing](#file-processing)
+    - [Development & Deployment](#development--deployment)
+    - [Code Quality Tools](#code-quality-tools)
+
+## Project Overview
+
+**modmixx** is a web-based platform designed to foster creativity and collaboration among music makers of all skill levels. It provides a safe, inclusive space where users can share unfinished ideas, learn from others, and build meaningful connections. The platform prioritises creativity over perfection and community over competition, offering an alternative to traditional self-promotion-focused platforms.
+
+[Live Site](https://modmixx-427f89e87a1b.herokuapp.com/)  
+
+---
  
 
 ## Purpose, Industry Context and Objectives
 
-The music industry is evolving rapidly, presenting both challenges and opportunities for independent artists. With declining revenue from streaming platforms and the rise of AI-generated content, original, human-made music risks being undervalued. Despite these shifts, the demand for creativity, connection, and community in music remains as strong as ever.
+The music industry is undergoing significant transformation, presenting both challenges and opportunities for independent artists. With declining revenue from streaming platforms and the rise of AI-generated content, original, human-made music risks being undervalued. Despite these shifts, the demand for creativity, connection, and community in music remains as strong as ever.
 
-In parallel, the tools for music creation have become more accessible than ever. The market for both professional and hobbyist hardware, from analogue synthesizers to MIDI controllers, is thriving. Furthermore, the availability of powerful free software—including Digital Audio Workstations (DAWs), VST plugins, and sample packs—has lowered the barrier to entry, empowering a new generation of creators. This democratization of tools has expanded the community of music makers, creating a greater need for a platform that supports their journey.
+Simultaneously, music creation tools have become more accessible than ever before. The market for both professional and hobbyist hardware continues to thrive, from analogue synthesizers to MIDI controllers. Additionally, powerful free software including Digital Audio Workstations (DAWs), VST plugins, and sample libraries have dramatically lowered barriers to entry, empowering a new generation of creators. This democratisation of production tools has expanded the community of music makers, creating a need for platforms that genuinely support their creative journey.
 
-**modmixx** is a platform designed to fill a critical gap in the market: a space where music creators of all skill levels can share, experiment, and grow without the pressure of perfection or competition. Unlike traditional platforms that prioritize polished content and algorithmic visibility, modmixx fosters sincerity, collaboration, and experimentation.
+**modmixx** addresses this gap by providing a dedicated space where music creators of all skill levels can share, experiment, and grow without the pressure of perfection or competition that characterises existing platforms. Unlike traditional social media that prioritises polished content and algorithmic visibility, modmixx fosters authentic creativity, collaboration, and experimentation.
 
-This project was developed as part of a full-stack web development diploma assessment to showcase technical proficiency while addressing a real-world need. With its inclusive design and focus on community, modmixx has the potential to grow into a thriving, user-driven platform that empowers creators and offers a supportive alternative for sharing and creating music.
+The platform's focus on authentic creativity and community building creates natural opportunities for meaningful partnerships with the hardware and software brands that creators use daily. When users share their creative processes and the tools that enable their work, it builds genuine, trust-based connections between creators and the brands that support their journey.
+
+With its emphasis on inclusivity and authentic connection, modmixx has the potential to evolve into a thriving, user-driven platform that truly empowers creators while establishing valuable partnerships that benefit the entire community.
 
 ---
 
 ## Concept Goals
 
 - **Creative Playground**: A space for users to upload musical ideas, sketches, and tracks without fear of judgment.
-- **A Safe & Inclusive Space**: Prioritizes a safe and welcoming environment for all creators, with a focus on amplifying voices often underrepresented in the music industry.
+- **A Safe & Inclusive Space**: Prioritises a safe and welcoming environment for all creators, with a focus on amplifying voices often underrepresented in the music industry.
 - **Learning Through Sharing**: Encourages users to share their creative processes (e.g., DAW, techniques, effects) to inspire and educate others.
 - **Community & Feedback**: Promotes thoughtful, collaborative feedback rather than criticism.
 - **Challenges**: Monthly creative prompts to inspire participation and experimentation.
@@ -48,7 +101,6 @@ This project was developed as part of a full-stack web development diploma asses
 - **Main Feed**: Displays user uploads for discovery and engagement.
 - **Commenting System**: Enables collaborative feedback on tracks.
 - **User Profiles**: Includes pronouns, bio, profile picture, and uploaded tracks.
-- **Challenges Page**: Features monthly challenges and user submissions.
 - **Static Pages**: Includes About, Community Guidelines, and 404 pages.
 - **Contact Form**: Allows users to provide feedback or request support.
 
@@ -56,6 +108,7 @@ This project was developed as part of a full-stack web development diploma asses
 
 ## Future Features
 
+- **Challenges**: Monthly creative prompts to inspire participation and experimentation.
 - **Learning Content**: Tutorials, masterclasses, and mentorship opportunities featuring a diverse range of artists and producers to ensure representation and broad perspectives.
 - **Social Features**: Follow/friend functionality with personalized feeds.
 - **Collaboration Tools**: Direct messaging and shared project spaces.
@@ -115,20 +168,84 @@ This project was developed as part of a full-stack web development diploma asses
 #### Challenge Details Page and Submissions
 ![Challenge Details Page and Submissions Wireframe](docs/images/wireframes/challenge-page-and-submissions-wireframes.jpg)
 
-### Colour Palette
-![Colour Palette](docs/images/design/main-colour-palette.png)
+### Colour Palette - MVP Implementation
+![MVP Colour Palette](docs/images/design/modmixx-colour-palette.png)
 
-#### Palette Brightness Variations
-![Palette Brightness Variations](docs/images/design/brightness-shades-colour-palette.jpg)
+**Primary Brand Colours:**
+- **Yellow**: #FFD20B 
+- **Orange**: #F3682C   
+- **Pink**: #F82170 
+- **Purple**: #B544D0
 
-### Accessibility
+**Interface Colours:**
+- **Background**: #FFFFFF (Clean white base)
+- **Text**: #24343c (Charcoal black for readability)
+- **Gradient Backgrounds**: 
+  - #FFFCF0 (Pale cream)
+  - #FEF6F2 (Soft peach) 
+  - #FFF2F6 (Light pink)
 
-#### Contrast 
+**Design Approach:**
+The interface emphasises clean white space and visual breathing room, with subtle pale gradient backgrounds in near off-white tones (#FFFCF0 → #FEF6F2 → #FFF2F6). This creates a gentle way to introduce colour without overwhelming the user experience. Interactive elements feature vibrant orange-to-pink gradients with white text for clear call-to-action visibility, while maintaining accessibility and readability throughout.
+
+*Note: The complete brand palette is maintained in CSS custom properties for consistent design system implementation and future development phases.*
+
+## Accessibility
+
+#### Colour Contrast & Visual Design
+
+Accessibility was prioritised from the planning phase through implementation and testing. Colour contrast ratios were carefully evaluated and tested throughout the development process to ensure WCAG compliance.
+
+**Planning Phase:**
+- Colour contrast combinations were evaluated during design planning using WebAIM contrast checker
+- Multiple contrast scenarios documented on Miro planning board with screenshots
+- Accessibility considerations informed colour palette decisions from the start
+
+**Implementation Phase:**
+- Continuous contrast testing during development using eyedropper tools and WebAIM contrast checker
+- Strategic design decisions made to enhance readability and user experience, including:
+  - Hero overlay gradient with 70% opacity for sufficient background contrast
+  - Gradient overlay prevents hero image from detracting attention from CTA buttons and headline
+  - Text shadows and box shadows added to improve text legibility over images
+  - White text on gradient overlays tested for optimal contrast ratios
+
+**Example - Hero Section Design Strategy:**
+```css
+/* Hero brand pink to orange gradient overlay for contrast enhancement */
+.hero-gradient-overlay {
+    background: linear-gradient(135deg, rgba(248,33,112,0.7) 0%, rgba(243,104,44,0.7) 100%);
+} 
+
+/* Deep burgundy text shadow for enhanced readability */
+.hero-text {
+    text-shadow: 0px 3px 20px rgba(84, 6, 35); 
+}
+
+```
 
 ### Typography
 
+
+**Primary Fonts:**
+**Nunito** - Main body font, clean and highly readable
+![Nunito](docs/images/design/google-font-nunito.png)
+
+**Raleway** - Headlines and subheadings in bold weights for visual hierarchy
+![Raleway](docs/images/design/google-font-raleway.png)
+
+**Design Strategy:**
+Both fonts were chosen for exceptional readability across devices and accessibility compliance. Raleway's versatile weight range (100-900) provides strong visual hierarchy for headlines and taglines, while Nunito ensures comfortable reading for body content.
+
+### Design Process & Documentation
+
+For a comprehensive view of the complete design process, and planning documentation, visit the project planning board:
+
+**[View Complete Design Process on Miro →](https://miro.com/app/live-embed/uXjVIjLi6S0=/?embedMode=view_only_without_ui&moveToViewport=-9757%2C-5087%2C50008%2C25645&embedId=323941935999)**
+
+*The Miro board contains detailed planning and research that informed the development of this MVP.*
+
 ### Site Map
-![Site Map](docs/images/diagrams/site-map-1.jpg)
+![Site Map](docs/images/diagrams/modmixx-site-map-mvp.jpg)
 
 ### User Flow Diagrams
 
@@ -138,6 +255,8 @@ This project was developed as part of a full-stack web development diploma asses
 #### User Flow for Existing User Posting a Challenge Track
 ![User Flow for Existing User Posting a Challenge Track](docs/images/diagrams/user-flow-2.jpg)
 
+*Note: This user flow represents planned functionality for monthly challenges, which were strategically deferred from the MVP scope to prioritise core platform features. Challenge functionality provides greater community value once the platform has established its user base and proven engagement with core features. The challenges feature is planned for future development phases.*
+
 #### User Flow for User Commenting on a Track
 ![User Flow for User Commenting on a Track](docs/images/diagrams/user-flow-3.jpg)
 
@@ -145,7 +264,10 @@ This project was developed as part of a full-stack web development diploma asses
 ![User Flow for User Editing Their Profile](docs/images/diagrams/user-flow-4.jpg)
 
 ### ERD 
-![ERD](docs/images/diagrams/modmixx-erd-stretch-goals-plus-about-contact.jpg)
+
+*Entity Relationship Diagram showing the core data structure: User authentication, Profile management, Track uploads with S3 storage (PATH), Comments, and Contact form functionality.*
+
+![ERD](docs/images/diagrams/modmixx-core-erd.png)
 
 
 
@@ -301,7 +423,7 @@ _As a seasoned music producer who thrives on collaboration, I want to find a spa
 
 **Goals:**
 - Build a welcoming community for music creativity  
-- Reduce barriers to entry for marginalised people in music tech  
+- Reduce barriers to entry for people in music tech  
 - Focus on fun, honesty, connection, learning - not performance or clout  
 - A music producers hangout/playground
 
@@ -317,7 +439,7 @@ _As the developer, I want to build a platform that encourages authenticity over 
 
 
 ## Themes, Epics, and User Stories
-The project was organized into themes, epics, and user stories to ensure a user-centered approach to development. Each theme represents a key area of focus, with epics breaking down larger goals into manageable user stories.
+The project was organised into themes, epics, and user stories to ensure a user-centered approach to development. Each theme represents a key area of focus, with epics breaking down larger goals into manageable user stories.
 
 ## **Theme 1: Onboarding & Identity**
 
@@ -354,7 +476,7 @@ The project was organized into themes, epics, and user stories to ensure a user-
 
 ### **Epic 2.1: Track Uploads**
 
-**Note:** Track tagging functionality was deferred to future releases due to MVP timeline constraints.
+**Note:** Track tagging functionality was deferred to future releases.
 
 ### User Stories:
 
@@ -397,7 +519,7 @@ The project was organized into themes, epics, and user stories to ensure a user-
 
 ### **Epic 3.2: Monthly Challenges** *(Removed from MVP Scope)*
 
-**Note:** Monthly challenges were initially planned but removed from the current MVP scope due to project timeline constraints. This feature is planned for future development phases.
+**Strategic MVP Decision:** Monthly challenges were initially planned but strategically deferred from the MVP scope to prioritise core platform functionality. This feature provides maximum value when there's sufficient user adoption and content volume to create meaningful community engagement. The MVP focuses on establishing the foundational user experience authentication, track sharing, and community interaction which are prerequisites for successful challenge participation. Monthly challenges will be implemented in future releases once the platform has grown its user base and proven the core value proposition.
 
 ### User Stories:
 
@@ -472,7 +594,71 @@ The project was organized into themes, epics, and user stories to ensure a user-
 
 
 #### Fibonacci Sequence for Estimation
-The Fibonacci sequence was used for estimating the complexity of tasks, helping to prioritize features and manage workload effectively. 
+The Fibonacci sequence was used for estimating the complexity of tasks, helping to prioritise features and manage workload effectively.
 
 #### Fibonacci Effort vs Risk Matrix
-![Fibonacci Effort vs Risk Matrix](docs/images/diagrams/effort-risk-matrix-fibonacci.jpg)
+![Fibonacci Effort vs Risk Matrix](docs/images/diagrams/modmixx-fibonacci-matrix.jpg)
+
+## Technologies Used
+
+### Languages & Frameworks
+- **HTML5** - Semantic structure and content
+- **CSS3** - Styling, responsive layouts, custom properties
+- **JavaScript (ES6+)** - Client-side interactivity and dynamic functionality
+- **Python 3.13** - Backend application logic
+- **Django 5.2.4** - Full-stack web framework with ORM and templating
+
+### Frontend Technologies & UI
+- **Bootstrap 5** - Responsive CSS framework and components
+- **Django Crispy Forms 2.4** - Enhanced form rendering and styling
+- **Crispy Bootstrap5 2025.6** - Bootstrap 5 integration for forms
+- **Google Fonts** - Typography (Nunito, Raleway)
+- **Font Awesome** - Iconography
+
+### JavaScript APIs & Browser Features
+- **Fetch API** - Modern AJAX for dynamic content loading
+- **File API** - Drag-and-drop and file upload handling
+- **Intersection Observer API** - Infinite scroll and lazy loading
+- **HTML5 Audio API** - Audio playback and management for tracks
+- **Bootstrap Modal & Toast API** - Enhanced UI feedback and modal management
+
+### Backend & Database
+- **PostgreSQL** - Primary relational database management (psycopg2)
+- **Custom User Model** - Email-based authentication system
+- **Django Signals** - Automated profile creation and model events
+- **dj-database-url 3.0.1** - Database configuration management
+
+### Authentication & Security
+- **Django Allauth 65.10.0** - Comprehensive authentication system with Google OAuth
+- **Google OAuth 2.0** - Social authentication for Google account sign-up/login
+- **Custom Form Validation** - Multi-layered security with regex patterns
+- **Honeypot Spam Protection** - Bot detection via hidden form fields
+- **File Upload Security** - Type, size, and content validation
+- **Content Moderation** - AI-powered filtering for text and images
+
+### Cloud Services & APIs
+- **Amazon S3** - Cloud storage for audio files and images
+- **AWS Rekognition** - AI-powered image content moderation
+- **Google Perspective API** - Real-time toxicity detection for text content by Google & Jigsaw
+- **Gmail SMTP** - Email service for contact forms
+- **Boto3 1.40.1** - AWS SDK for Python
+
+### File Processing
+- **Pillow 11.3.0** - Image processing and validation
+- **Mutagen 1.47.0** - Audio file metadata extraction and duration calculation
+- **Python-ULID 3.0.0** - Unique identifier generation for file naming
+
+### Development & Deployment
+- **GitHub** - Version control and repository management
+- **VSCode** - Code editing and development environment
+- **Heroku** - Application hosting and deployment
+- **Gunicorn 23.0.0** - WSGI HTTP server for production
+- **Whitenoise 6.9.0** - Static file serving in production
+- **Django Storages 1.14.6** - Custom storage backends for S3
+
+### Code Quality Tools
+- **Black 25.1.0** - Python code formatter
+- **Flake8 7.3.0** - Python linting and style guide enforcement
+- **isort 6.0.1** - Python import statement sorting
+- **djlint 1.36.4** - Django template linting and formatting
+- **ESLint** - JavaScript linting and style guide enforcement
