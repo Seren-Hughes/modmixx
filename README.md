@@ -783,20 +783,26 @@ The landing page introduces new visitors to the modmixx community with a clear v
 **Contextual navigation that adapts based on user authentication status:**
 
 **Pre-Authentication Navigation**
+
 ![Logged out Navbar](docs/images/screenshots/logged-out-navbar.png)
+
 - Clear signup/login options
 - Access to About and Contact pages
 - Responsive collapse on mobile devices
 
 **Post-Authentication Navigation**
+
 ![Logged in Navbar](docs/images/screenshots/signed-in-navbar.png)
+
 - Feed access for track discovery
 - Upload functionality for content creation
 - Profile management
 - Secure logout option
 
 **Mobile-Responsive Design**
+
 ![Mobile navbar collapsed](docs/images/screenshots/collapsed-navbar.png)
+
 - Bootstrap 5 collapse component
 - Touch-friendly interface
 - Maintains full functionality on smaller screens
@@ -810,6 +816,10 @@ The landing page introduces new visitors to the modmixx community with a clear v
 - **Email Verification** - Secure account confirmation workflow
 - **Form Security** - Honeypot spam protection and comprehensive validation
 
+### Main Feed
+
+![Main Feed Screenshot](docs/images/screenshots/main-feed-page.png)
+
 ### Track Upload & Management System
 
 **Comprehensive Upload Process:**
@@ -817,8 +827,8 @@ The landing page introduces new visitors to the modmixx community with a clear v
 - **Multi-Format Support** - Accepts various audio formats (MP3, WAV, M4A, etc.)
 - **Rich Metadata Collection** - Title, description, DAW used, optional cover art
 - **File Validation** - Security checks for file type, size, and content
-- **AWS S3 Integration** - Secure cloud storage with CDN delivery
-- **Audio Processing** - Automatic duration extraction and metadata parsing
+- **AWS S3 Integration** - Secure cloud storage
+- **Audio Processing** - Automatic duration extraction
 - **Progress Feedback** - Real-time upload status and error handling
 
 **Content Moderation Pipeline:**
@@ -837,12 +847,14 @@ The main feed implements a performance-optimised loading strategy that balances 
 - Displays the 5 most recent tracks immediately
 - Provides instant content engagement
 - Reduces initial page load time
-- Optimizes AWS S3 data transfer costs - Only loads audio/image files for tracks currently being viewed
-- Minimizes bandwidth usage - Prevents unnecessary downloads of media files that users may never interact with
+- Optimises AWS S3 data transfer costs - Only loads audio/image files for tracks currently being viewed
+- Minimises bandwidth usage - Prevents unnecessary downloads of media files that users may never interact with
 - Includes complete track information (audio player, metadata, comments)
 
 **Infinite Scroll Implementation:**
+
 ![Infinite scroll/lazy load loading indicator](docs/images/screenshots/infinite-scroll-lazy-load.gif)
+
 *Demonstration with throttled connection speed to show loading behaviour*
 
 **Technical Implementation:**
@@ -850,18 +862,24 @@ The main feed implements a performance-optimised loading strategy that balances 
 - **Loading States** - Visual feedback during content fetching
 
 **Navigation Enhancement:**
+
 ![Back to top button smooth scroll](docs/images/screenshots/back-to-top-smooth-scroll.gif)
+
 - **Back to Top Button** - Smooth scroll functionality for long feeds
 - **Dynamic Visibility** - Appears/disappears based on scroll position
 - **Accessibility Compliance** - Keyboard navigation support
 
-### Interactive Comment System
+### Comment System
 
-**Collaborative Feedback Features:**
-- **Threaded Comments** - Organized discussion structure
+- **Threaded Comments** - Organised discussion structure
+
+<img src="docs/images/screenshots/comment-threads.png" alt="Threaded comments example" width="50%">
+
+<img src="docs/images/screenshots/comment-edit-delete.png" alt="User comment edit and delete" width="50%">
+
 - **Real-Time Validation** - Immediate feedback on comment length and content
 - **Edit/Delete Functionality** - User control over their contributions
-- **Moderation Integration** - AWS and Google powered content filtering for community safety
+- **Moderation Integration** - Google Perspective API powered content filtering for community safety
 - **Responsive Design** - Optimised for mobile and desktop interaction
 
 ### AI-Powered Content Moderation
@@ -871,14 +889,15 @@ The main feed implements a performance-optimised loading strategy that balances 
 **Image Content Analysis:**
 - **AWS Rekognition Integration** - Detects inappropriate visual content
 - **Confidence Thresholding** - Configurable sensitivity levels (default: 80%)
-- **Category Detection** - Identifies suggestive content, violence, explicit material
+- **Category Detection** - Identifies harmful content categories
 - **Admin Dashboard** - Review and override moderation decisions
 
 **Text Content Analysis:**
 - **Google Perspective API** - Real-time toxicity detection
-- **Multiple Attribute Analysis** - Toxicity, severe toxicity, identity attacks, threats
+- **Multiple Attribute Analysis** - Toxicity and severe toxicity
 - **Instant User Feedback** - Immediate toxic post prevention and user feedback for potentially harmful content
-![Perspective toxic flagging](docs/images/test-screenshots/gifs/toxic-comment.gif)
+
+![Perspective toxic flagging](docs/images/screenshots/toxic-comment-user-feedback.gif)
 
 ### User Profile Management
 
@@ -888,10 +907,15 @@ The main feed implements a performance-optimised loading strategy that balances 
 - **Profile Customisation** - Image upload with validation and processing
 - **Social Features Ready** - Architecture supports future follow/friend functionality
 
+<img src="docs/images/screenshots/user-profile-page.png" alt="User Profile Page" width="50%">
+
 ### Static Information Pages
 
 **Community Building Pages:**
-![About & Guidelines Page](docs/images/screenshots/about-guidelines-screenshot.png)
+
+
+<img src="docs/images/screenshots/about-guidelines-screenshot.png" alt="About & Guidelines Page" width="50%">
+
 - **About Page** - Platform mission, values, and community focus
 - **Community Guidelines** - Clear expectations for behaviour and content
 
@@ -918,7 +942,7 @@ The main feed implements a performance-optimised loading strategy that balances 
 
 - **Clean Design** - Minimal, professional appearance
 - **Consistent Branding** - Maintains visual identity across all pages
-- **Essential Links** - Quick access to key information and legal pages
+- **Essential Links** - Quick access to key information
 - **Responsive Layout** - Adapts seamlessly to different screen sizes
 
 ### Error Handling & User Experience
@@ -928,6 +952,8 @@ The main feed implements a performance-optimised loading strategy that balances 
 - **500 Error Handling** - Server error management
 
   <img src="docs/images/screenshots/500-error-screenshot.png" alt="500 Error Page" width="40%">
+
+  <img src="docs/images/screenshots/404-screenshot.png" alt="404 Error Page" width="40%">
 
 - **Form Validation** - Real-time feedback and clear error messaging
 
