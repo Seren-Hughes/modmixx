@@ -57,6 +57,8 @@
     - [File Processing](#file-processing)
     - [Development & Deployment](#development--deployment)
     - [Code Quality Tools](#code-quality-tools)
+16. [Site Features](#site-features)
+17. [Deployment](#deployment)
 
 ## Project Overview
 
@@ -467,7 +469,7 @@ The project was organised into themes, epics, and user stories to ensure a user-
 
 | Story Number | User Story                                                                                                              | Story Point |
 | ------------ | ----------------------------------------------------------------------------------------------------------------------- | ----------- |
-| **1.3.1**    | *As a new user, I want to register with a unique username and secure password, so that I can create an account safely.* | 5          |
+| **1.3.1**    | *As a new user, I want to register with my email address and a secure password, so that I can create an account safely.* | 5          |
 | **1.3.2**    | *As a returning user, I want to log in with my credentials, so that I can access my profile and uploads.*               | 3           |
 | **1.3.3**    | *As a logged-in user, I want to log out securely, so that my session ends safely.*                                      | 2          |
 
@@ -635,6 +637,7 @@ The Fibonacci sequence was used for estimating the complexity of tasks, helping 
 - **Honeypot Spam Protection** - Bot detection via hidden form fields
 - **File Upload Security** - Type, size, and content validation
 - **Content Moderation** - AI-powered filtering for text and images
+- **GitGuardian** – Enhanced security monitoring and vulnerability detection
 
 ### Cloud Services & APIs
 - **Amazon S3** - Cloud storage for audio files and images
@@ -662,3 +665,299 @@ The Fibonacci sequence was used for estimating the complexity of tasks, helping 
 - **isort 6.0.1** - Python import statement sorting
 - **djlint 1.36.4** - Django template linting and formatting
 - **ESLint** - JavaScript linting and style guide enforcement
+
+### Other Tools
+- **GitHub Projects** - For agile project management and issue tracking
+- **Miro** - Whiteboarding platform
+- **Adobe Photoshop** - Graphic design and image editing
+- **Adobe Illustrator** - Vector graphics editing and illustration
+- **ChatGPT** - Used to refine written content and improve clarity in documentation. Also utilised for learning alongside traditional documentation and resources.
+- **Coolors** - Colour palette generation tool
+- **Drawdb** - ERD (Entity Relationship Diagram) design tool
+- **Eyedropper** - Colour extraction tool for design
+
+
+## Site Features
+### Welcome Page
+
+### User Registration
+
+### Track Upload Process
+
+### Main Feed with Infinite Scroll
+
+### Comments
+### Comment Moderation
+### Image Moderation
+
+### Profile Management
+### Static Information Pages
+
+# Deployment
+## Prerequisites
+- Python **3.13**
+- Git
+- GitHub account
+- Heroku account
+- AWS account
+- Google Cloud account (for Perspective API)
+
+---
+
+## 1. Repository Setup
+
+### 1.1 Create Repository on GitHub (UI)
+1. Sign in to GitHub.
+2. Use the Code Institute template (optional) or create a new repository.
+3. Click **Use this template → Create a new repository**.
+4. Name the repository → **Create repository from template**.
+
+### 1.2 Clone & Open in VS Code
+1. In VS Code, open **Accounts** and sign in to GitHub.
+2. Go to **Source Control** → **Clone Repository**.
+3. Select your repo → choose a local folder → open in VS Code.
+
+### 1.3 Manual Git Setup (Terminal)
+```bash
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/YOUR-USERNAME/YOUR-REPO.git
+git push -u origin main
+```
+
+**For updates:**
+```bash
+git add .
+git commit -m "Your commit message"
+git push
+```
+
+---
+
+## 2. Local Development Setup
+
+### 2.1 Virtual Environment
+```bash
+python -m venv venv
+
+# Activate
+# Windows:
+venv\Scripts\activate
+# macOS/Linux:
+source venv/bin/activate
+
+pip install -r requirements.txt
+```
+
+### 2.2 Environment Variables
+```bash
+cp env_example.py env.py
+echo "env.py" >> .gitignore
+```
+- Fill in real values in `env.py`.
+- Never commit `env.py`.
+
+### 2.3 Database & Server
+```bash
+python manage.py migrate
+python manage.py createsuperuser   # optional
+python manage.py runserver
+```
+
+---
+
+## 3. AWS S3 Setup
+
+### 3.1 Create Bucket
+1. AWS Console → **S3** → **Create bucket**.
+2. Enter unique name + region → configure → **Create bucket**.
+
+### 3.2 Bucket Permissions
+
+**Bucket Policy** (replace `YOUR-BUCKET-NAME`):
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PublicReadGetObject",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::YOUR-BUCKET-NAME/*"
+    }
+  ]
+}
+```
+
+**CORS Configuration:**
+```json
+[
+  {
+    "AllowedHeaders": ["*"],
+    "AllowedMethods": ["GET", "POST", "PUT"],
+    "AllowedOrigins": ["*"],
+    "ExposeHeaders": []
+  }
+]
+```
+
+### 3.3 IAM User
+1. IAM → **Users** → **Add user** (`django-s3-user`) → **Programmatic access**.
+2. Attach policies:
+   - `AmazonS3FullAccess`
+   - `AmazonRekognitionReadOnlyAccess`
+3. Save **Access Key ID** and **Secret Access Key**.
+
+---
+
+## 4. Google Services Setup
+
+### 4.1 Google OAuth
+1. Google Cloud Console → create/select a project.
+2. **APIs & Services → Library**: enable
+   - **Google+ API** (for OAuth)
+   - **Perspective Comment Analyzer API**
+3. **APIs & Services → Credentials**:
+   - **Create Credentials → OAuth 2.0 Client ID** (type: **Web application**).
+   - Configure consent screen (External) and required fields.
+   - Authorized redirect URIs:
+     - `http://127.0.0.1:8000/accounts/google/login/callback/`
+     - `https://your-heroku-app.herokuapp.com/accounts/google/login/callback/`
+4. Save **Client ID** and **Client Secret**.
+
+### 4.2 Perspective API
+1. Ensure **Perspective Comment Analyzer API** is enabled.
+2. **Credentials → Create Credentials → API Key**.
+3. Restrict key: **API restrictions → Perspective Comment Analyzer API**.
+4. Save the API key.
+
+---
+
+## 5. Heroku Deployment
+
+### 5.1 Required Files
+- `requirements.txt`
+- `Procfile`
+  ```
+  web: gunicorn modmixx.wsgi
+  ```
+- `runtime.txt`
+  ```
+  3.13
+  ```
+  _Note: Only the major.minor version (e.g., `3.13`)._
+
+### 5.2 Deploy via Heroku Dashboard
+1. Create app: **New → Create new app** (name + region).
+2. **Deploy** tab → connect GitHub repository.
+3. (Optional) Enable **Automatic deploys** from `main`.
+4. **Manual deploy**: choose branch (usually `main`) → **Deploy Branch**.
+
+### 5.3 Deploy via Heroku CLI
+```bash
+heroku login
+heroku create your-app-name
+```
+
+**Set Config Vars:**
+```bash
+# Django
+heroku config:set SECRET_KEY="your-secret-key"
+heroku config:set DEBUG=False
+heroku config:set DATABASE_URL="your-database-url"
+
+# AWS
+heroku config:set AWS_ACCESS_KEY_ID="your-aws-access-key"
+heroku config:set AWS_SECRET_ACCESS_KEY="your-aws-secret-key"
+heroku config:set AWS_REGION="eu-west-1"
+
+# Google OAuth & Perspective API
+heroku config:set SOCIAL_AUTH_GOOGLE_OAUTH2_KEY="your-google-client-id"
+heroku config:set SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET="your-google-client-secret"
+heroku config:set PERSPECTIVE_API_KEY="your-perspective-api-key"
+
+# Email
+heroku config:set EMAIL_HOST_USER="your-gmail-address"
+heroku config:set EMAIL_HOST_PASSWORD="your-gmail-app-password"
+
+# Rekognition
+heroku config:set IMAGE_MODERATION_ENABLED="true"
+heroku config:set REKOG_MIN_CONFIDENCE="80"
+```
+
+**Release & Setup:**
+```bash
+git push heroku main
+heroku run python manage.py migrate
+heroku run python manage.py collectstatic --noinput
+heroku run python manage.py createsuperuser
+```
+
+---
+
+## 6. Post-Deployment
+
+### 6.1 Update Google OAuth Redirect URI
+- Use your live Heroku URL:
+  - `https://YOUR-HEROKU-APP.herokuapp.com/accounts/google/login/callback/`
+
+### 6.2 Verify Functionality
+- Site loads without errors
+- User registration
+- Google OAuth login
+- File uploads to S3
+- Static files served
+- Emails sent successfully
+
+---
+
+## 7. Environment Variables Reference (`env.py` should contain these variables based on `env_example.py`)
+```python
+import os
+
+# Django
+os.environ.setdefault("SECRET_KEY", "your-actual-secret-key")
+os.environ.setdefault("DEBUG", "True")  # False for production
+os.environ.setdefault("DATABASE_URL", "your-database-url")
+
+# AWS
+os.environ.setdefault("AWS_ACCESS_KEY_ID", "your-actual-aws-key")
+os.environ.setdefault("AWS_SECRET_ACCESS_KEY", "your-actual-aws-secret")
+os.environ.setdefault("AWS_REGION", "eu-west-1")
+
+# Google
+os.environ.setdefault("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY", "your-actual-google-client-id")
+os.environ.setdefault("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET", "your-actual-google-client-secret")
+
+# Google Perspective API
+os.environ.setdefault("PERSPECTIVE_API_KEY", "your-actual-perspective-key")
+
+# Email
+os.environ.setdefault("EMAIL_HOST_USER", "your-actual-email")
+os.environ.setdefault("EMAIL_HOST_PASSWORD", "your-actual-app-password")
+
+# AWS Rekognition
+os.environ.setdefault("IMAGE_MODERATION_ENABLED", "true")
+os.environ.setdefault("REKOG_MIN_CONFIDENCE", "80")
+```
+
+---
+
+## 8. Troubleshooting
+
+### Application Won’t Start
+```bash
+heroku logs --tail
+```
+- Confirm all config vars are set.
+- Ensure `requirements.txt` is current.
+
+## Testing
+
+## Future Enhancements
+
+## Credits
+
+## Acknowledgements
