@@ -89,7 +89,6 @@ With its emphasis on inclusivity and authentic connection, modmixx has the poten
 - **A Safe & Inclusive Space**: Prioritises a safe and welcoming environment for all creators, with a focus on amplifying voices often underrepresented in the music industry.
 - **Learning Through Sharing**: Encourages users to share their creative processes (e.g., DAW, techniques, effects) to inspire and educate others.
 - **Community & Feedback**: Promotes thoughtful, collaborative feedback rather than criticism.
-- **Challenges**: Monthly creative prompts to inspire participation and experimentation.
 - **Connection, Not Clout**: Eliminates follower counts to focus on genuine creative exchange rather than competition.
 
 ---
@@ -275,7 +274,7 @@ For a comprehensive view of the complete design process, and planning documentat
 
 # Agile Project Management
 
-Agile methodology was used for project management, with a focus on iterative development and reassessment. The project was divided into sprints, each lasting two weeks, allowing for regular reflection and adjustments based on scope and feedback.
+Agile methodology was used for project management, with a focus on iterative development and reassessment. The project was broken down into manageable themes, epics, and user stories to ensure a user-centered approach to development. 
 
 ### User Personas
 Personas were created to represent the target users of the application, helping to guide design and development decisions.
@@ -722,7 +721,7 @@ Detailed iteration planning, retrospectives, and strategic decision-making were 
 - **GitGuardian** – Enhanced security monitoring and vulnerability detection
 
 ### Cloud Services & APIs
-- **Amazon S3** - Cloud storage for audio files and images
+- **AWS S3** - Cloud storage for audio files and images
 - **AWS Rekognition** - AI-powered image content moderation
 - **Google Perspective API** - Real-time toxicity detection for text content by Google & Jigsaw
 - **Gmail SMTP** - Email service for contact forms
@@ -1038,7 +1037,49 @@ heroku logs --tail
 
 ## Testing
 
+This project underwent comprehensive testing including manual functionality testing, user acceptance testing, and lighthouse audits. All core features were tested across multiple devices and browsers to ensure consistent performance and user experience.
+
+**[View Complete Testing Documentation →](https://github.com/Seren-Hughes/modmixx/blob/main/TESTING.md)**
+
+*The testing documentation includes detailed test cases, validation reports, device compatibility testing, lighthouse audits, security testing and bugs/issues tracking.*
+
+---
 ## Future Enhancements
+
+### User Experience Improvements
+- **Dark Mode Toggle** - User preference settings for light/dark theme switching
+- **Custom Audio Player** - Enhanced player controls using Web Audio API with audio waveform visualisation and potential spectrogram display for mixing analysis tools
+- **Mobile App** - iOS/Android app for improved mobile experience 
+
+### Audio Features
+- **Version Control for Tracks** - Track revision history showing creative evolution
+
+### Community & Social Features
+- **Monthly Challenges System** - Creative prompts to inspire participation and experimentation
+- **Learning Content Hub** - Tutorials, masterclasses, and workshops featuring diverse artists and producers
+- **Social Features** - Follow/friend functionality with personalised feeds
+- **Collaboration Tools** - Direct messaging, shared project spaces, and collaboration requests
+- **Forum Integration** - Dedicated spaces for sharing resources, tips, and discussions
+- **Listening Parties** - Real-time collaborative listening sessions 
+
+### Enhanced Administration & Moderation
+- **Advanced Admin Dashboard** - Comprehensive content management with analytics and user engagement metrics
+- **Contact Form Management** - Admin panel integration allowing direct email replies to user inquiries with conversation threading
+- **Enhanced Moderation Tools** - Bulk actions, automated flagging rules, and improved moderation queue management
+- **User Management System** - Advanced user roles, suspension capabilities, and community guideline enforcement tools
+- **Content Analytics** - Track engagement patterns, popular content types, and community growth metrics
+
+### Technical & Infrastructure Improvements
+- **Content Delivery Network (CDN)** - Global audio streaming optimisation for reduced latency (this would be beneficial for users in different geographical locations)
+- **Advanced Search & Filtering** - Search by DAW, genre tags, BPM, and other metadata
+- **Performance Optimisation** - Database query optimisation and caching strategies for improved load times
+
+### Business & Scalability
+- **Beta Testing Program** - Controlled scalability testing with early user feedback collection
+- **Cost Optimisation** - Alternative moderation APIs (e.g., [OpenAI's multimodal moderation API](https://openai.com/index/upgrading-the-moderation-api-with-our-new-multimodal-moderation-model/)) and storage solutions
+- **Partnership Integration** - Hardware/software brand partnerships with gear showcasing and affiliate programs
+- **Paid Features** - Optional paid tiers for increased storage, masterclasses, and exclusive content access (but at a reasonable price point to ensure accessibility and _always maintaining free high value resources for all users_ . Community first.)
+- **Scholarship Program** - Funded workshops and masterclasses for creators facing barriers to entry, including those from low-income backgrounds and underrepresented groups in music production. As a platform built from personal experience in the music industry, supporting accessible learning opportunities and fostering inclusivity both within our community and the broader music industry is fundamental to the modmixx mission.
 
 ## Credits
 
