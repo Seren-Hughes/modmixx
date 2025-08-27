@@ -106,3 +106,6 @@ class ProfileAdmin(admin.ModelAdmin):
             updated += 1
 
         self.message_user(request, f"Re-scanned {updated} profile(s).")
+
+
+admin.site.register(CustomUser, CustomUserAdmin)
