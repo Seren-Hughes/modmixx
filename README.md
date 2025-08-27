@@ -46,8 +46,9 @@
       - [Epic 4.1: Static Information Pages](#epic-41-static-information-pages)
       - [Epic 4.2: Contact & Support](#epic-42-contact--support)
     - [User Stories for Future Features](#user-stories-for-future-features)
-    - [Fibonacci Effort vs Risk Matrix](#fibonacci-effort-vs-risk-matrix)
-15. [Technologies Used](#technologies-used)
+15. [Fibonacci Sequence for Estimation](#fibonacci-sequence-for-estimation)
+16. [GitHub Projects & Agile Implementation](#github-projects--agile-implementation)
+17. [Technologies Used](#technologies-used)
     - [Languages & Frameworks](#languages--frameworks)
     - [Frontend Technologies & UI](#frontend-technologies--ui)
     - [JavaScript APIs & Browser Features](#javascript-apis--browser-features)
@@ -57,8 +58,12 @@
     - [File Processing](#file-processing)
     - [Development & Deployment](#development--deployment)
     - [Code Quality Tools](#code-quality-tools)
-16. [Site Features](#site-features)
-17. [Deployment](#deployment)
+18. [Site Features](#site-features)
+19. [Deployment](#deployment)
+20. [Testing](#testing)
+21. [Future Enhancements](#future-enhancements)
+22. [Credits & References](#credits--references)
+23. [Acknowledgements](#acknowledgements)
 
 ## Project Overview
 
@@ -595,7 +600,7 @@ The project was organised into themes, epics, and user stories to ensure a user-
 
 
 #### Fibonacci Sequence for Estimation
-The Fibonacci sequence was used for estimating the complexity of tasks, helping to prioritise features and manage workload effectively.
+The Fibonacci sequence was used for estimating the complexity of user stories, helping to prioritise features and manage workload effectively.
 
 #### Fibonacci Effort vs Risk Matrix
 ![Fibonacci Effort vs Risk Matrix](docs/images/diagrams/modmixx-fibonacci-matrix.jpg)
@@ -1084,100 +1089,79 @@ This project underwent comprehensive testing including manual functionality test
 ## Credits & References
 
 ### Content & Media
-**Site Images**: 
-- Hero Image Photo by Jona Meza from Pexels: https://www.pexels.com/photo/woman-playing-disco-music-on-keyboard-12756988/
-- Photo by Anna Pou from Pexels: https://www.pexels.com/photo/a-man-wearing-an-orange-beanie-8132529/
-- Mobile phone music creator photo: https://unsplash.com/photos/a-person-using-a-cell-phone-cqFBTqhPKXQ
-- Laptop music creator photo: https://unsplash.com/photos/a-person-using-a-laptop-gjqL19jYoAI
 
-*Note: *All content below is used under appropriate licenses for demonstration and testing purposes to showcase platform functionality with realistic user-generated content examples.*
+#### Site Images
+- Hero Image: [Jona Meza](https://www.pexels.com/photo/woman-playing-disco-music-on-keyboard-12756988/) - Pexels
+- Producer wearing orange beanie: [Anna Pou](https://www.pexels.com/photo/a-man-wearing-an-orange-beanie-8132529/) - Pexels
+- Mobile music creator: [Unsplash](https://unsplash.com/photos/a-person-using-a-cell-phone-cqFBTqhPKXQ)
+- Laptop music creator: [Unsplash](https://unsplash.com/photos/a-person-using-a-laptop-gjqL19jYoAI)
 
-**Demo Audio Files** *(for testing and demo accounts)*: 
-- Chill by lkoliks: https://pixabay.com/music/beats-chill-chill-background-music-363286/
-- Neuro Synth by Night City Radio: https://pixabay.com/music/drum-n-bass-neuro-synth-391617/
-- Jungle Waves by DIMMYSAD: https://pixabay.com/music/drum-n-bass-jungle-waves-drumampbass-electronic-inspiring-promo-345013/
-- Under the Arcade Glow by Runa Mirai: https://pixabay.com/music/upbeat-runa-mirai-under-the-arcade-glow-389508/
-- Slow downtempo chillwave by Elisaveta Stoycheva: https://pixabay.com/music/beats-slow-downtempo-chillwave-367092/
-- Cyberpunk Futuristic City Music by HitsLab: https://pixabay.com/music/upbeat-cyberpunk-futuristic-city-music-390972/
-- Metaverse Event by HitsLab: https://pixabay.com/music/upbeat-cyberpunk-metaverse-event-background-music-286971/
-- Cyberpunk by TuneTrove: https://pixabay.com/music/upbeat-cyberpunk-289544/
-- Dark Synthwave by TurtleBeats: https://pixabay.com/music/upbeat-dark-synthwave-spectral-251688/
+*All demo content below is used under appropriate licenses for demonstration and testing purposes to showcase platform functionality with realistic user-generated content examples.*
 
-**Profile Images** *(for demo user accounts)*: 
-- Photo by Konstantin Mishchenko from Pexels: https://www.pexels.com/photo/futuristic-musician-performing-with-keyboards-30124274/
-- Cat wearing sunnies by Studio Shephrd: https://unsplash.com/photos/a-close-up-of-a-cat-wearing-sunglasses-vqSUMebqpUM
+#### Demo Audio Files
+All demo tracks sourced from [Pixabay](https://pixabay.com/music/) under Creative Commons license:
+- "Chill" by lkoliks | "Neuro Synth" by Night City Radio | "Jungle Waves" by DIMMYSAD
+- "Under the Arcade Glow" by Runa Mirai | "Slow downtempo chillwave" by Elisaveta Stoycheva
+- "Cyberpunk Futuristic City Music" by HitsLab | "Metaverse Event" by HitsLab
+- "Cyberpunk" by TuneTrove | "Dark Synthwave" by TurtleBeats
 
-**Track Artwork** *(for demo content)*: 
-- by Adi Goldstein: https://unsplash.com/photos/black-and-gray-audio-mixer-u0BVH8IOTUk
-- by Harrison Mitchell: https://unsplash.com/photos/a-palm-tree-against-a-blue-sky-ZxlxbUxGxN8
-- by Arvind Pillai: https://unsplash.com/photos/a-person-standing-next-to-a-body-of-water-Yl4Y7COttGo
-- by MARK ADRIAN: https://unsplash.com/photos/good-vibes-only-text-muS2RraYRuQ
-- by Efe Kurnaz: https://unsplash.com/photos/multicolored-hallway-RnCPiXixooY
-- by Olegs Jonins: https://unsplash.com/photos/a-person-holding-a-flower-in-their-hand-CWnaL_0CWjk
-- Photo by Jess Loiterton from Pexels: https://www.pexels.com/photo/palm-tree-near-body-of-water-during-sunset-4319879/
-- by wirestock: https://www.freepik.com/free-photo/stunning-view-colorful-patterned-neon-lights-darkness_10944959.htm
-- by Wirestock: https://www.freepik.com/free-photo/cool-geometric-triangular-hallway-3d-rendering_9990853.htm
-- by lucabravo: https://www.freepik.com/free-photo/empty-road-with-blacklight_12661335.htm#fromView=search&page=1&position=15&uuid=0c16e31e-46c1-4bb2-83ec-fdee7e984e4d&query=empty-road-with-blacklight.jpg
+#### Demo Profile & Track Images
+- Profile images: [Konstantin Mishchenko](https://www.pexels.com/photo/futuristic-musician-performing-with-keyboards-30124274/) (Pexels), [Studio Shephrd](https://unsplash.com/photos/a-close-up-of-a-cat-wearing-sunglasses-vqSUMebqpUM) (Unsplash)
+- Track artwork: Various artists via Unsplash, Pexels, and Freepik
 
-### Learning Resources & Educational Content
-- [Code Institute](https://codeinstitute.net/) - Django Blog walkthrough project provided foundational structure
-- [Django Custom User Model Tutorial](https://testdriven.io/blog/django-custom-user-model/) - Implementation guidance for email-based authentication
-- [Django Project Structure Discussion](https://forum.djangoproject.com/t/django-new-project-structure-name/9987/4) - Best practices for Django project organization
+<details>
+<summary>View Complete Image Credits</summary>
 
-### Frontend Development & UI/UX
-- [CSS Component Architecture Guide](https://medium.com/design-bootcamp/12-steps-to-setting-up-reusable-component-styles-with-css-for-large-scale-%EF%B8%8F-projects-%EF%B8%8F-c8375ee600ea) - Reusable CSS component methodology
-- [Django Allauth Styling Guide](https://andypi.co.uk/2024/08/23/how-to-style-django-allauth-pages/) - Custom authentication form styling
-- [Bootstrap 5 Documentation](https://getbootstrap.com/docs/5.3/components/modal/) - Modal component implementation
-- [Bootstrap 5 VS Code Extension](https://marketplace.visualstudio.com/items?itemName=AnbuselvanRocky.bootstrap5-vscode) - Development productivity tool
+**Track Artwork Sources:**
 
-### Security & Validation
-- [OWASP File Upload Vulnerabilities](https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload) - Security considerations for file uploads
-- [OWASP Content Security Policy](https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html) - CSP implementation guidance
-- [Django Security Documentation](https://docs.djangoproject.com/en/5.2/topics/security/#user-uploaded-content-security) - User-uploaded content security
-- [CWE Path Traversal](https://cwe.mitre.org/data/definitions/22.html) - Path traversal attack prevention
-- [Honeypot Anti-Spam Implementation](https://sixfeetup.com/blog/captchas-plone-site-honeypot-fields) - Bot detection methodology
+**Unsplash Contributors:**
+- Adi Goldstein, Harrison Mitchell, Arvind Pillai, MARK ADRIAN, Efe Kurnaz, Olegs Jonins
 
-### Authentication & Social Login
-- [Google OAuth2 Django Integration](https://dev.to/odhiambo/integrate-google-oauth2-social-authentication-into-your-django-web-app-1bk5) - Social authentication implementation
-- [Django Allauth Google Logout Issue](https://github.com/pennersr/django-allauth/issues/3104) - Template override solution
-- [Django Allauth Documentation](https://pypi.org/project/django-allauth/0.16.1/) - Authentication framework reference
+**Pexels Contributors:**  
+- Jess Loiterton
 
-### AJAX & Dynamic Content
-- [Django AJAX Request Handling](https://www.geeksforgeeks.org/python/handling-ajax-request-in-django/) - Asynchronous request implementation
-- [File API Documentation](https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications) - Drag-and-drop file handling
-- [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) - Infinite scroll implementation
-- [Web.dev Intersection Observer Guide](https://web.dev/articles/intersectionobserver) - Performance optimisation techniques
+**Freepik Contributors:**
+- Wirestock, lucabravo
 
-### Django Framework & Database
-- [Django Documentation](https://docs.djangoproject.com/en/5.2/ref/templates/builtins/) - Template built-ins reference
-- [Django Pagination](https://docs.djangoproject.com/en/5.2/topics/pagination/) - Paginated query implementation
-- [Django JSON Response](https://docs.djangoproject.com/en/5.2/ref/request-response/#jsonresponse-objects) - API response formatting
-- [Django ORM Optimization](https://docs.djangoproject.com/en/5.2/ref/models/querysets/#select-related) - Database query optimisation
-- [Django Validators](https://docs.djangoproject.com/en/5.2/ref/validators/) - Built-in validation methods
+</details>
 
-### Audio & Media Handling
-- [HTML5 Audio API](https://www.w3schools.com/html/html5_audio.asp) - Audio element implementation
-- [Python DateTime Formatting](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes) - Date/time display formatting
+### Technical Resources & Learning
 
-### Code Quality & Development Tools
-- [djlint Documentation](https://www.djlint.com/docs/getting-started/) - Django template linting
-- [PEP 257 Docstring Conventions](https://peps.python.org/pep-0257/) - Python documentation standards
-- [Chrome Lighthouse Performance](https://developer.chrome.com/docs/lighthouse/performance/unminified-javascript/) - Performance optimisation reference (future implementation)
+#### Core Django & Python
+- **[Code Institute](https://codeinstitute.net/)** - Django Blog walkthrough foundational structure
+- **[Django Custom User Model](https://testdriven.io/blog/django-custom-user-model/)** - Email-based authentication implementation
+- **[Django Documentation](https://docs.djangoproject.com/en/5.2/)** - Templates, pagination, ORM optimization, validators
+- **[Django Project Structure](https://forum.djangoproject.com/t/django-new-project-structure-name/9987/4)** - Best practices
 
-### Project Management & Development Process
-- [GitHub Sub-Issues Tutorial by Kera Cudmore](https://practicaldev-herokuapp-com.freetls.fastly.net/keracudmore/create-sub-issues-in-github-issues-409m) - Agile project management
+#### Frontend & UI Development  
+- **[Bootstrap 5 Documentation](https://getbootstrap.com/docs/5.3/)** - Modal components and responsive framework
+- **[CSS Component Architecture](https://medium.com/design-bootcamp/12-steps-to-setting-up-reusable-component-styles-with-css-for-large-scale-%EF%B8%8F-projects-%EF%B8%8F-c8375ee600ea)** - Scalable styling methodology
+- **[Django Allauth Styling](https://andypi.co.uk/2024/08/23/how-to-style-django-allauth-pages/)** - Custom authentication forms
 
-### Third-Party Services & APIs
-- [Google Perspective API](https://developers.perspectiveapi.com/s/docs-enable-the-api?language=en_US) - Content moderation integration
+#### Security & Authentication
+- **[OWASP Security Guidelines](https://owasp.org/)** - File upload vulnerabilities, CSP implementation
+- **[Django Security Best Practices](https://docs.djangoproject.com/en/5.2/topics/security/)** - User-uploaded content security
+- **[Google OAuth2 Integration](https://dev.to/odhiambo/integrate-google-oauth2-social-authentication-into-your-django-web-app-1bk5)** - Social authentication
+- **[Django Allauth Documentation](https://pypi.org/project/django-allauth/)** - Authentication framework
 
-### Data Management & Architecture
-- [UUIDs vs ULIDs Comparison](https://medium.com/@denis.volokh/uuids-vs-ulids-in-python-should-you-make-the-switch-dd029764155f) - Identifier strategy decision-making
-- [Python ULID Library](https://pypi.org/project/python-ulid/) - Unique identifier implementation
-- [Django Naming Conventions](https://www.reddit.com/r/django/comments/l8iafj/looking_for_a_good_naming_convention_for/) - Code organisation best practices
+#### JavaScript & Dynamic Features
+- **[MDN Web APIs](https://developer.mozilla.org/en-US/docs/Web/API/)** - File API, Intersection Observer, HTML5 Audio
+- **[Web.dev Performance](https://web.dev/articles/intersectionobserver)** - Infinite scroll optimization
+- **[Django AJAX Handling](https://www.geeksforgeeks.org/python/handling-ajax-request-in-django/)** - Asynchronous requests
 
-### Accessibility & User Experience
-- [Infinite Scroll Accessibility](https://www.digitala11y.com/infinite-scroll-accessibility-is-it-any-good/) - UX considerations for dynamic loading
-- [Django REST Framework Pagination](https://www.django-rest-framework.org/api-guide/pagination/) - API pagination patterns
+#### Third-Party Services & APIs
+- **[Google Perspective API](https://developers.perspectiveapi.com/s/docs-enable-the-api?language=en_US)** - Content moderation integration
+- **[AWS Documentation](https://docs.aws.amazon.com/)** - S3 storage and Rekognition services
+
+#### Development Tools & Quality
+- **[GitHub Sub-Issues Tutorial](https://practicaldev-herokuapp-com.freetls.fastly.net/keracudmore/create-sub-issues-in-github-issues-409m)** - Project management by Kera Cudmore
+- **[djlint Documentation](https://www.djlint.com/docs/getting-started/)** - Django template linting
+- **[PEP 257](https://peps.python.org/pep-0257/)** - Python documentation standards
+
+#### Architecture & Data Management
+- **[UUIDs vs ULIDs](https://medium.com/@denis.volokh/uuids-vs-ulids-in-python-should-you-make-the-switch-dd029764155f)** - Identifier strategy decisions
+- **[Python ULID Library](https://pypi.org/project/python-ulid/)** - Unique identifier implementation
+- **[Accessibility Guidelines](https://www.digitala11y.com/infinite-scroll-accessibility-is-it-any-good/)** - UX considerations
 
 ---
 
