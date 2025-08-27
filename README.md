@@ -812,9 +812,7 @@ The landing page introduces new visitors to the modmixx community with a clear v
 **Multi-Modal Registration System:**
 - **Email/Password Registration** - Traditional account creation with validation
 - **Google OAuth Integration** - One-click social authentication
-- **Profile Setup** - Immediate profile creation with optional bio, pronouns, and profile image
-- **Email Verification** - Secure account confirmation workflow
-- **Form Security** - Honeypot spam protection and comprehensive validation
+- **Profile Setup** - Immediate profile creation with username, display name, optional bio, pronouns, and profile image
 
 ### Main Feed
 
@@ -873,9 +871,9 @@ The main feed implements a performance-optimised loading strategy that balances 
 
 - **Threaded Comments** - Organised discussion structure
 
-<img src="docs/images/screenshots/comment-threads.png" alt="Threaded comments example" width="50%">
+<img src="docs/images/screenshots/comment-threads.png" alt="Threaded comments example" width="60%">
 
-<img src="docs/images/screenshots/comment-edit-delete.png" alt="User comment edit and delete" width="50%">
+<img src="docs/images/screenshots/comment-edit-delete.png" alt="User comment edit and delete" width="60%">
 
 - **Real-Time Validation** - Immediate feedback on comment length and content
 - **Edit/Delete Functionality** - User control over their contributions
@@ -891,6 +889,16 @@ The main feed implements a performance-optimised loading strategy that balances 
 - **Confidence Thresholding** - Configurable sensitivity levels (default: 80%)
 - **Category Detection** - Identifies harmful content categories
 - **Admin Dashboard** - Review and override moderation decisions
+
+_In addition to regular default settings of AWS Rekognition of inappropriate content detection, images of smoking have been added to the configuration for testing purposes. A demonstration of this feature is shown below:_
+
+![rekognition moderation](docs/images/test-screenshots/gifs/smoking-moderation.gif)
+
+_Confidence settings have been configured to high sensitivity mode for testing purposes. Below is a demonstration of a cheese plant image being flagged for pending review:_
+
+![rekognition moderation](docs/images/test-screenshots/gifs/cheese-plant-pending-moderation.gif)
+
+These settings are not for a production launch and will be less extreme in a live environment.
 
 **Text Content Analysis:**
 - **Google Perspective API** - Real-time toxicity detection
@@ -926,7 +934,7 @@ The main feed implements a performance-optimised loading strategy that balances 
 
 **User Support Infrastructure:**
 - **Contact Form** - Direct communication channel with site administrators with email confirmation
-- **Anti-Spam Protection** - Honeypot fields and validation
+- **Anti-Spam Protection** - Honeypot field and validation
 - **User Feedback** - Success/error messaging with clear next steps
 - **Responsive Design** - Accessible across all device types
 
@@ -960,8 +968,7 @@ The main feed implements a performance-optimised loading strategy that balances 
 
 ### Security & Data Protection
 
-**Multi-Layer Security Implementation:**
-- **File Upload Security** - Type validation, size limits, content scanning
+- **File Upload Security** - Type validation, size limits
 - **User Authentication** - Secure password handling and session management
 - **CSRF Protection** - Django built-in cross-site request forgery prevention
 - **SQL Injection Prevention** - ORM-based database queries
