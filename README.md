@@ -601,6 +601,88 @@ The Fibonacci sequence was used for estimating the complexity of tasks, helping 
 #### Fibonacci Effort vs Risk Matrix
 ![Fibonacci Effort vs Risk Matrix](docs/images/diagrams/modmixx-fibonacci-matrix.jpg)
 
+## GitHub Projects & Agile Implementation
+
+### Project Management Methodology
+This project utilised GitHub Projects with a comprehensive agile approach, implementing MoSCoW prioritisation (Must Have, Should Have, Could Have, Won't Have) combined with iterative development cycles.
+
+[Link to the modmixx Project Boards](https://github.com/users/Seren-Hughes/projects/8) 
+
+### GitHub Projects Kanban Board
+<details>
+<summary>
+MoSCoW prioritised user stories tracked through GitHub Projects with clear priority labels and sub-issue organisation
+</summary>
+
+![GitHub Projects Kanban Board](docs/images/screenshots/user-stories-kanban-2.jpg)
+</details>
+
+### Iteration Planning & Management
+<details>
+<summary>
+Six iteration cycles with milestone tracking and feature-focused sprint planning
+</summary>
+
+![Iteration Board](docs/images/screenshots/iteration-board.png)
+</details>
+
+### Project Roadmap & Milestones
+<details>
+<summary>
+Strategic milestone planning with deliverable tracking and timeline management
+</summary>
+
+![Project Milestones](docs/images/screenshots/early-iterations-roadmap-progress.jpg)
+</details>
+
+### Iteration Breakdown
+
+**Iteration 1: Accounts & Profiles**
+- User registration and login functionality
+- Profile management system
+
+**Iteration 2: Tracks**
+- Audio file upload functionality
+- Track display in main feed
+- Individual track page creation
+
+**Iteration 3: Comments System**
+- Comment model linking to tracks and users
+- Comment form and display logic
+- Moderation planning
+
+**Iteration 4: AWS + Media Setup** *(Milestone: Storage & Backend)*
+- AWS S3 integration for audio and image storage
+- Production upload functionality testing
+- Moderation implementation
+
+**Iteration 5: UI + Forms + Auth Polish** *(Milestone: Frontend)*
+- Bootstrap integration and responsive design
+- Custom signup/login form styling
+- Navigation and template optimization
+- Content creation 
+
+**Iteration 6: QA + Documentation + Testing** *(Milestones: Testing & Release 1 MVP)*
+- Comprehensive testing implementation
+- README documentation completion
+- Screenshots and UX documentation
+- MVP release preparation
+
+**Deferred Feature: Challenges System** *(Planned for Release 2)*
+- Monthly challenge model implementation
+- Challenge-track linking functionality
+- Upload logic extension for challenges
+
+### Agile Development Impact
+
+The agile approach allowed for flexibility and adaptability throughout the project. Regular iterations enabled continuous reassessment of priorities, leading to the strategic deferral of the challenges system to a future release. This ensured that core functionalities were delivered with high quality within the project timeline.
+
+### Planning & Retrospectives Documentation
+Detailed iteration planning, retrospectives, and strategic decision-making were documented on the project's Miro board:
+
+[View Miro Planning Board - modmixx Project](https://miro.com/app/board/uXjVIjLi6S0=/?share_link_id=759006025965)
+
+
 ## Technologies Used
 
 ### Languages & Frameworks
