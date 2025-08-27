@@ -915,7 +915,10 @@ These settings are not for a production launch and will be less extreme in a liv
 - **Profile Customisation** - Image upload with validation and processing
 - **Social Features Ready** - Architecture supports future follow/friend functionality
 
-<img src="docs/images/screenshots/user-profile-page.png" alt="User Profile Page" width="50%">
+![User Profile Page](docs/images/screenshots/user-profile-page.png)
+
+_Edit profile features are only available on users own profile page_
+![Users own profile page](docs/images/screenshots/users-profile-edit-features.png)
 
 ### Static Information Pages
 
