@@ -7,7 +7,7 @@
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=flat&logo=javascript&logoColor=black)
 ![AWS](https://img.shields.io/badge/AWS-S3%20%7C%20Rekognition-FF9900?style=flat&logo=amazon-aws&logoColor=white)
 ![Google OAuth](https://img.shields.io/badge/OAuth-Google-4285F4?style=flat&logoColor=white)
-![Perspective API](https://img.shields.io/badge/Google%20|%20Jigsaw-Perspective%20API-4285F4?style=flat&logoColor=white)
+![Perspective API](https://img.shields.io/badge/Google%20|%20Jigsaw-Perspective-4285F4?style=flat&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=flat&logo=postgresql&logoColor=white)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?style=flat&logo=bootstrap&logoColor=white)
 ![Heroku](https://img.shields.io/badge/Heroku-430098?style=flat&logo=heroku&logoColor=white)
@@ -174,7 +174,7 @@ With its emphasis on inclusivity and authentic connection, modmixx has the poten
 #### Challenge Details Page and Submissions
 ![Challenge Details Page and Submissions Wireframe](docs/images/wireframes/challenge-page-and-submissions-wireframes.jpg)
 
-### Colour Palette - MVP Implementation
+### Colour Palette
 ![MVP Colour Palette](docs/images/design/modmixx-colour-palette.png)
 
 **Primary Brand Colours:**
@@ -192,9 +192,9 @@ With its emphasis on inclusivity and authentic connection, modmixx has the poten
   - #FFF2F6 (Light pink)
 
 **Design Approach:**
-The interface emphasises clean white space and visual breathing room, with subtle pale gradient backgrounds in near off-white tones (#FFFCF0 → #FEF6F2 → #FFF2F6). This creates a gentle way to introduce colour without overwhelming the user experience. Interactive elements feature vibrant orange-to-pink gradients with white text for clear call-to-action visibility, while maintaining accessibility and readability throughout.
+The interface emphasises clean white space and visual breathing room, with subtle pale gradient backgrounds in near off-white tones (#FFFCF0 → #FEF6F2 → #FFF2F6). This creates a way to introduce colour without overwhelming the user experience. Interactive elements feature vibrant orange-to-pink gradients with white text for clear call-to-action visibility, while maintaining accessibility and readability throughout.
 
-*Note: The complete brand palette is maintained in CSS custom properties for consistent design system implementation and future development phases.*
+*Note: The MVP colour palette is documented in detail, while the complete brand palette is maintained in CSS custom properties for consistent design system implementation and future development phases.*
 
 ## Accessibility
 
@@ -213,7 +213,7 @@ Accessibility was prioritised from the planning phase through implementation and
   - Hero overlay gradient with 70% opacity for sufficient background contrast
   - Gradient overlay prevents hero image from detracting attention from CTA buttons and headline
   - Text shadows and box shadows added to improve text legibility over images
-  - White text on gradient overlays tested for optimal contrast ratios
+  - White text on gradient overlays tested for contrast ratios
 
 **Example - Hero Section Design Strategy:**
 ```css
@@ -285,7 +285,7 @@ Agile methodology was used for project management, with a focus on iterative dev
 Personas were created to represent the target users of the application, helping to guide design and development decisions.
 
 <details>
-<summary>👤 <strong>User Persona 1: Ava - The Curious Hobbyist</strong></summary>
+<summary><strong>User Persona 1: Ava - The Curious Hobbyist</strong></summary>
 
 **Uses:** Freeware like GarageBand, BandLab  
 **Experience Level:** Beginner / Hobbyist  
@@ -313,7 +313,7 @@ _As a beginner producer, I want to upload unfinished tracks without fear, so tha
 </details>
 
 <details>
-<summary>🎚️ <strong>User Persona 2: Jules - The Burnt-Out Pro</strong></summary>
+<summary><strong>User Persona 2: Jules - The Burnt-Out Pro</strong></summary>
 
 **Uses:** Ableton Live, plugins like Serum  
 **Experience Level:** Professional / Advanced  
@@ -340,7 +340,7 @@ _As an experienced producer, I want to share ideas without “branding,” so th
 </details>
 
 <details>
-<summary>🎵 <strong>User Persona 3: Diane - The Rediscovering Creative</strong></summary>
+<summary><strong>User Persona 3: Diane - The Rediscovering Creative</strong></summary>
 
 **Background:** Recently became an empty nester. Used to write songs and dabble in music 30 years ago but stopped when life got busy. Now exploring digital music tools (DAWs, loops, etc.) and wants a hobby that feels meaningful and social.
 
@@ -365,7 +365,7 @@ _As an older woman rediscovering music, I want to find a friendly space that val
 </details>
 
 <details>
-<summary>🎧 <strong>User Persona 4: Emmi - The Shy Beginner</strong></summary>
+<summary><strong>User Persona 4: Emmi - The Shy Beginner</strong></summary>
 
 **Uses:** Logic Pro, sometimes GarageBand on iPad  
 **Experience Level:** Beginner - Intermediate  
@@ -392,7 +392,7 @@ _As a beginner learning music production, I want to share my work without judgme
 </details>
 
 <details>
-<summary>🎛️ <strong>User Persona 5: Jesse - The Experimental Collaborator</strong></summary>
+<summary><strong>User Persona 5: Jesse - The Experimental Collaborator</strong></summary>
 
 **Uses:** Avid Pro Tools  
 **Experience Level:** Intermediate  
@@ -422,7 +422,7 @@ _As a seasoned music producer who thrives on collaboration, I want to find a spa
 </details>
 
 <details>
-<summary>🛠️ <strong>Site Owner - Developer</strong></summary>
+<summary><strong>Site Owner - Developer</strong></summary>
 
 **Uses:** Ableton Live  
 **Experience Level:** Professional / Advanced  
@@ -614,7 +614,7 @@ This project utilised GitHub Projects with a comprehensive agile approach, imple
 
 ### GitHub Projects Kanban Board
 <details>
-<summary>[Click to expand]
+<summary><em>Click to expand</em><br>
 MoSCoW prioritised user stories tracked through GitHub Projects with clear priority labels and sub-issue organisation
 </summary>
 
@@ -623,7 +623,7 @@ MoSCoW prioritised user stories tracked through GitHub Projects with clear prior
 
 ### Iteration Planning & Management
 <details>
-<summary>[Click to expand]
+<summary><em>Click to expand</em><br>
 Six iteration cycles with milestone tracking and feature-focused sprint planning
 </summary>
 
@@ -632,7 +632,7 @@ Six iteration cycles with milestone tracking and feature-focused sprint planning
 
 ### Project Roadmap & Milestones
 <details>
-<summary>[Click to expand]
+<summary><em>Click to expand</em><br>
 Strategic milestone planning with deliverable tracking and timeline management
 </summary>
 
@@ -764,20 +764,185 @@ Detailed iteration planning, retrospectives, and strategic decision-making were 
 
 
 ## Site Features
-### Welcome Page
 
-### User Registration
+### Welcome & Landing Page
+![Welcome Page](docs/images/screenshots/modmixx-home-screenshot.png)
 
-### Track Upload Process
+The landing page introduces new visitors to the modmixx community with a clear value proposition and welcoming design. Features include:
+- **Hero Section** - Compelling call-to-action with gradient overlay for optimal text contrast
+- **Community Values** - Clear messaging about creativity, inclusivity, and collaboration
+- **Getting Started** - Streamlined signup/login options prominently displayed
+- **Responsive Design** - Optimized experience across all device sizes
 
-### Main Feed with Infinite Scroll
+<details>
+<summary><em>Click to expand the full page</em><br></summary>
+<img src="docs/images/screenshots/full-home-screenshot.png" alt="Full Welcome Page Screenshot" width="28%">
+</details>
 
-### Comments
-### Comment Moderation
-### Image Moderation
+### Dynamic Navigation System
+**Contextual navigation that adapts based on user authentication status:**
 
-### Profile Management
+**Pre-Authentication Navigation**
+![Logged out Navbar](docs/images/screenshots/logged-out-navbar.png)
+- Clear signup/login options
+- Access to About and Contact pages
+- Responsive collapse on mobile devices
+
+**Post-Authentication Navigation**
+![Logged in Navbar](docs/images/screenshots/signed-in-navbar.png)
+- Feed access for track discovery
+- Upload functionality for content creation
+- Profile management
+- Secure logout option
+
+**Mobile-Responsive Design**
+![Mobile navbar collapsed](docs/images/screenshots/collapsed-navbar.png)
+- Bootstrap 5 collapse component
+- Touch-friendly interface
+- Maintains full functionality on smaller screens
+
+### User Registration & Authentication
+
+**Multi-Modal Registration System:**
+- **Email/Password Registration** - Traditional account creation with validation
+- **Google OAuth Integration** - One-click social authentication
+- **Profile Setup** - Immediate profile creation with optional bio, pronouns, and profile image
+- **Email Verification** - Secure account confirmation workflow
+- **Form Security** - Honeypot spam protection and comprehensive validation
+
+### Track Upload & Management System
+
+**Comprehensive Upload Process:**
+- **Drag-and-Drop Interface** - Intuitive file selection with visual feedback
+- **Multi-Format Support** - Accepts various audio formats (MP3, WAV, M4A, etc.)
+- **Rich Metadata Collection** - Title, description, DAW used, optional cover art
+- **File Validation** - Security checks for file type, size, and content
+- **AWS S3 Integration** - Secure cloud storage with CDN delivery
+- **Audio Processing** - Automatic duration extraction and metadata parsing
+- **Progress Feedback** - Real-time upload status and error handling
+
+**Content Moderation Pipeline:**
+- **Image Analysis** - AWS Rekognition for inappropriate visual content detection
+- **Text Moderation** - Google Perspective API for toxicity and inappropriate language detection
+- **Multi-Layer Security** - File type validation, size limits, and content scanning
+- **Admin Override** - Manual moderation capabilities for edge cases
+
+### Main Feed with Intelligent Loading
+_(AKA lazy loading)_
+
+**Initial Content Strategy:**
+The main feed implements a performance-optimised loading strategy that balances user experience with server resources:
+
+**Initial Load (5 Tracks):**
+- Displays the 5 most recent tracks immediately
+- Provides instant content engagement
+- Reduces initial page load time
+- Optimizes AWS S3 data transfer costs - Only loads audio/image files for tracks currently being viewed
+- Minimizes bandwidth usage - Prevents unnecessary downloads of media files that users may never interact with
+- Includes complete track information (audio player, metadata, comments)
+
+**Infinite Scroll Implementation:**
+![Infinite scroll/lazy load loading indicator](docs/images/screenshots/infinite-scroll-lazy-load.gif)
+*Demonstration with throttled connection speed to show loading behaviour*
+
+**Technical Implementation:**
+- **Intersection Observer API** - Efficient scroll detection without performance impact 
+- **Loading States** - Visual feedback during content fetching
+
+**Navigation Enhancement:**
+![Back to top button smooth scroll](docs/images/screenshots/back-to-top-smooth-scroll.gif)
+- **Back to Top Button** - Smooth scroll functionality for long feeds
+- **Dynamic Visibility** - Appears/disappears based on scroll position
+- **Accessibility Compliance** - Keyboard navigation support
+
+### Interactive Comment System
+
+**Collaborative Feedback Features:**
+- **Threaded Comments** - Organized discussion structure
+- **Real-Time Validation** - Immediate feedback on comment length and content
+- **Edit/Delete Functionality** - User control over their contributions
+- **Moderation Integration** - AWS and Google powered content filtering for community safety
+- **Responsive Design** - Optimised for mobile and desktop interaction
+
+### AI-Powered Content Moderation
+
+**Multi-Service Moderation Pipeline:**
+
+**Image Content Analysis:**
+- **AWS Rekognition Integration** - Detects inappropriate visual content
+- **Confidence Thresholding** - Configurable sensitivity levels (default: 80%)
+- **Category Detection** - Identifies suggestive content, violence, explicit material
+- **Admin Dashboard** - Review and override moderation decisions
+
+**Text Content Analysis:**
+- **Google Perspective API** - Real-time toxicity detection
+- **Multiple Attribute Analysis** - Toxicity, severe toxicity, identity attacks, threats
+- **Instant User Feedback** - Immediate toxic post prevention and user feedback for potentially harmful content
+![Perspective toxic flagging](docs/images/test-screenshots/gifs/toxic-comment.gif)
+
+### User Profile Management
+
+**Comprehensive Profile System:**
+- **Identity Expression** - Pronouns field, bio, profile images
+- **Creative Portfolio** - Automatic display of user's uploaded tracks
+- **Profile Customisation** - Image upload with validation and processing
+- **Social Features Ready** - Architecture supports future follow/friend functionality
+
 ### Static Information Pages
+
+**Community Building Pages:**
+![About & Guidelines Page](docs/images/screenshots/about-guidelines-screenshot.png)
+- **About Page** - Platform mission, values, and community focus
+- **Community Guidelines** - Clear expectations for behaviour and content
+
+
+### Contact & Support System
+
+![Contact Form](docs/images/screenshots/contact-form.png)
+
+**User Support Infrastructure:**
+- **Contact Form** - Direct communication channel with site administrators with email confirmation
+- **Anti-Spam Protection** - Honeypot fields and validation
+- **User Feedback** - Success/error messaging with clear next steps
+- **Responsive Design** - Accessible across all device types
+
+### Consistent Footer Design
+
+**Site-Wide Footer:**
+
+<img src="docs/images/screenshots/home-final-cta-footer.png" alt="full size Footer" width="50%">
+
+**Mobile-Optimized Footer:**
+
+<img src="docs/images/screenshots/small-footer.png" alt="small screen Footer" width="30%">
+
+- **Clean Design** - Minimal, professional appearance
+- **Consistent Branding** - Maintains visual identity across all pages
+- **Essential Links** - Quick access to key information and legal pages
+- **Responsive Layout** - Adapts seamlessly to different screen sizes
+
+### Error Handling & User Experience
+
+**Comprehensive Error Management:**
+- **Custom 404 Pages** - User-friendly error messages with navigation options
+- **500 Error Handling** - Server error management
+
+  <img src="docs/images/screenshots/500-error-screenshot.png" alt="500 Error Page" width="40%">
+
+- **Form Validation** - Real-time feedback and clear error messaging
+
+
+### Security & Data Protection
+
+**Multi-Layer Security Implementation:**
+- **File Upload Security** - Type validation, size limits, content scanning
+- **User Authentication** - Secure password handling and session management
+- **CSRF Protection** - Django built-in cross-site request forgery prevention
+- **SQL Injection Prevention** - ORM-based database queries
+- **Content Security Policy** - XSS attack prevention
+- **Secure Headers** - HTTPS enforcement and security header configuration
+
+---
 
 # Deployment
 ## Prerequisites
