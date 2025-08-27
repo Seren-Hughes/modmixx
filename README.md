@@ -898,7 +898,7 @@ _Confidence settings have been configured to high sensitivity mode for testing p
 
 ![rekognition moderation](docs/images/test-screenshots/gifs/cheese-plant-pending-moderation.gif)
 
-These settings are not for a production launch and will be less extreme in a live environment.
+_**These settings are not for a production launch and will be less extreme in a live environment**._
 
 **Text Content Analysis:**
 - **Google Perspective API** - Real-time toxicity detection
@@ -906,6 +906,8 @@ These settings are not for a production launch and will be less extreme in a liv
 - **Instant User Feedback** - Immediate toxic post prevention and user feedback for potentially harmful content
 
 ![Perspective toxic flagging](docs/images/screenshots/toxic-comment-user-feedback.gif)
+
+_Perspective API detects not only profanity but also the perceived toxicity of user comments in real-time. The example above shows how a potentially toxic comment "your music is rubbish" is flagged and the user is notified instantly and prevented from posting it._
 
 ### User Profile Management
 
