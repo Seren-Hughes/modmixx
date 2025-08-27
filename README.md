@@ -609,7 +609,7 @@ This project utilised GitHub Projects with a comprehensive agile approach, imple
 
 ### GitHub Projects Kanban Board
 <details>
-<summary>
+<summary>[Click to expand]
 MoSCoW prioritised user stories tracked through GitHub Projects with clear priority labels and sub-issue organisation
 </summary>
 
@@ -618,7 +618,7 @@ MoSCoW prioritised user stories tracked through GitHub Projects with clear prior
 
 ### Iteration Planning & Management
 <details>
-<summary>
+<summary>[Click to expand]
 Six iteration cycles with milestone tracking and feature-focused sprint planning
 </summary>
 
@@ -627,7 +627,7 @@ Six iteration cycles with milestone tracking and feature-focused sprint planning
 
 ### Project Roadmap & Milestones
 <details>
-<summary>
+<summary>[Click to expand]
 Strategic milestone planning with deliverable tracking and timeline management
 </summary>
 
@@ -1070,7 +1070,7 @@ This project underwent comprehensive testing including manual functionality test
 - **Content Analytics** - Track engagement patterns, popular content types, and community growth metrics
 
 ### Technical & Infrastructure Improvements
-- **Content Delivery Network (CDN)** - Global audio streaming optimisation for reduced latency (this would be beneficial for users in different geographical locations)
+- **Content Delivery Network (CDN)** - Global audio streaming optimisation for reduced latency (this would be beneficial for users in different geographical locations and a large user base)
 - **Advanced Search & Filtering** - Search by DAW, genre tags, BPM, and other metadata
 - **Performance Optimisation** - Database query optimisation and caching strategies for improved load times
 
@@ -1079,8 +1079,75 @@ This project underwent comprehensive testing including manual functionality test
 - **Cost Optimisation** - Alternative moderation APIs (e.g., [OpenAI's multimodal moderation API](https://openai.com/index/upgrading-the-moderation-api-with-our-new-multimodal-moderation-model/)) and storage solutions
 - **Partnership Integration** - Hardware/software brand partnerships with gear showcasing and affiliate programs
 - **Paid Features** - Optional paid tiers for increased storage, masterclasses, and exclusive content access (but at a reasonable price point to ensure accessibility and _always maintaining free high value resources for all users_ . Community first.)
-- **Scholarship Program** - Funded workshops and masterclasses for creators facing barriers to entry, including those from low-income backgrounds and underrepresented groups in music production. As a platform built from personal experience in the music industry, supporting accessible learning opportunities and fostering inclusivity both within our community and the broader music industry is fundamental to the modmixx mission.
+- **Scholarship Program** - Funded workshops and masterclasses for creators facing barriers to entry, including those from low-income backgrounds and underrepresented groups in music production. As a platform built from personal experience in the music industry, supporting accessible learning opportunities and fostering inclusivity in the community is fundamental to the modmixx mission.
 
-## Credits
+## Credits & References
+
+### Content & Media
+- **Site Images**: 
+- **Demo Audio Files**: 
+- **Profile Images**: 
+
+### Learning Resources & Educational Content
+- **Code Institute** - Django Blog walkthrough project provided foundational structure and patterns
+- [Django Custom User Model Tutorial](https://testdriven.io/blog/django-custom-user-model/) - Implementation guidance for email-based authentication
+- [Django Project Structure Discussion](https://forum.djangoproject.com/t/django-new-project-structure-name/9987/4) - Best practices for Django project organization
+
+### Frontend Development & UI/UX
+- [CSS Component Architecture Guide](https://medium.com/design-bootcamp/12-steps-to-setting-up-reusable-component-styles-with-css-for-large-scale-%EF%B8%8F-projects-%EF%B8%8F-c8375ee600ea) - Reusable CSS component methodology
+- [Django Allauth Styling Guide](https://andypi.co.uk/2024/08/23/how-to-style-django-allauth-pages/) - Custom authentication form styling
+- [Bootstrap 5 Documentation](https://getbootstrap.com/docs/5.3/components/modal/) - Modal component implementation
+- [Bootstrap 5 VS Code Extension](https://marketplace.visualstudio.com/items?itemName=AnbuselvanRocky.bootstrap5-vscode) - Development productivity tool
+
+### Security & Validation
+- [OWASP File Upload Vulnerabilities](https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload) - Security considerations for file uploads
+- [OWASP Content Security Policy](https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html) - CSP implementation guidance
+- [Django Security Documentation](https://docs.djangoproject.com/en/5.2/topics/security/#user-uploaded-content-security) - User-uploaded content security
+- [CWE Path Traversal](https://cwe.mitre.org/data/definitions/22.html) - Path traversal attack prevention
+- [Honeypot Anti-Spam Implementation](https://sixfeetup.com/blog/captchas-plone-site-honeypot-fields) - Bot detection methodology
+
+### Authentication & Social Login
+- [Google OAuth2 Django Integration](https://dev.to/odhiambo/integrate-google-oauth2-social-authentication-into-your-django-web-app-1bk5) - Social authentication implementation
+- [Django Allauth Google Logout Issue](https://github.com/pennersr/django-allauth/issues/3104) - Template override solution
+- [Django Allauth Documentation](https://pypi.org/project/django-allauth/0.16.1/) - Authentication framework reference
+
+### AJAX & Dynamic Content
+- [Django AJAX Request Handling](https://www.geeksforgeeks.org/python/handling-ajax-request-in-django/) - Asynchronous request implementation
+- [File API Documentation](https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications) - Drag-and-drop file handling
+- [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) - Infinite scroll implementation
+- [Web.dev Intersection Observer Guide](https://web.dev/articles/intersectionobserver) - Performance optimisation techniques
+
+### Django Framework & Database
+- [Django Documentation](https://docs.djangoproject.com/en/5.2/ref/templates/builtins/) - Template built-ins reference
+- [Django Pagination](https://docs.djangoproject.com/en/5.2/topics/pagination/) - Paginated query implementation
+- [Django JSON Response](https://docs.djangoproject.com/en/5.2/ref/request-response/#jsonresponse-objects) - API response formatting
+- [Django ORM Optimization](https://docs.djangoproject.com/en/5.2/ref/models/querysets/#select-related) - Database query optimisation
+- [Django Validators](https://docs.djangoproject.com/en/5.2/ref/validators/) - Built-in validation methods
+
+### Audio & Media Handling
+- [HTML5 Audio API](https://www.w3schools.com/html/html5_audio.asp) - Audio element implementation
+- [Python DateTime Formatting](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes) - Date/time display formatting
+
+### Code Quality & Development Tools
+- [djlint Documentation](https://www.djlint.com/docs/getting-started/) - Django template linting
+- [PEP 257 Docstring Conventions](https://peps.python.org/pep-0257/) - Python documentation standards
+- [Chrome Lighthouse Performance](https://developer.chrome.com/docs/lighthouse/performance/unminified-javascript/) - Performance optimisation reference (future implementation)
+
+### Project Management & Development Process
+- [GitHub Sub-Issues Tutorial by Kera Cudmore](https://practicaldev-herokuapp-com.freetls.fastly.net/keracudmore/create-sub-issues-in-github-issues-409m) - Agile project management
+
+### Third-Party Services & APIs
+- [Google Perspective API](https://developers.perspectiveapi.com/s/docs-enable-the-api?language=en_US) - Content moderation integration
+
+### Data Management & Architecture
+- [UUIDs vs ULIDs Comparison](https://medium.com/@denis.volokh/uuids-vs-ulids-in-python-should-you-make-the-switch-dd029764155f) - Identifier strategy decision-making
+- [Python ULID Library](https://pypi.org/project/python-ulid/) - Unique identifier implementation
+- [Django Naming Conventions](https://www.reddit.com/r/django/comments/l8iafj/looking_for_a_good_naming_convention_for/) - Code organisation best practices
+
+### Accessibility & User Experience
+- [Infinite Scroll Accessibility](https://www.digitala11y.com/infinite-scroll-accessibility-is-it-any-good/) - UX considerations for dynamic loading
+- [Django REST Framework Pagination](https://www.django-rest-framework.org/api-guide/pagination/) - API pagination patterns
+
+---
 
 ## Acknowledgements
