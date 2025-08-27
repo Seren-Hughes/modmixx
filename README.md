@@ -1084,12 +1084,43 @@ This project underwent comprehensive testing including manual functionality test
 ## Credits & References
 
 ### Content & Media
-- **Site Images**: 
-- **Demo Audio Files**: 
-- **Profile Images**: 
+**Site Images**: 
+- Hero Image Photo by Jona Meza from Pexels: https://www.pexels.com/photo/woman-playing-disco-music-on-keyboard-12756988/
+- Photo by Anna Pou from Pexels: https://www.pexels.com/photo/a-man-wearing-an-orange-beanie-8132529/
+- Mobile phone music creator photo: https://unsplash.com/photos/a-person-using-a-cell-phone-cqFBTqhPKXQ
+- Laptop music creator photo: https://unsplash.com/photos/a-person-using-a-laptop-gjqL19jYoAI
+
+*Note: *All content below is used under appropriate licenses for demonstration and testing purposes to showcase platform functionality with realistic user-generated content examples.*
+
+**Demo Audio Files** *(for testing and demo accounts)*: 
+- Chill by lkoliks: https://pixabay.com/music/beats-chill-chill-background-music-363286/
+- Neuro Synth by Night City Radio: https://pixabay.com/music/drum-n-bass-neuro-synth-391617/
+- Jungle Waves by DIMMYSAD: https://pixabay.com/music/drum-n-bass-jungle-waves-drumampbass-electronic-inspiring-promo-345013/
+- Under the Arcade Glow by Runa Mirai: https://pixabay.com/music/upbeat-runa-mirai-under-the-arcade-glow-389508/
+- Slow downtempo chillwave by Elisaveta Stoycheva: https://pixabay.com/music/beats-slow-downtempo-chillwave-367092/
+- Cyberpunk Futuristic City Music by HitsLab: https://pixabay.com/music/upbeat-cyberpunk-futuristic-city-music-390972/
+- Metaverse Event by HitsLab: https://pixabay.com/music/upbeat-cyberpunk-metaverse-event-background-music-286971/
+- Cyberpunk by TuneTrove: https://pixabay.com/music/upbeat-cyberpunk-289544/
+- Dark Synthwave by TurtleBeats: https://pixabay.com/music/upbeat-dark-synthwave-spectral-251688/
+
+**Profile Images** *(for demo user accounts)*: 
+- Photo by Konstantin Mishchenko from Pexels: https://www.pexels.com/photo/futuristic-musician-performing-with-keyboards-30124274/
+- Cat wearing sunnies by Studio Shephrd: https://unsplash.com/photos/a-close-up-of-a-cat-wearing-sunglasses-vqSUMebqpUM
+
+**Track Artwork** *(for demo content)*: 
+- by Adi Goldstein: https://unsplash.com/photos/black-and-gray-audio-mixer-u0BVH8IOTUk
+- by Harrison Mitchell: https://unsplash.com/photos/a-palm-tree-against-a-blue-sky-ZxlxbUxGxN8
+- by Arvind Pillai: https://unsplash.com/photos/a-person-standing-next-to-a-body-of-water-Yl4Y7COttGo
+- by MARK ADRIAN: https://unsplash.com/photos/good-vibes-only-text-muS2RraYRuQ
+- by Efe Kurnaz: https://unsplash.com/photos/multicolored-hallway-RnCPiXixooY
+- by Olegs Jonins: https://unsplash.com/photos/a-person-holding-a-flower-in-their-hand-CWnaL_0CWjk
+- Photo by Jess Loiterton from Pexels: https://www.pexels.com/photo/palm-tree-near-body-of-water-during-sunset-4319879/
+- by wirestock: https://www.freepik.com/free-photo/stunning-view-colorful-patterned-neon-lights-darkness_10944959.htm
+- by Wirestock: https://www.freepik.com/free-photo/cool-geometric-triangular-hallway-3d-rendering_9990853.htm
+- by lucabravo: https://www.freepik.com/free-photo/empty-road-with-blacklight_12661335.htm#fromView=search&page=1&position=15&uuid=0c16e31e-46c1-4bb2-83ec-fdee7e984e4d&query=empty-road-with-blacklight.jpg
 
 ### Learning Resources & Educational Content
-- **Code Institute** - Django Blog walkthrough project provided foundational structure and patterns
+- [Code Institute](https://codeinstitute.net/) - Django Blog walkthrough project provided foundational structure
 - [Django Custom User Model Tutorial](https://testdriven.io/blog/django-custom-user-model/) - Implementation guidance for email-based authentication
 - [Django Project Structure Discussion](https://forum.djangoproject.com/t/django-new-project-structure-name/9987/4) - Best practices for Django project organization
 
