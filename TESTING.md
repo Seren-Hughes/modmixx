@@ -446,11 +446,92 @@ Comprehensive manual testing of all functionality across different user scenario
 
 ### Form Testing
 
-| Form | Test Case | Steps | Expected | Actual | Status |
-|------|-----------|-------|----------|--------|--------|
-| Contact Form | Valid submission | Fill all fields, submit | Success message, email sent | ✅ Works | ✅ Pass |
-| Upload Form | File validation | Try invalid file types | Error message shown | ✅ Works | ✅ Pass |
-| Profile Edit | Image upload | Upload profile picture | Image saves and displays | ✅ Works | ✅ Pass |
+#### Contact Form Testing
+| Test Case | Steps | Expected | Actual | Status |
+|-----------|-------|----------|--------|--------|
+| Valid submission | Fill all fields correctly, submit | Success message, email sent | ✅ Contact form submits and sends email notification | ✅ Pass |
+| Empty required fields | Submit form with empty name field | Required field validation error | ✅ "This field is required" shown | ✅ Pass |
+| Empty email field | Submit form without email | Required field validation error | ✅ Email field validation triggered | ✅ Pass |
+| Empty message field | Submit form without message | Required field validation error | ✅ Message field validation triggered | ✅ Pass |
+| Invalid email format | Enter "notanemail" in email field | Email validation error shown | ✅ "Enter a valid email address" error displayed | ✅ Pass |
+| HTML injection attempt | Enter `<script>alert('XSS')</script>` in name field | HTML tags blocked with error message | ✅ "No HTML tags are allowed" error displayed | ✅ Pass |
+| Perspective API moderation | Enter toxic language in message field | Toxicity validation error | ✅ "Your message may contain inappropriate language" shown | ✅ Pass |
+
+#### User Registration Form Testing
+| Test Case | Steps | Expected | Actual | Status |
+|-----------|-------|----------|--------|--------|
+| Valid registration | Enter unique email and strong password | Account created successfully | ✅ User registered and redirected to profile setup | ✅ Pass |
+| Duplicate email | Try to register with existing email | Email uniqueness validation error | ✅ Django authentication prevents duplicate emails | ✅ Pass |
+| Weak password | Enter password that doesn't meet Django requirements | Password strength validation | ✅ Django password validators active | ✅ Pass |
+| Empty required fields | Submit without email or password | Field validation errors | ✅ Required field validation working | ✅ Pass |
+
+#### Profile Setup Form Testing
+| Test Case | Steps | Expected | Actual | Status |
+|-----------|-------|----------|--------|--------|
+| Valid profile setup | Enter username, display name, bio, pronouns | Profile created successfully | ✅ Profile setup completes, redirects to feed | ✅ Pass |
+| HTML injection in username | Enter `<script>alert('XSS')</script>` in username | HTML tags blocked | ✅ "No HTML tags are allowed" error shown | ✅ Pass |
+| Toxic content in display name | Enter offensive language in display name | Perspective API blocks content | ✅ "Your display name may contain inappropriate language" | ✅ Pass |
+| Toxic content in bio | Enter inappropriate content in bio | Content moderation active | ✅ "Your bio may contain inappropriate language" | ✅ Pass |
+| Toxic content in pronouns | Enter offensive language in pronouns | Validation prevents submission | ✅ "Your pronouns may contain inappropriate language" | ✅ Pass |
+| Long username | Enter 151+ character username | Length validation error | ✅ Username length limit enforced | ✅ Pass |
+| Duplicate username | Use existing username | Uniqueness validation | ✅ "User with this Username already exists" | ✅ Pass |
+
+#### Profile Edit Form Testing
+| Test Case | Steps | Expected | Actual | Status |
+|-----------|-------|----------|--------|--------|
+| Valid profile update | Update bio, pronouns, display name | Changes saved successfully | ✅ Profile updates and shows success message | ✅ Pass |
+| Profile image upload | Upload valid image file | Image uploads to S3 and displays | ✅ Image saves and displays correctly | ✅ Pass |
+| Invalid image file | Upload .txt file as profile image | File type validation error | ✅ "Upload a valid image" error shown | ✅ Pass |
+| Oversized image | Upload >10MB image file | File size validation error | ✅ Large image rejected appropriately | ✅ Pass |
+| HTML injection in bio | Enter HTML tags in bio field | HTML validation blocks content | ✅ "No HTML tags are allowed" displayed | ✅ Pass |
+| Content moderation | Enter toxic content in any text field | Perspective API validation | ✅ All text fields properly moderated | ✅ Pass |
+
+#### Track Upload Form Testing
+| Test Case | Steps | Expected | Actual | Status |
+|-----------|-------|----------|--------|--------|
+| Valid track upload | Upload audio file with title and description | Track uploaded successfully | ✅ Track uploads to S3, appears in feed | ✅ Pass |
+| Empty required title | Submit upload without track title | Required field validation | ✅ "This field is required" for title | ✅ Pass |
+| Empty required audio | Submit upload without audio file | Required field validation | ✅ Audio file requirement enforced | ✅ Pass |
+| Invalid audio format | Upload .txt file as audio | File type validation | ✅ "File extension 'txt' is not allowed" | ✅ Pass |
+| Valid audio formats | Upload .mp3, .wav files | Files accepted | ✅ All allowed audio formats work | ✅ Pass |
+| Audio file too large | Upload >100MB audio file | File size validation | ✅ "File too large" error displayed | ✅ Pass |
+| HTML in track title | Enter `<h1>Title</h1>` in title field | HTML tags blocked | ✅ "No HTML tags are allowed" error | ✅ Pass |
+| Toxic content in title | Enter inappropriate language in title | Content moderation blocks | ✅ "Your track title may contain inappropriate language" | ✅ Pass |
+| Toxic content in description | Enter offensive content in description | Perspective API validation | ✅ "Your description may contain inappropriate language" | ✅ Pass |
+| Cover art upload | Upload image as track cover | Image uploads and displays | ✅ Track cover image saves correctly | ✅ Pass |
+| Invalid cover art | Upload non-image file as cover | File validation error | ✅ Image validation prevents invalid files | ✅ Pass |
+
+#### Track Edit Form Testing
+| Test Case | Steps | Expected | Actual | Status |
+|-----------|-------|----------|--------|--------|
+| Valid track edit | Update title, description, or cover art | Changes saved successfully | ✅ Track updates save and display | ✅ Pass |
+| Owner verification | Non-owner tries to access edit form | Access denied/404 error | ✅ Only track owner can access edit | ✅ Pass |
+| Audio file replacement | Upload new audio file | Old file deleted, new file saved | ✅ S3 cleanup and replacement working | ✅ Pass |
+| Content moderation on edit | Enter toxic content during edit | Validation blocks inappropriate content | ✅ Same moderation rules apply to edits | ✅ Pass |
+
+#### Comment Form Testing
+| Test Case | Steps | Expected | Actual | Status |
+|-----------|-------|----------|--------|--------|
+| Valid comment | Enter appropriate comment text | Comment posts successfully | ✅ Comment appears immediately after submission | ✅ Pass |
+| Empty comment | Submit empty comment form | Validation prevents submission | ✅ Required field validation active | ✅ Pass |
+| HTML injection in comment | Enter `<script>` tags in comment | HTML content blocked | ✅ "No HTML tags are allowed" error | ✅ Pass |
+| Toxic content in comment | Enter inappropriate language | Perspective API blocks content | ✅ "Your comment may contain inappropriate language" | ✅ Pass |
+| Long comment validation | Enter 501+ character comment | Length validation error | ✅ Comment length limit enforced | ✅ Pass |
+| Comment edit | Edit existing comment | Updated content saves | ✅ Comment edits save with "edited" indicator | ✅ Pass |
+| Comment delete | Delete own comment | Comment removed from system | ✅ Comment deletion works correctly | ✅ Pass |
+| Owner verification | Try to edit/delete other user's comment | Access denied | ✅ Only comment owner can edit/delete | ✅ Pass |
+
+#### Security & Validation Summary
+| Security Feature | Implementation Status | Testing Result |
+|------------------|----------------------|----------------|
+| **HTML Tag Prevention** | All text fields validate against HTML patterns | ✅ All forms block HTML injection |
+| **Perspective API Integration** | All user-generated text content moderated | ✅ Toxic content consistently blocked |
+| **File Type Validation** | Audio and image uploads restricted to safe formats | ✅ Invalid file types rejected |
+| **File Size Limits** | 100MB audio, 10MB images enforced | ✅ Oversized files blocked |
+| **Length Validation** | Character limits on all text fields | ✅ Length limits enforced |
+| **Unique Constraints** | Username and email uniqueness verified | ✅ Duplicate prevention working |
+| **Owner Verification** | Edit/delete actions restricted to content owners | ✅ Authorization checks active |
+| **Required Field Validation** | Critical fields cannot be empty | ✅ Required validation working |
 
 ### Audio Player Testing
 
@@ -479,7 +560,7 @@ Testing error handling, edge cases, and security measures.
 |-----------|-------|-------------------|--------|--------|
 | File Type Validation | Upload non-audio file | Rejection with error message | ✅ Rejected | ✅ Pass |
 | File Size Limits | Upload >100MB file | Rejection with size error | ✅ Rejected | ✅ Pass |
-| Malicious Files | Upload .exe file renamed as malicious-song.mp3.exe | File rejected due to executable extension | ✅ Upload blocked - dangerous extension detected | ✅ Pass |
+| Malicious Files | Upload .exe file renamed as malicious-song.mp3.exe | File rejected due to executable extension | ✅ Upload blocked  | ✅ Pass |
 | Invalid Audio Content | Upload text file renamed as fake-song.mp3 | File accepted based on extension (content validation planned for future enhancement) | ✅ Extension validation working, file accepted | ✅ Pass |
 
 ### Input Validation & XSS Protection
