@@ -49,7 +49,7 @@ def track_feed(request):
         request,
         "tracks/feed.html",
         {
-            "tracks": page_obj,  # Fixed: Now this is paginated :D
+            "tracks": page_obj,
             "upload_form": upload_form,
             "show_upload_modal": show_upload_modal,
         },
