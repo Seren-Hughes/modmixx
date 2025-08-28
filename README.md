@@ -874,13 +874,36 @@ The main feed implements a performance-optimised loading strategy that balances 
 - **Dynamic Visibility** - Appears/disappears based on scroll position
 - **Accessibility Compliance** - Keyboard navigation support
 
-### Comment System
+### Track Detail Page
+**Full description of the track and its dedicated comments section**
 
+![Track Detail Page Screenshot](docs/images/screenshots/track-detail-editable.png)
+
+_Only the user who uploaded the track can see edit and delete options_
+
+**View of the track details and comments section by other users** 
+
+![Track Detail Page Screenshot](docs/images/screenshots/track-detail-auth-edit-only.png)
+
+**Delete warning to minimise accidental removals**
+
+_Only the user who uploaded the track can see delete option_
+
+![Track Delete Warning Screenshot](docs/images/screenshots/delete-track-warning.png)
+
+### Interactive Comment System
+
+**Seamless User Experience with AJAX Implementation:**
+- **Real-Time Commenting** - Users can comment while listening to tracks without interrupting audio playback
+- **Instant Feedback** - Comments appear immediately after submission using AJAX, eliminating page refreshes that would stop the music
+- **Uninterrupted Listening Experience** - Essential for music platforms where continuous playback maintains the user's engagement with the track
+
+**Additional Features:**
 - **Threaded Comments** - Organised discussion structure
 
-<img src="docs/images/screenshots/comment-threads.png" alt="Threaded comments example" width="60%">
+<img src="docs/images/screenshots/comment-threads.png" alt="Threaded comments example" width="80%">
 
-<img src="docs/images/screenshots/comment-edit-delete.png" alt="User comment edit and delete" width="60%">
+<img src="docs/images/screenshots/comment-edit-delete.png" alt="User comment edit and delete" width="80%">
 
 - **Real-Time Validation** - Immediate feedback on comment length and content
 - **Edit/Delete Functionality** - User control over their contributions
