@@ -914,7 +914,7 @@ _**These settings are not for a production launch and will be less extreme in a 
 
 ![Perspective toxic flagging](docs/images/screenshots/toxic-comment-user-feedback.gif)
 
-_Perspective API detects not only toxic language but also the perceived toxicity of user comments in real-time. The example above shows how a potentially toxic comment "your music is rubbish" is flagged. The user is notified instantly and prevented from posting it._
+_Perspective API detects not only toxic language but also the perceived toxicity of user comments in real-time. The example above shows how a potentially toxic comment "your music is rubbish" is flagged. The user is notified instantly and prevented from posting it. When the comment is then changed to "your music is great", it is successfully posted._
 
 ### User Profile Management
 
