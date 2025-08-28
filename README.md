@@ -1388,6 +1388,7 @@ git push origin main
 ---
 
 ## 7. Environment Variables Reference (`env.py` should contain these variables based on `env_example.py`)
+**Always ensure your env.py or .env file is added to your .gitignore and never committed to version control**
 ```python
 import os
 
@@ -1443,9 +1444,9 @@ This project underwent comprehensive testing including manual functionality test
 - **Dark Mode Toggle** - User preference settings for light/dark theme switching
 - **Custom Audio Player** - Enhanced player controls using Web Audio API with audio waveform visualisation and potentially a [spectrogram](https://en.wikipedia.org/wiki/Spectrogram) display for mixing analysis tools
 - **Mobile App** - iOS/Android app for improved mobile experience 
-
-### Audio Features
 - **Version Control for Tracks** - Track revision history showing creative evolution
+- **Notifications System** - Real-time updates for comments, follows, and challenges
+- **Reporting System** - User-friendly tools for reporting inappropriate content or behaviour
 
 ### Community & Social Features
 - **Monthly Challenges System** - Creative prompts to inspire participation and experimentation
