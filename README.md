@@ -21,7 +21,7 @@
 5. [Future Features](#future-features)
 6. [Planning](#planning)
    - [Wireframes](#wireframes)
-   - [Colour Palette - MVP Implementation](#colour-palette---mvp-implementation)
+   - [Colour Palette](#colour-palette)
 7. [Accessibility](#accessibility)
    - [Colour Contrast & Visual Design](#colour-contrast--visual-design)
 8. [Typography](#typography)
@@ -69,7 +69,9 @@
 
 **modmixx** is a web-based platform designed to foster creativity and collaboration among music makers of all skill levels. It provides a safe, inclusive space where users can share unfinished ideas, learn from others, and build meaningful connections. The platform prioritises creativity over perfection and community over competition, offering an alternative to traditional self-promotion-focused platforms.
 
-[Live Site](https://modmixx-427f89e87a1b.herokuapp.com/)  
+[Live Site](https://modmixx-427f89e87a1b.herokuapp.com/) 
+
+*Note: Currently hosted on Heroku with eco dynos - initial load may take 10-15 seconds as dynos require wake-up time after periods of inactivity*
 
 ---
  
@@ -127,8 +129,6 @@ With its emphasis on inclusivity and authentic connection, modmixx has the poten
 
 
 ## Planning
-
-[Miro modmixx Planning Board](https://miro.com/app/board/uXjVIjLi6S0=/?share_link_id=959911845180)
 
 ### Wireframes
 
@@ -244,11 +244,18 @@ Both fonts were chosen for exceptional readability across devices and accessibil
 
 ### Design Process & Documentation
 
-For a comprehensive view of the complete design process, and planning documentation, visit the project planning board:
+For a comprehensive view of the complete design process, brainstorming, and planning documentation, visit the project planning board:
 
 **[View Complete Design Process on Miro →](https://miro.com/app/live-embed/uXjVIjLi6S0=/?embedMode=view_only_without_ui&moveToViewport=-9757%2C-5087%2C50008%2C25645&embedId=323941935999)**
 
-*The Miro board contains detailed planning and research that informed the development of this MVP.*
+**What's Included:**
+- **User Research & Personas** - Understanding target users and their needs
+- **Visual Mood Boards** - Design inspiration and aesthetic direction
+- **Agile Planning & Sprint Management** - User story mapping and iteration planning
+- **Retrospectives & Learning Documentation** - Continuous improvement throughout development
+- **Technical Architecture Planning** - Database design and system architecture decisions
+
+*The Miro board contains planning and research documentation that informed the development of this MVP, demonstrating the iterative design process from initial concept through to final implementation.*
 
 ### Site Map
 ![Site Map](docs/images/diagrams/modmixx-site-map-mvp.jpg)
@@ -663,7 +670,7 @@ Strategic milestone planning with deliverable tracking and timeline management
 **Iteration 5: UI + Forms + Auth Polish** *(Milestone: Frontend)*
 - Bootstrap integration and responsive design
 - Custom signup/login form styling
-- Navigation and template optimization
+- Navigation and template optimisation
 - Content creation 
 
 **Iteration 6: QA + Documentation + Testing** *(Milestones: Testing & Release 1 MVP)*
@@ -772,7 +779,7 @@ The landing page introduces new visitors to the modmixx community with a clear v
 - **Hero Section** - Compelling call-to-action with gradient overlay for optimal text contrast
 - **Community Values** - Clear messaging about creativity, inclusivity, and collaboration
 - **Getting Started** - Streamlined signup/login options prominently displayed
-- **Responsive Design** - Optimized experience across all device sizes
+- **Responsive Design** - Optimised experience across all device sizes
 
 <details>
 <summary><em>Click to expand the full page</em><br></summary>
@@ -827,7 +834,7 @@ The landing page introduces new visitors to the modmixx community with a clear v
 - **File Validation** - Security checks for file type, size, and content
 - **AWS S3 Integration** - Secure cloud storage
 - **Audio Processing** - Automatic duration extraction
-- **Progress Feedback** - Real-time upload status and error handling
+
 
 **Content Moderation Pipeline:**
 - **Image Analysis** - AWS Rekognition for inappropriate visual content detection
@@ -907,7 +914,7 @@ _**These settings are not for a production launch and will be less extreme in a 
 
 ![Perspective toxic flagging](docs/images/screenshots/toxic-comment-user-feedback.gif)
 
-_Perspective API detects not only profanity but also the perceived toxicity of user comments in real-time. The example above shows how a potentially toxic comment "your music is rubbish" is flagged and the user is notified instantly and prevented from posting it._
+_Perspective API detects not only toxic language but also the perceived toxicity of user comments in real-time. The example above shows how a potentially toxic comment "your music is rubbish" is flagged. The user is notified instantly and prevented from posting it._
 
 ### User Profile Management
 
@@ -949,7 +956,7 @@ _Edit profile features are only available on users own profile page_
 
 <img src="docs/images/screenshots/home-final-cta-footer.png" alt="full size Footer" width="50%">
 
-**Mobile-Optimized Footer:**
+**Mobile-Optimised Footer:**
 
 <img src="docs/images/screenshots/small-footer.png" alt="small screen Footer" width="30%">
 
@@ -995,33 +1002,105 @@ _Edit profile features are only available on users own profile page_
 
 ## 1. Repository Setup
 
-### 1.1 Create Repository on GitHub (UI)
-1. Sign in to GitHub.
-2. Use the Code Institute template (optional) or create a new repository.
-3. Click **Use this template → Create a new repository**.
-4. Name the repository → **Create repository from template**.
+### Option A: Fork an Existing Repository
+1. **Navigate to the source repository** on GitHub
+2. **Click the "Fork" button** in the top-right corner
+3. **Select your account** as the destination for the fork
+4. **Choose fork settings**:
+   - Keep the same repository name or change it
+   - Add a description (optional)
+   - Choose to copy only the main branch or all branches
+5. **Click "Create fork"**
 
-### 1.2 Clone & Open in VS Code
-1. In VS Code, open **Accounts** and sign in to GitHub.
-2. Go to **Source Control** → **Clone Repository**.
-3. Select your repo → choose a local folder → open in VS Code.
+### Option B: Create New Repository from Template
+1. If using a template (like Code Institute's):
+   - **Click "Use this template"** → **"Create a new repository"**
+   - **Fill in repository details** (name, description, public/private)
+   - **Click "Create repository from template"**
+2. For a completely new repository:
+   - **Go to GitHub** → **Click "New"** button
+   - **Enter repository name and settings**
+   - **Initialize with README** (recommended)
+   - **Choose .gitignore template**: Python
+   - **Select license** (optional)
 
-### 1.3 Manual Git Setup (Terminal)
+### Clone Repository to Local Machine
+
+#### Method 1: Using VS Code (Recommended for Beginners)
+1. **Open VS Code**
+2. **Install GitHub extension** if not already installed
+3. **Connect GitHub account**:
+   - Click **Accounts icon** (bottom-left)
+   - **Sign in to GitHub** and authorise VS Code
+4. **Clone repository**:
+   - Press `Ctrl+Shift+P` (Windows) or `Cmd+Shift+P` (Mac)
+   - Type "Git: Clone" and select it
+   - Choose **"Clone from GitHub"**
+   - **Search and select your repository**
+   - **Choose local folder** where you want to store the project
+   - **Click "Open in VS Code"** when cloning completes
+
+#### Method 2: Command Line (Terminal/Git Bash)
 ```bash
-git init
-git add .
-git commit -m "Initial commit"
-git remote add origin https://github.com/YOUR-USERNAME/YOUR-REPO.git
-git push -u origin main
-```
+# Navigate to where you want to store the project
+cd /path/to/your/projects
 
-**For updates:**
+# Clone the repository (replace with your actual repository URL)
+git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY-NAME.git
+
+# Navigate into the project folder
+cd YOUR-REPOSITORY-NAME
+
+# Open in VS Code (optional)
+code .
+```
+#### Method 3: GitHub Desktop
+1. Download and install GitHub Desktop
+2. Sign in to your GitHub account
+3. Click "Clone a repository from the Internet"
+4. Select your repository from the list
+5. Choose local path and click "Clone"
+
+Setting Up Git Configuration (First Time Only)
 ```bash
-git add .
-git commit -m "Your commit message"
-git push
-```
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
 
+# Verify configuration
+git config --list
+```
+Basic Git Workflow for Development
+```bash
+# Check current status
+git status
+
+# Add changes to staging area
+git add .                    # Add all changes
+git add filename.py          # Add specific file
+
+# Commit changes with descriptive message
+git commit -m "Add user authentication system"
+
+# Push changes to GitHub
+git push origin main        # Push to main branch
+
+# Pull latest changes from GitHub (before starting work)
+git pull origin main
+```
+#### Branch Strategy (For Team Development)
+*Note: This project was developed solo using direct commits to main branch. The branch strategy below is recommended for team collaboration and will be adopted for future development of this project.*
+```bash
+# Always start from the latest main branch
+git checkout main
+git pull origin main
+
+# Create a new feature branch for each feature/fix
+git checkout -b feature/user-authentication
+# or
+git checkout -b fix/navbar-mobile-bug
+# or  
+git checkout -b update/readme-deployment-section
+```
 ---
 
 ## 2. Local Development Setup
@@ -1111,7 +1190,7 @@ python manage.py runserver
 3. **APIs & Services → Credentials**:
    - **Create Credentials → OAuth 2.0 Client ID** (type: **Web application**).
    - Configure consent screen (External) and required fields.
-   - Authorized redirect URIs:
+   - Authorised redirect URIs:
      - `http://127.0.0.1:8000/accounts/google/login/callback/`
      - `https://your-heroku-app.herokuapp.com/accounts/google/login/callback/`
 4. Save **Client ID** and **Client Secret**.
@@ -1124,27 +1203,115 @@ python manage.py runserver
 
 ---
 
-## 5. Heroku Deployment
+## 5. Heroku Deployment & Hosting
 
-### 5.1 Required Files
-- `requirements.txt`
-- `Procfile`
+### Important Heroku Considerations
+**Performance Note:** Heroku Eco dynos "sleep" after 30 minutes of inactivity and require 10-15 seconds to "wake up" on first access. This is normal behaviour for free/low-cost hosting tiers and does not reflect the application's actual performance once active.
+
+### Required Files
+Ensure you have these files in your project root:
+
+- **requirements.txt** - List of Python dependencies
+- **Procfile** containing:
   ```
   web: gunicorn modmixx.wsgi
   ```
-- `runtime.txt`
+- **runtime.txt** containing:
   ```
   3.13
   ```
-  _Note: Only the major.minor version (e.g., `3.13`)._
+  _Note: Only the major.minor version (e.g., `3.13` not `3.13.0`)._
 
-### 5.2 Deploy via Heroku Dashboard
-1. Create app: **New → Create new app** (name + region).
-2. **Deploy** tab → connect GitHub repository.
-3. (Optional) Enable **Automatic deploys** from `main`.
-4. **Manual deploy**: choose branch (usually `main`) → **Deploy Branch**.
 
-### 5.3 Deploy via Heroku CLI
+### 5.1 Heroku Account Setup
+1. **Create Heroku account** at [heroku.com](https://heroku.com)
+2. **Verify your email address**
+3. **Complete account setup** 
+
+### 5.2 Heroku CLI Installation & Setup
+1. **Download Heroku CLI** from [devcenter.heroku.com/articles/heroku-cli](https://devcenter.heroku.com/articles/heroku-cli)
+2. **Install following platform-specific instructions**:
+   - **Windows**: Download installer and run
+   - **macOS**: Use installer or `brew install heroku/brew/heroku`
+   - **Linux**: Use package manager or snap
+3. **Verify installation**:
+```bash
+heroku --version
+```
+4. **Login to Heroku**:
+```bash
+heroku login
+# Follow the prompts to complete login
+```
+
+### 5.3 Deploy via Heroku Dashboard (Recommended if unfamiliar with Heroku)
+
+### Create Heroku App
+1. Log into your Heroku Dashboard at [dashboard.heroku.com](https://dashboard.heroku.com/)
+2. Click **New** → **Create new app**
+3. Enter app details:
+   - App name: Must be unique (e.g., `your-project-name`)
+   - Region: Choose closest to your users (US/Europe)
+4. Click **Create app**
+
+### Connect GitHub Repository
+1. Go to **Deploy** tab in your Heroku app dashboard
+2. Deployment method section: Click **GitHub**
+3. Connect to GitHub:
+   - Click **Connect to GitHub**
+   - Authorise Heroku to access your GitHub account
+4. Search for repository:
+   - Enter your repository name
+   - Click **Search**
+   - Click **Connect** next to your repository
+
+### Configure Automatic Deployments (Optional but Recommended)
+1. **In "Automatic deploys" section**:
+   - **Select branch**: Usually `main`
+   - **Check "Wait for CI to pass before deploy"** (if using CI)
+   - **Click "Enable Automatic Deploys"**
+
+2. **What this means**: Every time you push to GitHub, Heroku automatically updates your live site
+
+**Important Considerations:**
+- **Testing recommended**: Set up automated tests to ensure code quality before automatic deployment. _(tests are planned for future development of this project)._
+- **Security**: Always use environment variables for sensitive data (see section 7: Environment Variables Reference)
+- **Branch protection**: Consider enabling branch protection rules on GitHub for additional safety
+
+### Manual Deploy
+1. In **Manual deploy** section:
+   - Select branch to deploy (usually `main`)
+   - Click **Deploy Branch**
+   - Wait for build to complete (you'll see build logs)
+   - Click **View** to see your live app
+
+### Set Environment Variables via Heroku Dashboard
+1. Go to **Settings** tab in your Heroku app
+2. Click **Reveal Config Vars**
+3. Add each environment variable as key-value pairs:
+
+
+|Key |	Value Example |
+|-------------------------------|----------------------------------|
+|SECRET_KEY                     |your-django-secret-key-here      |
+|DEBUG                          |False    _**(Always use False in production!)**_                         |
+|DATABASE_URL                   |your-database-connection-string   |
+|AWS_ACCESS_KEY_ID              |your-aws-access-key               |
+|AWS_SECRET_ACCESS_KEY          |your-aws-secret-key               |
+|AWS_REGION                     |eu-west-1                         |
+|SOCIAL_AUTH_GOOGLE_OAUTH2_KEY  |your-google-client-id             |
+|SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET|your-google-client-secret         |
+|PERSPECTIVE_API_KEY            |your-perspective-api-key          |
+|EMAIL_HOST_USER                |your-gmail-address                |
+|EMAIL_HOST_PASSWORD            |your-gmail-app-password           |
+|IMAGE_MODERATION_ENABLED       |true                              |
+|REKOG_MIN_CONFIDENCE          |80                                |
+
+4. Click **Add** after entering each key-value pair
+
+### 5.4 Deploy via Heroku CLI (Alternative Method)
+#### Create and Deploy
+
 ```bash
 heroku login
 heroku create your-app-name
@@ -1176,13 +1343,31 @@ heroku config:set IMAGE_MODERATION_ENABLED="true"
 heroku config:set REKOG_MIN_CONFIDENCE="80"
 ```
 
+
 **Release & Setup:**
 ```bash
 git push heroku main
-heroku run python manage.py migrate
-heroku run python manage.py collectstatic --noinput
-heroku run python manage.py createsuperuser
 ```
+**Via Heroku CLI:**
+```bash
+heroku run python manage.py migrate
+```
+**Via Console:**
+```bash
+python manage.py collectstatic --noinput
+python manage.py createsuperuser
+```
+### 5.6 Ongoing Development Workflow
+1. Make changes locally
+2. Test thoroughly with `python manage.py runserver`
+3. Commit and push to GitHub:
+```bash
+git add .
+git commit -m "Description of changes"
+git push origin main
+```
+   - If automatic deploys enabled: Heroku automatically updates
+   - If manual deploy needed: Go to Heroku dashboard → Deploy tab → **Deploy Branch**
 
 ---
 
@@ -1256,7 +1441,7 @@ This project underwent comprehensive testing including manual functionality test
 
 ### User Experience Improvements
 - **Dark Mode Toggle** - User preference settings for light/dark theme switching
-- **Custom Audio Player** - Enhanced player controls using Web Audio API with audio waveform visualisation and potential spectrogram display for mixing analysis tools
+- **Custom Audio Player** - Enhanced player controls using Web Audio API with audio waveform visualisation and potentially a [spectrogram](https://en.wikipedia.org/wiki/Spectrogram) display for mixing analysis tools
 - **Mobile App** - iOS/Android app for improved mobile experience 
 
 ### Audio Features
@@ -1276,6 +1461,15 @@ This project underwent comprehensive testing including manual functionality test
 - **Enhanced Moderation Tools** - Bulk actions, automated flagging rules, and improved moderation queue management
 - **User Management System** - Advanced user roles, suspension capabilities, and community guideline enforcement tools
 - **Content Analytics** - Track engagement patterns, popular content types, and community growth metrics
+
+### Future Security & Data Protection Enhancements
+_These enhancements were discussed with my mentor Daniel Hamilton, who shared valuable professional industry insights:_
+- **Environment Variable Expansion** - Move `ALLOWED_HOSTS` to environment variables to prevent unauthorised site mirroring on similar domains and protect brand integrity
+- **Key Rotation System** - Implement regular rotation of API keys and secrets with automated processes
+- **Incident Response Protocol** - Establish procedures for immediate key regeneration if credentials are accidentally shared
+- **Secret Management Service** - Consider services like [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) or [HashiCorp Vault](https://www.hashicorp.com/en/products/vault) for enterprise-level secret management
+- **Access Monitoring** - Implement logging and alerting for unauthorised access attempts
+- **Regular Security Audits** - Scheduled reviews of all authentication and authorisation mechanisms
 
 ### Technical & Infrastructure Improvements
 - **Content Delivery Network (CDN)** - Global audio streaming optimisation for reduced latency (this would be beneficial for users in different geographical locations and a large user base)
@@ -1333,7 +1527,7 @@ All demo tracks sourced from [Pixabay](https://pixabay.com/music/) under Creativ
 #### Core Django & Python
 - **[Code Institute](https://codeinstitute.net/)** - Django Blog walkthrough foundational structure
 - **[Django Custom User Model](https://testdriven.io/blog/django-custom-user-model/)** - Email-based authentication implementation
-- **[Django Documentation](https://docs.djangoproject.com/en/5.2/)** - Templates, pagination, ORM optimization, validators
+- **[Django Documentation](https://docs.djangoproject.com/en/5.2/)** - Templates, pagination, ORM optimisation, validators
 - **[Django Project Structure](https://forum.djangoproject.com/t/django-new-project-structure-name/9987/4)** - Best practices
 
 #### Frontend & UI Development  
@@ -1349,7 +1543,7 @@ All demo tracks sourced from [Pixabay](https://pixabay.com/music/) under Creativ
 
 #### JavaScript & Dynamic Features
 - **[MDN Web APIs](https://developer.mozilla.org/en-US/docs/Web/API/)** - File API, Intersection Observer, HTML5 Audio
-- **[Web.dev Performance](https://web.dev/articles/intersectionobserver)** - Infinite scroll optimization
+- **[Web.dev Performance](https://web.dev/articles/intersectionobserver)** - Infinite scroll optimisation
 - **[Django AJAX Handling](https://www.geeksforgeeks.org/python/handling-ajax-request-in-django/)** - Asynchronous requests
 
 #### Third-Party Services & APIs
@@ -1369,3 +1563,21 @@ All demo tracks sourced from [Pixabay](https://pixabay.com/music/) under Creativ
 ---
 
 ## Acknowledgements
+
+### Professional Mentorship & Guidance
+
+**Daniel Hamilton** - _Code Institute Mentor_  
+
+I am deeply grateful for Daniel's exceptional mentorship throughout this project. His industry expertise and willingness to share real-world insights have been invaluable to my development as a developer. Daniel's constructive feedback during our discussions and his demonstration of best practices has significantly accelerated my learning. His guidance on security implementations and production-ready development has shaped not just this project, but my understanding of software development standards. I genuinely learn something new from every conversation with Daniel and strive to emulate the practices he demonstrates.
+
+**Marko Tot** - _Code Institute Cohort Facilitator_  
+
+Special thanks to Marko for his additional learning support during weekly standups, particularly with Entity Relationship Diagrams and Django framework concepts. His clear explanations and patient guidance helped solidify my understanding of complex database relationships and Django's architecture. Marko's extra support sessions were invaluable in building the foundation that made this project possible.
+
+### Peer Learning & Community Support
+
+**Code Institute** - _Fellow Students_ 
+
+Heartfelt appreciation to my fellow students and our weekly standup sessions. The collaborative learning environment, shared challenges, and mutual support have been a constant source of motivation and insight. Whether discussing roadblocks (like my memorable 5-hour rollercoaster journey to get Google OAuth working!), celebrating breakthroughs, or learning from each other's unique problem-solving approaches, these sessions have enriched my learning journey immeasurably. The opportunity to share both struggles and successes with peers who truly understand the challenges has been invaluable.
+
+
