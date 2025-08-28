@@ -11,7 +11,7 @@ import os
 # Django Configuration
 os.environ.setdefault("SECRET_KEY", "your-50-character-secret-key-here")
 os.environ.setdefault("DEBUG", "True")  # Set to False for production
-os.environ.setdefault("DATABASE_URL", "postgresql://user:password@localhost:5432/modmixx_db")
+os.environ.setdefault("DATABASE_URL", "your-database-url-here")
 
 # AWS S3 Storage Configuration
 os.environ.setdefault("AWS_ACCESS_KEY_ID", "your-aws-access-key-id")
